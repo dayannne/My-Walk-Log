@@ -2,11 +2,7 @@ import type { Metadata } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import ClientOnly from './_component/common/ClientOnly';
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import Map from './_component/common/Map';
 import Script from 'next/script';
 import SearchBar from './_component/common/SearchLayout';
 import SearchLayout from './_component/common/SearchLayout';
@@ -36,8 +32,7 @@ export default async function RootLayout({
         ></Script>
         <div className='w-full h-full flex'>
           <SearchLayout>{children}</SearchLayout>
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+          <Map />
         </div>
       </body>
     </html>
