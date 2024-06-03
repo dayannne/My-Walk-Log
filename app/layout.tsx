@@ -4,8 +4,11 @@ import './globals.css';
 import ClientOnly from './_component/common/ClientOnly';
 import Map from './_component/common/Map';
 import Script from 'next/script';
-import SearchBar from './_component/common/SearchLayout';
-import SearchLayout from './_component/common/SearchLayout';
+import SearchBar from './_component/search/SearchLayout';
+import SearchLayout from './_component/search/SearchLayout';
+import MapProvider from './_component/common/Map';
+import Container from './_component/common/Container';
+import ReactQueryProviders from './_hooks/useReactQuery';
 // import ToasterProvider from './provider/ToasterProvider';
 
 export const metadata: Metadata = {
@@ -30,10 +33,9 @@ export default async function RootLayout({
           type='text/javascript'
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${mapKey}&libraries=services,clusterer&autoload=false`}
         ></Script>
-        <div className='w-full h-full flex'>
-          <SearchLayout>{children}</SearchLayout>
-          <Map />
-        </div>
+        <ClientOnly>
+          <Container>{children}</Container>
+        </ClientOnly>
       </body>
     </html>
   );
