@@ -3,6 +3,8 @@
 import React, { useEffect } from 'react';
 import { useMap } from '../common/Map';
 import { fetchPlaceDetail } from '@/app/api/map';
+import { filterPlacesByKeyword } from '@/app/shared/function/filter';
+import { FILTER_CATEGORIES } from '@/app/shared/constant';
 
 const SearchResult = () => {
   const mapContext = useMap();
@@ -21,7 +23,14 @@ const SearchResult = () => {
     pagination: any,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
-      mapContext?.setPlaces(data);
+      const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
+
+      if (filteredPlaces.length === 0) {
+        return alert('검색 결과가 존재하지 않습니다.');
+      }
+
+      mapContext?.setPlaces(filteredPlaces);
+
 
       const bounds = new kakao.maps.LatLngBounds();
       let markers = [];
@@ -40,6 +49,7 @@ const SearchResult = () => {
       }
 
       // @ts-ignore
+    }
       mapContext?.setMarkers(markers);
 
       // 검색된 장소 위치를 기준으로 지도 범위를 재설정
