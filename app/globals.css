@@ -6,4 +6,10 @@ html,
 body,
 :root {
   height: 100dvh;
+  font-size: 14px;
+}
+
+input,
+button {
+  font-size: 14px;
 }

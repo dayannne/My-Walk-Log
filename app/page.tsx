@@ -1,19 +1,24 @@
+'use client';
+
 import ClientOnly from './_component/common/ClientOnly';
-import Container from './_component/common/Container';
-import SearchLayout from './_component/common/SearchLayout';
-import SearchForm from './_component/search/SearchForm';
+import { useMap } from './_component/common/Map';
+import Search from './_component/search/SearchForm';
+import SearchResult from './_component/search/SearchResult';
 
 export default function Home() {
   const isEmpty = false;
+  const mapContext = useMap();
+
+  const onSearch = (keyword: string) => {
+    mapContext?.setKeyword(keyword);
+  };
 
   if (isEmpty) {
   }
   return (
     <ClientOnly>
-      <Container>
-        ㅇㅇ
-        <SearchForm />
-      </Container>
+      <Search onSearch={onSearch} />
+      <SearchResult />
     </ClientOnly>
   );
 }
