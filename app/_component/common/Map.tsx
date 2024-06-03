@@ -8,11 +8,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Map } from 'react-kakao-maps-sdk';
 import useGeolocation from '@/app/_hooks/useGeolocation';
-import SearchLayout from '../search/SearchLayout';
-import Search from '../search/SearchForm';
-import SearchResult from '../search/SearchResult';
+
 import { IPlace } from '@/app/shared/types/map';
 
 interface MapProps {
@@ -24,8 +21,10 @@ interface IMapContextValue {
   mapData: kakao.maps.Map | null;
   markers: kakao.maps.Marker[];
   setMarkers: (markers: kakao.maps.Marker[]) => void;
-  places: kakao.maps.services.Places[];
-  setPlaces: React.Dispatch<React.SetStateAction<kakao.maps.services.Places[]>>;
+  overlays: kakao.maps.CustomOverlay[];
+  setOverlays: (markers: kakao.maps.CustomOverlay[]) => void;
+  places: IPlace[];
+  setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -35,6 +34,8 @@ const MapContext = createContext<IMapContextValue | null>({
   mapData: null,
   markers: [],
   setMarkers: () => {},
+  overlays: [],
+  setOverlays: () => {},
   places: [],
   setPlaces: () => {},
   keyword: '',
@@ -44,10 +45,12 @@ const MapContext = createContext<IMapContextValue | null>({
 const MapProvider: React.FC<MapProps> = ({ children }) => {
   const { location } = useGeolocation();
   const mapRef = useRef<HTMLDivElement>(null);
+
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
+  const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
   const [keyword, setKeyword] = useState<string>('');
-  const [places, setPlaces] = useState<kakao.maps.services.Places[]>([]); // 장소 배열 상태 추가
+  const [places, setPlaces] = useState<IPlace[]>([]); // 장소 배열 상태 추가
 
   useEffect(() => {
     const { kakao } = window;
@@ -80,6 +83,8 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       mapData: map,
       markers,
       setMarkers,
+      overlays,
+      setOverlays,
       places,
       setPlaces,
       keyword,

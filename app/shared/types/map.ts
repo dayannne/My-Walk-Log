@@ -4,7 +4,7 @@ export interface Latlng {
 }
 
 export interface IMarker {
-  position: { lat: string; lng: string };
+  position: { lat: number; lng: number };
   content: string;
 }
 

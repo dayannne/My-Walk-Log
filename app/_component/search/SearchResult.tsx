@@ -1,10 +1,12 @@
 'use client';
 
+import ReactDOMServer from 'react-dom/server';
 import React, { useEffect } from 'react';
 import { useMap } from '../common/Map';
 import { fetchPlaceDetail } from '@/app/api/map';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
+import { MapComponent } from 'react-kakao-maps-sdk';
 
 const SearchResult = () => {
   const mapContext = useMap();
@@ -23,6 +25,8 @@ const SearchResult = () => {
     pagination: any,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
+      clearMarkersAndOverlays();
+
       const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
 
       if (filteredPlaces.length === 0) {
@@ -31,41 +35,85 @@ const SearchResult = () => {
 
       mapContext?.setPlaces(filteredPlaces);
 
-
-      const bounds = new kakao.maps.LatLngBounds();
-      let markers = [];
-
-      for (var i = 0; i < data.length; i++) {
-        // @ts-ignore
-        markers.push({
-          position: {
-            lat: data[i].y,
-            lng: data[i].x,
-          },
-          content: data[i].place_name,
-        });
-        // @ts-ignore
-        bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-      }
-
-      // @ts-ignore
+      displayMarkers(filteredPlaces);
+    } else {
+      handleSearchError(status);
     }
-      mapContext?.setMarkers(markers);
+  };
+  const displayMarkers = (places: any[]) => {
+    let markers: kakao.maps.Marker[] = [];
+    let overlays: kakao.maps.CustomOverlay[] = [];
 
-      // 검색된 장소 위치를 기준으로 지도 범위를 재설정
-      mapContext?.mapData?.setBounds(bounds);
-    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-      alert('검색 결과가 존재하지 않습니다.');
-      return;
-    } else if (status === kakao.maps.services.Status.ERROR) {
-      alert('검색 결과 중 오류가 발생했습니다.');
-      return;
+    const bounds = new kakao.maps.LatLngBounds();
+
+    // 현재 활성화된 오버레이를 저장할 변수
+    let currentOverlay: kakao.maps.CustomOverlay | null = null;
+
+    places.forEach((place, index) => {
+      const content = <Label placeName={place.place_name} />;
+      const position = new kakao.maps.LatLng(place.y, place.x);
+
+      const marker = new kakao.maps.Marker({
+        map: mapContext?.mapData as kakao.maps.Map,
+        position: position,
+        title: place.place_name,
+      });
+
+      const customOverlay = new kakao.maps.CustomOverlay({
+        position: position,
+        content: ReactDOMServer.renderToString(content),
+      });
+
+      kakao.maps.event.addListener(marker, 'click', () => {
+        // 현재 활성화된 오버레이가 있으면 제거
+        if (currentOverlay) {
+          currentOverlay.setMap(null);
+        }
+        // 클릭된 마커의 오버레이를 표시하고 현재 활성화된 오버레이로 설정
+        customOverlay.setMap(mapContext?.mapData as kakao.maps.Map);
+        currentOverlay = customOverlay;
+      });
+
+      markers.push(marker);
+      overlays.push(customOverlay);
+      bounds.extend(position);
+    });
+
+    mapContext?.setMarkers(markers);
+    mapContext?.setOverlays(overlays);
+    mapContext?.mapData?.setBounds(bounds);
+  };
+
+  const clearMarkersAndOverlays = () => {
+    if (mapContext?.markers) {
+      mapContext?.markers.forEach((marker) => marker.setMap(null));
+      mapContext?.setMarkers([]);
+    }
+
+    if (mapContext?.overlays) {
+      mapContext?.overlays.forEach((overlay) => overlay.setMap(null));
+      mapContext?.setOverlays([]);
     }
   };
 
+  const handleSearchError = (status: kakao.maps.services.Status) => {
+    if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert('검색 결과가 존재하지 않습니다.');
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert('검색 결과 중 오류가 발생했습니다.');
+    }
+  };
+
+  const Label = ({ placeName }: { placeName: string }) => (
+    <div className='label'>
+      <span className='left'></span>
+      <span className='center'>{placeName}</span>
+      <span className='right'></span>
+    </div>
+  );
+
   const handleClick = async (placeId: string) => {
     const result = await fetchPlaceDetail(placeId);
-    console.log(result);
   };
 
   return (
