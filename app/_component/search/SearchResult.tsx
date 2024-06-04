@@ -53,10 +53,20 @@ const SearchResult = () => {
       const content = <Label placeName={place.place_name} />;
       const position = new kakao.maps.LatLng(place.y, place.x);
 
+      const imageSrc = '/icons/icon-marker.svg',
+        imageSize = new kakao.maps.Size(40, 40),
+        imageOption = { offset: new kakao.maps.Point(19.3, 40) };
+
+      // 마커 이미지
+      const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption,
+      );
       const marker = new kakao.maps.Marker({
         map: mapContext?.mapData as kakao.maps.Map,
         position: position,
-        title: place.place_name,
+        image: markerImage,
       });
 
       const customOverlay = new kakao.maps.CustomOverlay({
