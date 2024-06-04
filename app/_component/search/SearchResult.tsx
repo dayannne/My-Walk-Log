@@ -8,6 +8,7 @@ import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { MapComponent } from 'react-kakao-maps-sdk';
 import useGeolocation from '@/app/_hooks/useGeolocation';
+import MarkerInfo from '../common/MarkerInfo';
 
 const SearchResult = () => {
   const mapContext = useMap();
@@ -74,28 +75,37 @@ const SearchResult = () => {
     let currentOverlay: kakao.maps.CustomOverlay | null = null;
 
     places.forEach((place, index) => {
-      const content = <Label placeName={place.place_name} />;
       const position = new kakao.maps.LatLng(place.y, place.x);
 
-      const imageSrc = '/icons/icon-marker.svg',
-        imageSize = new kakao.maps.Size(40, 40),
-        imageOption = { offset: new kakao.maps.Point(19.3, 40) };
-
       // 마커 이미지
+      const imageSrc = '/icons/icon-marker.svg',
+        imageSize = new kakao.maps.Size(56, 56),
+        imageOption = { offset: new kakao.maps.Point(26.5, 54) };
       const markerImage = new kakao.maps.MarkerImage(
         imageSrc,
         imageSize,
         imageOption,
       );
+      // 마커
       const marker = new kakao.maps.Marker({
         map: mapContext?.mapData as kakao.maps.Map,
         position: position,
         image: markerImage,
       });
-
+      // 커스텀 오버레이
+      const content = (
+        <MarkerInfo placeId={place.id} placeName={place.place_name} />
+      );
+      const overlayContent = document.createElement('div');
+      overlayContent.innerHTML = ReactDOMServer.renderToString(content);
+      overlayContent.addEventListener('click', () => {
+        handleClick(place.id);
+      });
       const customOverlay = new kakao.maps.CustomOverlay({
         position: position,
-        content: ReactDOMServer.renderToString(content),
+        content: overlayContent,
+        yAnchor: 2.8,
+        clickable: true,
       });
 
       kakao.maps.event.addListener(marker, 'click', () => {
@@ -128,14 +138,6 @@ const SearchResult = () => {
       mapContext?.setOverlays([]);
     }
   };
-
-  const Label = ({ placeName }: { placeName: string }) => (
-    <div className='label'>
-      <span className='left'></span>
-      <span className='center'>{placeName}</span>
-      <span className='right'></span>
-    </div>
-  );
 
   const handleClick = async (placeId: string) => {
     const result = await fetchPlaceDetail(placeId);

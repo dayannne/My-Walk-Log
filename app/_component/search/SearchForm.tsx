@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import SearchIcon from '@/public/icons/icon_search.svg';
 import Logo from '@/public/icons/icon-logo(white).svg';
 
 import Image from 'next/image';
@@ -40,7 +39,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
           type='submit'
           className='shrink-0 relative w-4 flex items-center justify-center'
         >
-          <Image fill={true} src='/icons/icon-search.svg' alt='' />
+          <Image fill={true} src='/icons/icon-search.svg' alt='검색 아이콘' />
         </button>
       </form>
     </div>
