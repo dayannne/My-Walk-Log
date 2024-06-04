@@ -27,6 +27,8 @@ interface IMapContextValue {
   setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
+  prevKeyword: string;
+  setPrevKeyword: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const MapContext = createContext<IMapContextValue | null>({
@@ -40,16 +42,20 @@ const MapContext = createContext<IMapContextValue | null>({
   setPlaces: () => {},
   keyword: '',
   setKeyword: () => {},
+  prevKeyword: '',
+  setPrevKeyword: () => {},
 });
 
 const MapProvider: React.FC<MapProps> = ({ children }) => {
   const { location } = useGeolocation();
+
   const mapRef = useRef<HTMLDivElement>(null);
 
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
   const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
   const [keyword, setKeyword] = useState<string>('');
+  const [prevKeyword, setPrevKeyword] = useState<string>('');
   const [places, setPlaces] = useState<IPlace[]>([]); // 장소 배열 상태 추가
 
   useEffect(() => {
@@ -90,8 +96,10 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       setPlaces,
       keyword,
       setKeyword,
+      prevKeyword,
+      setPrevKeyword,
     }),
-    [map, markers, overlays, places, keyword], // places 배열 추가
+    [map, markers, overlays, places, keyword, prevKeyword], // places 배열 추가
   );
 
   return (

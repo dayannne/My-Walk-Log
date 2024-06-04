@@ -11,6 +11,7 @@ export default function Home() {
 
   const onSearch = (keyword: string) => {
     mapContext?.setKeyword(keyword);
+    mapContext?.setPrevKeyword(keyword);
   };
 
   if (isEmpty) {

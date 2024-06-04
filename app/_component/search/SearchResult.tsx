@@ -15,7 +15,7 @@ const SearchResult = () => {
 
   useEffect(() => {
     if (mapContext && mapContext?.keyword !== '') {
-      const { keyword, mapData } = mapContext;
+      const { keyword, mapData, setKeyword } = mapContext;
 
       // 장소 검색 서비스 객체
       const places = new kakao.maps.services.Places();
@@ -31,6 +31,7 @@ const SearchResult = () => {
         // 검색할 사각형 영역
         bounds: bounds,
       });
+      setKeyword('');
     }
   }, [mapContext?.keyword]);
 
