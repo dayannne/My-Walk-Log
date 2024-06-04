@@ -21,6 +21,8 @@ interface IMapContextValue {
   mapData: kakao.maps.Map | null;
   markers: kakao.maps.Marker[];
   setMarkers: (markers: kakao.maps.Marker[]) => void;
+  markerClusterer: kakao.maps.MarkerClusterer | null;
+  setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];
   setOverlays: (markers: kakao.maps.CustomOverlay[]) => void;
   places: IPlace[];
@@ -36,6 +38,8 @@ const MapContext = createContext<IMapContextValue | null>({
   mapData: null,
   markers: [],
   setMarkers: () => {},
+  markerClusterer: null,
+  setMarkerClusterer: () => {},
   overlays: [],
   setOverlays: () => {},
   places: [],
@@ -53,6 +57,8 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
 
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
+  const [markerClusterer, setMarkerClusterer] =
+    useState<kakao.maps.MarkerClusterer | null>(null);
   const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
   const [keyword, setKeyword] = useState<string>('');
   const [prevKeyword, setPrevKeyword] = useState<string>('');
@@ -90,6 +96,8 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       mapData: map,
       markers,
       setMarkers,
+      markerClusterer,
+      setMarkerClusterer,
       overlays,
       setOverlays,
       places,
@@ -99,7 +107,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       prevKeyword,
       setPrevKeyword,
     }),
-    [map, markers, overlays, places, keyword, prevKeyword], // places 배열 추가
+    [map, markers, markerClusterer, overlays, places, keyword, prevKeyword],
   );
 
   return (

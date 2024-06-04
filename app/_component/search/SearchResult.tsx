@@ -9,10 +9,12 @@ import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { MapComponent } from 'react-kakao-maps-sdk';
 import useGeolocation from '@/app/_hooks/useGeolocation';
 import MarkerInfo from '../common/MarkerInfo';
+import useMarkerClusterer from '@/app/_hooks/useMarkerClusterer';
 
 const SearchResult = () => {
   const mapContext = useMap();
   const { location } = useGeolocation();
+  const { clusterer } = useMarkerClusterer();
 
   useEffect(() => {
     if (mapContext && mapContext?.keyword !== '') {
@@ -34,6 +36,8 @@ const SearchResult = () => {
       });
       setKeyword('');
     }
+
+    return mapContext?.markerClusterer?.clear();
   }, [mapContext?.keyword]);
 
   /* 검색 결과를 받을 콜백함수 */
@@ -92,6 +96,7 @@ const SearchResult = () => {
         position: position,
         image: markerImage,
       });
+
       // 커스텀 오버레이
       const content = (
         <MarkerInfo placeId={place.id} placeName={place.place_name} />
@@ -122,8 +127,15 @@ const SearchResult = () => {
       overlays.push(customOverlay);
     });
 
+    // 마커 클러스터러 생성
+    const newClusterer = new kakao.maps.MarkerClusterer({
+      ...clusterer,
+      markers: markers,
+    });
+
     mapContext?.setMarkers(markers);
     mapContext?.setOverlays(overlays);
+    mapContext?.setMarkerClusterer(newClusterer);
   };
 
   /* 이전 마커 & 커스텀 오버레이 삭제 */
@@ -131,6 +143,7 @@ const SearchResult = () => {
     if (mapContext?.markers) {
       mapContext?.markers.forEach((marker) => marker.setMap(null));
       mapContext?.setMarkers([]);
+      mapContext?.setMarkerClusterer(null);
     }
 
     if (mapContext?.overlays) {
