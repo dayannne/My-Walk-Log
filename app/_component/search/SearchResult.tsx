@@ -7,46 +7,69 @@ import { fetchPlaceDetail } from '@/app/api/map';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { MapComponent } from 'react-kakao-maps-sdk';
+import useGeolocation from '@/app/_hooks/useGeolocation';
 
 const SearchResult = () => {
   const mapContext = useMap();
+  const { location } = useGeolocation();
 
   useEffect(() => {
     if (mapContext && mapContext?.keyword !== '') {
-      const { keyword } = mapContext;
-      var ps = new kakao.maps.services.Places();
-      ps.keywordSearch(keyword, placesSearchCB);
+      const { keyword, mapData } = mapContext;
+
+      // 장소 검색 서비스 객체
+      const places = new kakao.maps.services.Places();
+      // 현재 지도의 영역값
+      const bounds = mapData?.getBounds();
+
+      places.keywordSearch(keyword, placesSearchCB, {
+        // 검색 기준 위치
+        location: new kakao.maps.LatLng(
+          location?.latitude as number,
+          location?.longitude as number,
+        ),
+        // 검색할 사각형 영역
+        bounds: bounds,
+      });
     }
   }, [mapContext?.keyword]);
 
+  /* 검색 결과를 받을 콜백함수 */
   const placesSearchCB = (
     data: any,
     status: kakao.maps.services.Status,
     pagination: any,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
+      // 이전 마커 & 커스텀 오버레이 삭제
       clearMarkersAndOverlays();
 
+      // 검색 결과 필터링 (산책 가능 장소)
       const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
 
       if (filteredPlaces.length === 0) {
         return alert('검색 결과가 존재하지 않습니다.');
       }
 
+      // 장소 저장
       mapContext?.setPlaces(filteredPlaces);
-
+      // 마커 & 커스텀 오버레이 띄우기
       displayMarkers(filteredPlaces);
     } else {
-      handleSearchError(status);
+      if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 결과 중 오류가 발생했습니다.');
+      }
     }
   };
+
+  /* 마커 & 커스텀 오버레이 띄우기 */
   const displayMarkers = (places: any[]) => {
     let markers: kakao.maps.Marker[] = [];
     let overlays: kakao.maps.CustomOverlay[] = [];
 
-    const bounds = new kakao.maps.LatLngBounds();
-
-    // 현재 활성화된 오버레이를 저장할 변수
+    // 커스텀 오버레이 객체 생성
     let currentOverlay: kakao.maps.CustomOverlay | null = null;
 
     places.forEach((place, index) => {
@@ -86,14 +109,13 @@ const SearchResult = () => {
 
       markers.push(marker);
       overlays.push(customOverlay);
-      bounds.extend(position);
     });
 
     mapContext?.setMarkers(markers);
     mapContext?.setOverlays(overlays);
-    mapContext?.mapData?.setBounds(bounds);
   };
 
+  /* 이전 마커 & 커스텀 오버레이 삭제 */
   const clearMarkersAndOverlays = () => {
     if (mapContext?.markers) {
       mapContext?.markers.forEach((marker) => marker.setMap(null));
@@ -103,14 +125,6 @@ const SearchResult = () => {
     if (mapContext?.overlays) {
       mapContext?.overlays.forEach((overlay) => overlay.setMap(null));
       mapContext?.setOverlays([]);
-    }
-  };
-
-  const handleSearchError = (status: kakao.maps.services.Status) => {
-    if (status === kakao.maps.services.Status.ZERO_RESULT) {
-      alert('검색 결과가 존재하지 않습니다.');
-    } else if (status === kakao.maps.services.Status.ERROR) {
-      alert('검색 결과 중 오류가 발생했습니다.');
     }
   };
 

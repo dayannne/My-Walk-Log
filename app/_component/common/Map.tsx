@@ -64,6 +64,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
         ),
         level: 3,
         smooth: true,
+        tileAnimation: false,
       };
       let zoomControl = new kakao.maps.ZoomControl();
       // 지도 생성
@@ -90,7 +91,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       keyword,
       setKeyword,
     }),
-    [map, markers, places, keyword], // places 배열 추가
+    [map, markers, overlays, places, keyword], // places 배열 추가
   );
 
   return (

@@ -2,24 +2,21 @@ import { useState, useEffect } from 'react';
 import { Latlng } from '../shared/types/map';
 
 const useGeolocation = () => {
-  const [location, setLoacation] = useState<Latlng>({
-    latitude: 33.5563,
-    longitude: 126.79581,
-  }); // 현재 위치를 저장할 상태
+  const [location, setLocation] = useState<Latlng | null>(null); // 현재 위치를 저장할 상태
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler); // 성공시 successHandler, 실패시 errorHandler 함수가 실행된다.
   }, []);
 
   const successHandler = (response: {
-    coords: { latitude: any; longitude: any };
+    coords: { latitude: number; longitude: number };
   }) => {
     // coords: GeolocationCoordinates {latitude: 위도, longitude: 경도, …} timestamp: 1673446873903
     const { latitude, longitude } = response.coords;
-    setLoacation({ latitude, longitude });
+    setLocation({ latitude, longitude });
   };
 
-  const errorHandler = (error: any) => {
+  const errorHandler = (error: GeolocationPositionError) => {
     console.log(error);
   };
 
