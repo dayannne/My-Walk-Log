@@ -47,8 +47,8 @@ const SearchResult = () => {
     pagination: any,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
-      // 이전 마커 & 커스텀 오버레이 삭제
-      clearMarkersAndOverlays();
+      // 이전 마커 & 마커 인포윈도우 삭제
+      clearMarkersAndInfo();
 
       // 검색 결과 필터링 (산책 가능 장소)
       const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
@@ -59,7 +59,7 @@ const SearchResult = () => {
 
       // 장소 저장
       mapContext?.setPlaces(filteredPlaces);
-      // 마커 & 커스텀 오버레이 띄우기
+      // 마커 & 마커 인포윈도우 & 마커 클러스터러 띄우기
       displayMarkers(filteredPlaces);
     } else {
       if (status === kakao.maps.services.Status.ZERO_RESULT) {
@@ -70,13 +70,13 @@ const SearchResult = () => {
     }
   };
 
-  /* 마커 & 커스텀 오버레이 띄우기 */
+  /* 마커 & 마커 인포윈도우 & 클러스터러 띄우기 */
   const displayMarkers = (places: any[]) => {
     let markers: kakao.maps.Marker[] = [];
     let overlays: kakao.maps.CustomOverlay[] = [];
 
-    // 커스텀 오버레이 객체 생성
-    let currentOverlay: kakao.maps.CustomOverlay | null = null;
+    // 마커 인포윈도우 객체 생성
+    let currentMarkerInfo: kakao.maps.CustomOverlay | null = null;
 
     places.forEach((place, index) => {
       const position = new kakao.maps.LatLng(place.y, place.x);
@@ -96,35 +96,38 @@ const SearchResult = () => {
         position: position,
         image: markerImage,
       });
+      kakao.maps.event.addListener(marker, 'click', () => {
+        // 현재 활성화된 오버레이가 있으면 제거
+        if (currentMarkerInfo) {
+          currentMarkerInfo.setMap(null);
+        } else {
+        }
+        // 클릭된 마커의 오버레이를 표시하고 현재 활성화된 오버레이로 설정
+        mapContext?.mapData?.panTo(marker.getPosition());
+        newMarkerInfo.setMap(mapContext?.mapData as kakao.maps.Map);
+        currentMarkerInfo = newMarkerInfo;
+      });
 
-      // 커스텀 오버레이
-      const content = (
+      // 마커 인포윈도우
+      const markerInfoContent = (
         <MarkerInfo placeId={place.id} placeName={place.place_name} />
       );
-      const overlayContent = document.createElement('div');
-      overlayContent.innerHTML = ReactDOMServer.renderToString(content);
-      overlayContent.addEventListener('click', () => {
+      const markerInfo = document.createElement('div');
+      markerInfo.innerHTML = ReactDOMServer.renderToString(markerInfoContent);
+      markerInfo.addEventListener('click', () => {
         handleClick(place.id);
+
+        mapContext?.mapData?.panTo(marker.getPosition());
       });
-      const customOverlay = new kakao.maps.CustomOverlay({
+      const newMarkerInfo = new kakao.maps.CustomOverlay({
         position: position,
-        content: overlayContent,
+        content: markerInfo,
         yAnchor: 2.8,
         clickable: true,
       });
 
-      kakao.maps.event.addListener(marker, 'click', () => {
-        // 현재 활성화된 오버레이가 있으면 제거
-        if (currentOverlay) {
-          currentOverlay.setMap(null);
-        }
-        // 클릭된 마커의 오버레이를 표시하고 현재 활성화된 오버레이로 설정
-        customOverlay.setMap(mapContext?.mapData as kakao.maps.Map);
-        currentOverlay = customOverlay;
-      });
-
       markers.push(marker);
-      overlays.push(customOverlay);
+      overlays.push(newMarkerInfo);
     });
 
     // 마커 클러스터러 생성
@@ -150,8 +153,8 @@ const SearchResult = () => {
     mapContext?.setMarkerClusterer(newClusterer);
   };
 
-  /* 이전 마커 & 커스텀 오버레이 삭제 */
-  const clearMarkersAndOverlays = () => {
+  /* 이전 마커 & 마커 인포윈도우 삭제 */
+  const clearMarkersAndInfo = () => {
     if (mapContext?.markers) {
       mapContext?.markers.forEach((marker) => marker.setMap(null));
       mapContext?.setMarkers([]);
