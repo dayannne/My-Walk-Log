@@ -133,6 +133,18 @@ const SearchResult = () => {
       markers: markers,
     });
 
+    // 마커 클러스터러에 클릭이벤트를 등록
+    // 클릭할 때마다 zoomLevel을 1씩 확대
+    kakao.maps.event.addListener(
+      newClusterer,
+      'clusterclick',
+      (cluster: { getCenter: () => any }) => {
+        const level = mapContext?.mapData?.getLevel()! - 1;
+        // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대
+        mapContext?.mapData?.setLevel(level, { anchor: cluster.getCenter() });
+      },
+    );
+
     mapContext?.setMarkers(markers);
     mapContext?.setOverlays(overlays);
     mapContext?.setMarkerClusterer(newClusterer);

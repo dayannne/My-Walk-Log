@@ -6,6 +6,7 @@ const useMarkerClusterer = () => {
   const clusterer = {
     map: mapContext?.mapData as kakao.maps.Map, // 지도 객체
     averageCenter: true,
+    disableClickZoom: true,
     gridSize: 60,
     calculator: [3, 5, 10, 15],
     styles: [
