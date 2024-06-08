@@ -1,5 +1,5 @@
-import { fetchPlaceDetail } from '@/app/api/map';
 import Image from 'next/image';
+import { fetchPlaceDetail } from '@/app/api/map';
 
 interface MarkerInfoProps {
   placeId: string;

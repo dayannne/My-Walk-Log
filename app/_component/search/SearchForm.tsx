@@ -1,31 +1,33 @@
 'use client';
 
 import React, { useState } from 'react';
-import Logo from '@/public/icons/icon-logo(white).svg';
-
 import Image from 'next/image';
 
-interface SearchProps {
-  onSearch: (keyword: string) => void;
-}
+import { useMap } from '@/app/shared/contexts/Map';
+import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
-const Search: React.FC<SearchProps> = ({ onSearch }) => {
+import Logo from '@/public/icons/icon-logo(white).svg';
+
+const SearchForm = () => {
+  const mapContext = useMap();
+  const { searchPlaces } = useSearchPlaces();
   const [keyword, setKeyword] = useState('');
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mapContext?.setKeyword(keyword);
+    searchPlaces(keyword);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSearch(keyword);
   };
 
   return (
     <div className='p-4 bg-olive-green border-b border-olive-green'>
       <Image src={Logo} alt='' className='pl-1 mb-1' />
       <form
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         className='h-9 bg-white py-1 pl-2 pr-3 flex border rounded-lg border-olive-green box-content shadow-md justify-between gap-1'
       >
         <input
@@ -46,4 +48,4 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
   );
 };
 
-export default Search;
+export default SearchForm;

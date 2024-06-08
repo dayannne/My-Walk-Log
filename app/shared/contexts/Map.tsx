@@ -8,8 +8,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import useGeolocation from '@/app/_hooks/useGeolocation';
 import { IPlace } from '@/app/shared/types/map';
+import useGeolocation from '@/app/_hooks/useGeolocation';
 
 interface MapProps {
   children?: React.ReactNode;

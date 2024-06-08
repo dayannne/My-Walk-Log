@@ -1,15 +1,15 @@
-import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-import { useMap } from './Map';
 import { useEffect, useState } from 'react';
-import { Latlng } from '@/app/shared/types/map';
 import Image from 'next/image';
 
-export interface SearchAgainButtonProps {
-  onSearch: (keyword: string) => void;
-}
+import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
-const SearchAgainButton = ({ onSearch }: SearchAgainButtonProps) => {
+import { useMap } from '@/app/shared/contexts/Map';
+
+export interface SearchAgainButtonProps {}
+
+const SearchAgainButton = () => {
   const mapContext = useMap();
+  const { searchPlaces } = useSearchPlaces();
   const { keyword, currLocation, prevLocation, setPrevLocation, mapData } =
     mapContext!;
   const [isVisible, setIsVisible] = useState(false);
@@ -28,7 +28,8 @@ const SearchAgainButton = ({ onSearch }: SearchAgainButtonProps) => {
   }, [currLocation]);
 
   const handleSearchAgain = () => {
-    onSearch(mapContext?.keyword as string);
+    mapContext?.setKeyword(keyword);
+    searchPlaces(keyword);
     setIsVisible(false);
   };
   return (

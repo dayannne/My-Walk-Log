@@ -1,11 +1,9 @@
 'use client';
 
-import ClientOnly from './_component/common/ClientOnly';
-import { useMap } from './_component/common/Map';
-import SearchAgainButton from './_component/common/SearchAgainButton';
-import Search from './_component/search/SearchForm';
-import SearchResult from './_component/search/SearchResult';
+import { useMap } from './shared/contexts/Map';
 import useSearchPlaces from './_hooks/useSearchPlaces';
+import ClientOnly from './_component/common/ClientOnly';
+import SearchResult from './_component/search/SearchResult';
 
 export default function Home() {
   const isEmpty = false;
@@ -21,9 +19,7 @@ export default function Home() {
   }
   return (
     <ClientOnly>
-      <Search onSearch={onSearch} />
       <SearchResult />
-      <SearchAgainButton onSearch={onSearch} />
     </ClientOnly>
   );
 }

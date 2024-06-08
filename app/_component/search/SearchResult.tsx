@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useMap } from '../common/Map';
-import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
+
+import { useMap } from '@/app/shared/contexts/Map';
 import usePlaceDetail from '@/app/_hooks/usePlaceDetail';
 
 const SearchResult = () => {

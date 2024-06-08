@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
-
-import { filterPlacesByKeyword } from '@/app/shared/function/filter';
-import { FILTER_CATEGORIES } from '@/app/shared/constant';
-import { useMap } from '../_component/common/Map';
-import MarkerInfo from '../_component/common/MarkerInfo';
 import ReactDOMServer from 'react-dom/server';
 
-import useMarkerClusterer from './useMarkerClusterer';
+import { useMap } from '../shared/contexts/Map';
 import usePlaceDetail from './usePlaceDetail';
+import useMarkerClusterer from './useMarkerClusterer';
+
+import { FILTER_CATEGORIES } from '@/app/shared/constant';
+import { filterPlacesByKeyword } from '@/app/shared/function/filter';
+
+import MarkerInfo from '../_component/common/MarkerInfo';
 
 const useSearchPlaces = () => {
   const mapContext = useMap();

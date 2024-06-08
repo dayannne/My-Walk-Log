@@ -1,4 +1,4 @@
-import { useMap } from '../_component/common/Map';
+import { useMap } from '../shared/contexts/Map';
 
 const useMarkerClusterer = () => {
   const mapContext = useMap();
