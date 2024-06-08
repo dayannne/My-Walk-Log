@@ -9,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import useGeolocation from '@/app/_hooks/useGeolocation';
-
 import { IPlace } from '@/app/shared/types/map';
 
 interface MapProps {
@@ -29,8 +28,16 @@ interface IMapContextValue {
   setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
-  prevKeyword: string;
-  setPrevKeyword: React.Dispatch<React.SetStateAction<string>>;
+  prevKeyword: string[];
+  setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
+  currLocation: kakao.maps.LatLng | null;
+  setCurrLocation: React.Dispatch<
+    React.SetStateAction<kakao.maps.LatLng | null>
+  >;
+  prevLocation: kakao.maps.LatLng | null;
+  setPrevLocation: React.Dispatch<
+    React.SetStateAction<kakao.maps.LatLng | null>
+  >;
 }
 
 const MapContext = createContext<IMapContextValue | null>({
@@ -46,8 +53,12 @@ const MapContext = createContext<IMapContextValue | null>({
   setPlaces: () => {},
   keyword: '',
   setKeyword: () => {},
-  prevKeyword: '',
+  prevKeyword: [],
   setPrevKeyword: () => {},
+  currLocation: null,
+  setCurrLocation: () => {},
+  prevLocation: null,
+  setPrevLocation: () => {},
 });
 
 const MapProvider: React.FC<MapProps> = ({ children }) => {
@@ -61,8 +72,14 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
     useState<kakao.maps.MarkerClusterer | null>(null);
   const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
   const [keyword, setKeyword] = useState<string>('');
-  const [prevKeyword, setPrevKeyword] = useState<string>('');
-  const [places, setPlaces] = useState<IPlace[]>([]); // 장소 배열 상태 추가
+  const [prevKeyword, setPrevKeyword] = useState<string[]>([]);
+  const [places, setPlaces] = useState<IPlace[]>([]);
+  const [prevLocation, setPrevLocation] = useState<kakao.maps.LatLng | null>(
+    null,
+  );
+  const [currLocation, setCurrLocation] = useState<kakao.maps.LatLng | null>(
+    null,
+  );
 
   useEffect(() => {
     const { kakao } = window;
@@ -84,7 +101,12 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
         mapElement as HTMLDivElement,
         options,
       );
+      kakao.maps.event.addListener(kakaoMap, 'dragend', function () {
+        // 지도 중심좌표를 얻어옵니다
+        const latlng = kakaoMap.getCenter();
 
+        setCurrLocation(latlng);
+      });
       kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
       setMap(kakaoMap);
     });
@@ -92,6 +114,10 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
 
   const values: IMapContextValue = useMemo(
     () => ({
+      currLocation,
+      setCurrLocation,
+      prevLocation,
+      setPrevLocation,
       mapRef,
       mapData: map,
       markers,
@@ -107,7 +133,17 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       prevKeyword,
       setPrevKeyword,
     }),
-    [map, markers, markerClusterer, overlays, places, keyword, prevKeyword],
+    [
+      currLocation,
+      prevLocation,
+      map,
+      markers,
+      markerClusterer,
+      overlays,
+      places,
+      keyword,
+      prevKeyword,
+    ],
   );
 
   return (
