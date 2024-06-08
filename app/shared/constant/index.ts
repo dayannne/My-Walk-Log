@@ -8,4 +8,6 @@ export const FILTER_CATEGORIES = [
   '도립공원',
   '산',
   '오름',
+  '호수',
+  '저수지',
 ];

@@ -11,11 +11,10 @@ import Logo from '@/public/icons/icon-logo(white).svg';
 const SearchForm = () => {
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
-  const [keyword, setKeyword] = useState('');
+  const { keyword, setKeyword } = mapContext!;
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mapContext?.setKeyword(keyword);
     searchPlaces(keyword);
   };
 

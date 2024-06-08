@@ -10,8 +10,14 @@ export interface SearchAgainButtonProps {}
 const SearchAgainButton = () => {
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
-  const { keyword, currLocation, prevLocation, setPrevLocation, mapData } =
-    mapContext!;
+  const {
+    keyword,
+    setKeyword,
+    currLocation,
+    prevLocation,
+    setPrevLocation,
+    mapData,
+  } = mapContext!;
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const SearchAgainButton = () => {
   }, [currLocation]);
 
   const handleSearchAgain = () => {
-    mapContext?.setKeyword(keyword);
+    setKeyword(keyword);
     searchPlaces(keyword);
     setIsVisible(false);
   };
