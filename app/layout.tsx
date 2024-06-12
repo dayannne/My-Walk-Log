@@ -21,14 +21,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const mapKey = '767f029977f8d866cc34f510ce0ae236';
   return (
     <html lang='en'>
       <body className={font.className}>
         <Script
           async
           type='text/javascript'
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${mapKey}&libraries=services,clusterer&autoload=false`}
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_JS_KEY}&libraries=services,clusterer&autoload=false`}
         ></Script>
         <ClientOnly>
           <Container>{children}</Container>
