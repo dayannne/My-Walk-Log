@@ -17,8 +17,8 @@ const SearchCategory = () => {
   };
 
   return (
-    <ul className='flex items-center gap-3  py-4 px-5 absolute top-4 left-80 font-medium text-lg'>
-      <li>
+    <ul className='flex items-center gap-3  py-4 px-5 absolute top-4 left-0 font-medium text-sm'>
+      <li className='shrink-0'>
         <button
           className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
           onClick={handleClick}
@@ -28,7 +28,7 @@ const SearchCategory = () => {
           공원
         </button>
       </li>
-      <li>
+      <li className='shrink-0'>
         <button
           className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
           onClick={handleClick}
@@ -38,7 +38,7 @@ const SearchCategory = () => {
           하천
         </button>
       </li>
-      <li>
+      <li className='shrink-0'>
         <button
           className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
           onClick={handleClick}
@@ -48,7 +48,7 @@ const SearchCategory = () => {
           산
         </button>
       </li>
-      <li>
+      <li className='shrink-0'>
         <button
           className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
           onClick={handleClick}
@@ -58,7 +58,7 @@ const SearchCategory = () => {
           호수
         </button>
       </li>
-      <li>
+      <li className='shrink-0'>
         <button
           className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
           onClick={handleClick}

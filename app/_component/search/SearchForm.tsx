@@ -6,9 +6,11 @@ import Image from 'next/image';
 import { useMap } from '@/app/shared/contexts/Map';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
-import Logo from '@/public/icons/icon-logo(white).svg';
+import { usePathname, useRouter } from 'next/navigation';
 
 const SearchForm = () => {
+  const router = useRouter();
+  const pathname = usePathname().split('/').pop();
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
   const { keyword, setKeyword } = mapContext!;
@@ -23,11 +25,17 @@ const SearchForm = () => {
   };
 
   return (
-    <div className='p-4 bg-olive-green border-b border-olive-green'>
-      <Image src={Logo} alt='' className='pl-1 mb-1' />
+    <div className='p-4  border-b border-olive-green'>
+      <Image
+        src='/icons/icon-logo(default).svg'
+        alt=''
+        className='pl-1 mb-2 '
+        width={140}
+        height={80}
+      />
       <form
         onSubmit={onSubmit}
-        className='h-9 bg-white py-1 pl-2 pr-3 flex border rounded-lg border-olive-green box-content shadow-md justify-between gap-1'
+        className='h-9 bg-white py-1 pl-2 pr-3 flex border rounded-lg border-olive-green border-solid box-content shadow-md justify-between gap-1 '
       >
         <input
           type='text'
@@ -35,6 +43,7 @@ const SearchForm = () => {
           onChange={handleInputChange}
           size={15}
           className='pl-1 basis-full rounded-full outline-none '
+          placeholder='장소 검색하기'
         />
         <button
           type='submit'
