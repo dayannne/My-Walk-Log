@@ -1,0 +1,71 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING") 
+}
+
+model User {
+  id        String   @id @unique @default(uuid()) @map("_id") 
+  name      String   @unique
+  email     String   @unique
+  profileImage String?
+  hashedPassword String
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reviews   Review[] @relation("author")
+  diaries   Diary[] @relation("author")
+  likedReviews Review[] 
+  likedDiaries Diary[] 
+  likedPlaces PlaceDetail[]
+}
+
+model PlaceDetail {
+  id              String       @id @unique @default(uuid())
+  likedCount      Int       @default(0)
+  eval Int
+  currentUserLiked Boolean   @default(false)
+  reviews         Review[] 
+  diaries         Diary[]
+  ikedBy         User[]   
+}
+
+model Review {
+  id           String     @id @unique @default(uuid()) 
+  placeId      String 
+  placeDetail PlaceDetail? @relation(fields: [placeId], references: [id])
+  reviewImages String[]
+  description  String
+  tip          String?
+  likedCount   Int       @default(0)
+  likedBy      User[]    
+  authorId     String
+  author       User      @relation("author", fields: [authorId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  eval         Int
+  tags         String[]
+  
+}
+
+model Diary {
+  id           String       @id @unique @default(uuid()) 
+  placeId      String
+  placeDetail PlaceDetail? @relation(fields: [placeId], references: [id])
+  diaryImages  String[]
+  authorId     String
+  content      String
+  author       User      @relation("author", fields: [authorId], references: [id])
+  likedCount   Int       @default(0)
+  likedBy      User[]   
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  weather      String
+  tags         String[]
+}
