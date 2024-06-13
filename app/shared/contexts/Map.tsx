@@ -86,29 +86,28 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
 
     kakao?.maps.load(() => {
       const mapElement = mapRef.current;
-      const options = {
-        center: new kakao.maps.LatLng(
-          location?.latitude as number,
-          location?.longitude as number,
-        ),
-        level: 3,
-        smooth: true,
-        tileAnimation: false,
-      };
-      let zoomControl = new kakao.maps.ZoomControl();
-      // 지도 생성
-      const kakaoMap = new kakao.maps.Map(
-        mapElement as HTMLDivElement,
-        options,
-      );
-      kakao.maps.event.addListener(kakaoMap, 'dragend', function () {
-        // 지도 중심좌표를 얻어옵니다
-        const latlng = kakaoMap.getCenter();
-
-        setCurrLocation(latlng);
-      });
-      kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-      setMap(kakaoMap);
+      // 컴포넌트 mount 후 DOM 요소에 접근
+      if (mapElement) {
+        const options = {
+          center: new kakao.maps.LatLng(
+            location?.latitude as number,
+            location?.longitude as number,
+          ),
+          level: 3,
+          smooth: true,
+          tileAnimation: false,
+        };
+        let zoomControl = new kakao.maps.ZoomControl();
+        // 지도 생성
+        const kakaoMap = new kakao.maps.Map(mapElement, options);
+        kakao.maps.event.addListener(kakaoMap, 'dragend', function () {
+          // 지도 중심좌표를 얻어옵니다
+          const latlng = kakaoMap.getCenter();
+          setCurrLocation(latlng);
+        });
+        kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+        setMap(kakaoMap);
+      }
     });
   }, [location?.latitude, location?.longitude]);
 

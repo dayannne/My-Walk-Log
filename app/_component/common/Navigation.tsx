@@ -1,28 +1,44 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useState } from 'react';
 export interface NavigationProps {}
 
 const Navigation = ({}: NavigationProps) => {
   const pathname = usePathname();
+  const [isHovered, setIsHovered] = useState('');
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const { id } = e.currentTarget;
+    setIsHovered(id);
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setIsHovered('');
+  };
 
   return (
     <nav className='w-16 list-none flex flex-col text-xs'>
       <li>
         <Link
-          className={`h-16 flex flex-col items-center justify-center border border-olive-green basis-full text-olive-green p-2 
+          id='place'
+          className={`h-[72px] flex flex-col gap-1 items-center justify-center border border-olive-green basis-full p-2 
               ${
                 pathname.includes('place')
                   ? 'bg-olive-green text-white'
-                  : 'text-olive-green'
+                  : 'text-black hover:text-olive-green'
               }`}
           href={'/place'}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <Image
             src={
               pathname.includes('place')
                 ? `/icons/icon-marker(white).svg`
-                : `/icons/icon-marker(full).svg`
+                : isHovered === 'place'
+                ? `/icons/icon-marker(hover).svg`
+                : `/icons/icon-marker(black).svg`
             }
             width={30}
             height={30}
@@ -33,22 +49,29 @@ const Navigation = ({}: NavigationProps) => {
       </li>
       <li>
         <Link
-          className={`h-16 flex flex-col items-center justify-center border border-olive-green basis-full text-olive-green p-2  ${
-            pathname.includes('trail')
-              ? 'bg-olive-green text-white'
-              : 'text-olive-green'
-          }`}
+          id='trail'
+          className={`h-[72px] flex flex-col gap-1 items-center justify-center border border-olive-green basis-full p-2 
+            ${
+              pathname.includes('trail')
+                ? 'bg-olive-green text-white'
+                : 'text-black hover:text-olive-green'
+            }
+          `}
           href={'/trail'}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <Image
             src={
               pathname.includes('trail')
                 ? `/icons/icon-walk(white).svg`
+                : isHovered === 'trail'
+                ? `/icons/icon-walk(hover).svg`
                 : `/icons/icon-walk.svg`
             }
             width={30}
             height={30}
-            alt='마커 아이콘'
+            alt='산책로 아이콘'
           />
           산책로
         </Link>
