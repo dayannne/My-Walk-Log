@@ -69,3 +69,22 @@ model Diary {
   weather      String
   tags         String[]
 }
+
+model Trail{
+  ESNTL_ID           String @id @unique
+  WLK_COURS_FLAG_NM  String
+  WLK_COURS_NM       String
+  COURS_DC           String
+  SIGNGU_NM          String
+  COURS_LEVEL_NM     String
+  COURS_LT_CN        String
+  COURS_DETAIL_LT_CN String
+  ADIT_DC            String
+  COURS_TIME_CN      String
+  OPTN_DC            String
+  TOILET_DC          String
+  CVNTL_NM           String
+  LNM_ADDR           String
+  COURS_SPOT_LA      String
+  COURS_SPOT_LO      String
+}
