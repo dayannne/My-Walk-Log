@@ -15,6 +15,7 @@ const config: Config = {
       },
       colors: {
         'olive-green': '#8a9455',
+        black: '#333333',
         hover: '#EEEFE6',
       },
     },
