@@ -29,9 +29,7 @@ export default async function RootLayout({
           type='text/javascript'
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_JS_KEY}&libraries=services,clusterer&autoload=false`}
         ></Script>
-        <ClientOnly>
-          <Container>{children}</Container>
-        </ClientOnly>
+        <ClientOnly>{children}</ClientOnly>
       </body>
     </html>
   );
