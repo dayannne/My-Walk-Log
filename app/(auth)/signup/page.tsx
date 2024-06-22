@@ -31,16 +31,39 @@ const SignupPage = ({}: pageProps) => {
       email: '',
       password: '',
       passwordConfirm: '',
-      name: '',
+      username: '',
       adress: '',
     },
   });
-  const onSubmit = (data: ISignupForm) => console.log(data);
+  const onSubmit = async (data: ISignupForm) => {
+    try {
+      const email = data.email;
+      const password = data.password;
+      const username = data.username;
+
+      const response = await axios.post('/api/auth/signup', {
+        email,
+        password,
+        username,
+      });
+      console.log(response);
+      if (response.status === 200) {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Axios 에러:', error.message);
+      } else {
+        console.error('예상치 못한 에러 발생:', error);
+      }
+    }
+  };
 
   const handleCheckBtn = async () => {
+    const email = getValues('email');
     try {
       const response = await axios.post('/api/auth/email-check', {
-        email: getValues('email'),
+        email,
       });
       const { isDuplicate } = response.data;
       if (isDuplicate === true) {
@@ -98,8 +121,8 @@ const SignupPage = ({}: pageProps) => {
         {emailValid.isValid === false &&
           !!getValues('email') &&
           errors.email && (
-          <p className='text-sm text-red-400'>{errors.email?.message}</p>
-        )}
+            <p className='text-sm text-red-400'>{errors.email?.message}</p>
+          )}
         {emailValid.isValid === true && (
           <p className='text-sm text-green-500'>사용 가능한 이메일입니다.</p>
         )}
@@ -168,8 +191,14 @@ const SignupPage = ({}: pageProps) => {
             type='text'
             maxLength={8}
             placeholder='이름 입력 (8자리 이하)'
-            {...register('name', { required: true, maxLength: 8 })}
+            {...register('username', {
+              required: '이름을 입력해 주세요.',
+              maxLength: 8,
+            })}
           />
+          {!!getValues('username') && errors.username && (
+            <p className='text-sm text-red-400'>{errors.username.message}</p>
+          )}
         </label>
 
         <label>
@@ -178,7 +207,7 @@ const SignupPage = ({}: pageProps) => {
             className='border- w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
             type='password'
             placeholder='주소 입력'
-            {...register('name', { required: false })}
+            {...register('adress', { required: false })}
           />
         </label>
         <div className='flex flex-col'>
