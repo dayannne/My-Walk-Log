@@ -5,14 +5,21 @@ import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { ISignupForm } from '@/app/shared/types/auth';
 
+import axios from 'axios';
+import { useState } from 'react';
 
 export interface pageProps {}
 
 const SignupPage = ({}: pageProps) => {
+  const [emailValid, setEmailValid] = useState({
+    isValid: false,
+    email: '',
+  });
   const {
     watch,
     getValues,
     register,
+    setError,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<ISignupForm>({
@@ -31,6 +38,26 @@ const SignupPage = ({}: pageProps) => {
   const onSubmit = (data: ISignupForm) => console.log(data);
 
   const handleCheckBtn = async () => {
+    try {
+      const response = await axios.post('/api/auth/email-check', {
+        email: getValues('email'),
+      });
+      const { isDuplicate } = response.data;
+      if (isDuplicate === true) {
+        setError('email', {
+          message: '이미 존재하는 이메일입니다.',
+        });
+        setEmailValid({ isValid: false, email: '' });
+      } else {
+        setEmailValid({ isValid: true, email });
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.message);
+      } else {
+        console.error('An unexpected error occurred:', error);
+      }
+    }
   };
 
   return (
@@ -51,7 +78,13 @@ const SignupPage = ({}: pageProps) => {
               type='text'
               className='w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
               placeholder='이메일'
-              {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
+              {...register('email', {
+                required: '이메일을 입력해주세요.',
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: '올바른 이메일 형식이 아닙니다.',
+                },
+              })}
             />
             <button
               type='button'
@@ -62,8 +95,13 @@ const SignupPage = ({}: pageProps) => {
             </button>
           </div>
         </label>
-        {!!getValues('email') && errors.email && (
-          <p className='text-sm text-red-400'>잘못된 이메일 형식입니다.</p>
+        {emailValid.isValid === false &&
+          !!getValues('email') &&
+          errors.email && (
+          <p className='text-sm text-red-400'>{errors.email?.message}</p>
+        )}
+        {emailValid.isValid === true && (
+          <p className='text-sm text-green-500'>사용 가능한 이메일입니다.</p>
         )}
         <label>
           <h2 className='relative mb-2'>
@@ -76,14 +114,19 @@ const SignupPage = ({}: pageProps) => {
             type='password'
             className='border- w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
             placeholder='비밀번호 (8자리 이상)'
-            {...register('password', { required: true, minLength: 8 })}
+            {...register('password', {
+              required: '비밀번호를 입력해주세요.',
+              minLength: {
+                value: 8,
+                message: '비밀번호는 최소 8자 이상이어야 합니다.',
+              },
+            })}
           />
         </label>
         {!!getValues('password') && errors.password && (
-          <p className='text-sm text-red-400'>
-            8자리 이상의 비밀번호를 입력해 주세요.
-          </p>
+          <p className='text-sm text-red-400'>{errors.password.message}</p>
         )}
+
         <label>
           <h2 className='relative mb-2'>
             비밀번호 확인
@@ -142,7 +185,11 @@ const SignupPage = ({}: pageProps) => {
           <button
             type='submit'
             className='bg-olive-green mt-6 w-full rounded-md p-4 text-sm text-white disabled:bg-gray-300'
-            disabled={!isValid}
+            disabled={
+              isValid === false ||
+              emailValid.isValid === false ||
+              emailValid.email !== watch('email')
+            }
           >
             회원가입
           </button>
