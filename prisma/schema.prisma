@@ -11,67 +11,64 @@ datasource db {
 }
 
 model User {
-  id        String   @id @unique @default(uuid()) @map("_id") 
-  name      String   @unique
-  email     String   @unique
-  profileImage String?
+  id             Int      @id @default(autoincrement())
+  username       String
+  email          String   @unique
+  profileImage   String?
   hashedPassword String
-  address   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  reviews   Review[] @relation("author")
-  diaries   Diary[] @relation("author")
-  likedReviews Review[] 
-  likedDiaries Diary[] 
-  likedPlaces PlaceDetail[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  reviews        Review[] @relation("author")
+  diaries        Diary[]  @relation("author")
+  likedReviews   Review[]
+  likedDiaries   Diary[]
+  likedPlaces    PlaceDetail[]
 }
 
 model PlaceDetail {
-  id              String       @id @unique @default(uuid())
-  likedCount      Int       @default(0)
-  eval Int
-  currentUserLiked Boolean   @default(false)
-  reviews         Review[] 
+  id              String   @id @default(uuid())
+  likedCount      Int      @default(0)
+  eval            Int
+  currentUserLiked Boolean  @default(false)
+  reviews         Review[]
   diaries         Diary[]
-  ikedBy         User[]   
+  ikedBy          User[]
 }
-
 model Review {
-  id           String     @id @unique @default(uuid()) 
-  placeId      String 
-  placeDetail PlaceDetail? @relation(fields: [placeId], references: [id])
+  id           Int      @id @default(autoincrement())
+  placeId      String
+  placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
   reviewImages String[]
   description  String
   tip          String?
-  likedCount   Int       @default(0)
-  likedBy      User[]    
-  authorId     String
-  author       User      @relation("author", fields: [authorId], references: [id])
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  likedCount   Int      @default(0)
+  likedBy      User[]
+  authorId     Int
+  author       User     @relation("author", fields: [authorId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   eval         Int
   tags         String[]
-  
 }
 
 model Diary {
-  id           String       @id @unique @default(uuid()) 
-  placeId      String
-  placeDetail PlaceDetail? @relation(fields: [placeId], references: [id])
+  id           String   @id @default(uuid())
+  placeId      String   // 변경된 부분: String 타입으로 수정
+  placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
   diaryImages  String[]
-  authorId     String
+  authorId     Int
   content      String
-  author       User      @relation("author", fields: [authorId], references: [id])
-  likedCount   Int       @default(0)
-  likedBy      User[]   
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  author       User     @relation("author", fields: [authorId], references: [id])
+  likedCount   Int      @default(0)
+  likedBy      User[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   weather      String
   tags         String[]
 }
 
 model Trail{
-  ESNTL_ID           String @id @unique
+  ESNTL_ID           String @id 
   WLK_COURS_FLAG_NM  String
   WLK_COURS_NM       String
   COURS_DC           String
