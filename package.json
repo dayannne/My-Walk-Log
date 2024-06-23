@@ -20,7 +20,8 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.5",
     "react-kakao-maps-sdk": "^1.1.26",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
