@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import prisma from '@/prisma/context';
+import prisma from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 
 interface RequestBody {
