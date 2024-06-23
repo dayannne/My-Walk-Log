@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+
   // 기본 router 설정
   async redirects() {
     return [
@@ -44,6 +45,13 @@ const nextConfig = {
         ],
       },
     ];
+  },
+
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      require('./scripts/generate-sitemap'); // Ensure this script exists and works correctly
+    }
+    return config;
   },
 };
 
