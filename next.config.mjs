@@ -46,13 +46,6 @@ const nextConfig = {
       },
     ];
   },
-
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      require('./scripts/generate-sitemap'); // Ensure this script exists and works correctly
-    }
-    return config;
-  },
 };
 
 export default nextConfig;
