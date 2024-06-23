@@ -1,21 +1,29 @@
 'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { useUserStore } from '@/app/store/user';
+import { ILoginForm } from '@/app/shared/types/auth';
 
 export interface pageProps {}
 
-interface IForm {
-  email: string;
-  password: string;
-}
-
 const LoginPage = ({}: pageProps) => {
+  const router = useRouter();
+  const { setUser } = useUserStore();
+  const [error, setError] = useState({
+    isError: false,
+    message: '',
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IForm>({
+  } = useForm<ILoginForm>({
     mode: 'onBlur',
     reValidateMode: 'onChange',
     shouldFocusError: true,
@@ -25,7 +33,26 @@ const LoginPage = ({}: pageProps) => {
       password: '',
     },
   });
-  const onSubmit = () => console.log();
+  const onSubmit = async (data: ILoginForm) => {
+    try {
+      const result = await axios.post('/api/auth/login', data);
+
+      if (result.status === 200) {
+        setUser(result.data.data);
+        setError({
+          isError: false,
+          message: '',
+        });
+        alert(`${result.data.data.username}님, 반가워요 :)`);
+        router.push('/place');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error);
+        setError({ isError: true, message: error.response?.data.message });
+      }
+    }
+  };
 
   return (
     <form
@@ -47,9 +74,9 @@ const LoginPage = ({}: pageProps) => {
         placeholder='비밀번호'
         {...register('password', { required: true })}
       />
-      {/* <p className='mt-5 text-sm text-red-400'>
-        아이디 및 비밀번호가 일치하지 않습니다.
-      </p> */}
+      {error.isError && (
+        <p className='mt-5 text-sm text-red-400'>{error.message}</p>
+      )}
 
       <button
         type='submit'
