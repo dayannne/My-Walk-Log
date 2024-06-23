@@ -31,6 +31,7 @@ const SearchAgainButton = () => {
       setIsVisible(true);
       setPrevLocation(mapData?.getCenter() as kakao.maps.LatLng);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currLocation]);
 
   const handleSearchAgain = () => {
@@ -43,7 +44,7 @@ const SearchAgainButton = () => {
       {isVisible && (
         <button
           onClick={handleSearchAgain}
-          className='flex items-center gap-2 rounded-full py-4 px-5 absolute bottom-12 left-1/2 translate-x-[80px] border shadow-lg bg-white border-olive-green text-base font-medium'
+          className='border-olive-green absolute bottom-12 left-1/2 flex translate-x-[80px] items-center gap-2 rounded-full border bg-white px-5 py-4 text-base font-medium shadow-lg'
         >
           현재 위치에서 재검색하기
           <Image
