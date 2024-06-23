@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
@@ -18,7 +20,7 @@ const Navigation = ({}: NavigationProps) => {
   };
 
   return (
-    <nav className='w-16 list-none flex flex-col text-xs'>
+    <nav className='w-16 list-none flex flex-col text-xs basis-full'>
       <li>
         <Link
           id='place'
