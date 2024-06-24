@@ -44,7 +44,7 @@ model Place {
 
 model PlaceDetail {
   id                String   @id  
-
+  placeId String @unique
   placeName         String
   detail            Json
   likedCount        Int      @default(0)
@@ -54,7 +54,7 @@ model PlaceDetail {
   diaries           Diary[]
   likedBy            User[]
 
-  place            Place    @relation(fields: [id], references: [id])
+  place            Place    @relation(fields: [placeId], references: [id])
   @@index([id], name: "id")
 }
 
