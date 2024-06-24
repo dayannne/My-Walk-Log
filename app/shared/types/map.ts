@@ -10,8 +10,8 @@ export interface IMarker {
 
 export interface IPlace {
   address_name: string;
-  category_group_code: string;
-  category_group_name: string;
+  category_group_code?: string;
+  category_group_name?: string;
   category_name: string;
   distance: string;
   id: string;

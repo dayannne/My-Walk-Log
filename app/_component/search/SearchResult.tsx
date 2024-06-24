@@ -14,14 +14,15 @@ const SearchResult = () => {
       {mapContext?.places &&
         mapContext?.places?.map((place: any, index: number) => (
           <li
-            key={index}
+            key={place.id}
             className='item cursor-pointer'
             onClick={() => handleClick(place.id)}
           >
             <span className={`markerbg marker_${index + 1}`} />
-            <div className='info'>
-              <h5>{place.place_name}</h5>
-              <span>{place.road_address_name || place.address_name}</span>
+            <div className=''>
+              <h5>{place.placeName}</h5>
+              <span>{place.address}</span>
+              {place.roadAdress && <span>{place.roadAdress}</span>}
               <span className='tel'>{place.phone}</span>
             </div>
           </li>
