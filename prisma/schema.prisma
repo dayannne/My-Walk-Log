@@ -43,7 +43,7 @@ model Place {
 }
 
 model PlaceDetail {
-  id                String   @id  @unique
+  id                String   @id  
 
   placeName         String
   detail            Json
@@ -52,7 +52,7 @@ model PlaceDetail {
   currentUserLiked  Boolean  @default(false)
   reviews           Review[]
   diaries           Diary[]
-  ikedBy            User[]
+  likedBy            User[]
 
   place            Place    @relation(fields: [id], references: [id])
   @@index([id], name: "id")

@@ -1,7 +1,7 @@
 'use client';
 
+import usePlaceDetail from '@/app/_hooks/usePlaceDetail';
 import Image from 'next/image';
-import { fetchPlaceDetail } from '@/app/api/map';
 
 interface MarkerInfoProps {
   placeId: string;
@@ -9,15 +9,13 @@ interface MarkerInfoProps {
 }
 
 const MarkerInfo = ({ placeId, placeName }: MarkerInfoProps) => {
-  const handleClick = async (placeId: string) => {
-    const result = await fetchPlaceDetail(placeId);
-  };
+  const { handleClick } = usePlaceDetail();
 
   return (
-    <div className='bg-white shadow-lg rounded-md  text-base flex overflow-hidden'>
+    <div className='flex overflow-hidden rounded-md bg-white text-base shadow-lg'>
       <span className='px-3 py-2 font-medium'>{placeName}</span>
       <button
-        className='bg-olive-green w-10 basis-full  flex items-center justify-center'
+        className='bg-olive-green flex w-10 basis-full items-center justify-center'
         onClick={() => handleClick(placeId)}
       >
         <Image

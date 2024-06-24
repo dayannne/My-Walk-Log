@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/prisma/context';
 import { IPlace } from '@/app/shared/types/map';
-import { fetchPlaceDetail } from '../../map';
+
 import axiosInstance from '../../axiosInstance';
 
 export async function POST(request: Request) {
@@ -35,7 +35,6 @@ export async function POST(request: Request) {
               // 장소 상세 데이터 함께 생성(PlaceDetail DB에 저장됨)
               placeDetail: {
                 create: {
-                  id: place.id,
                   placeName: place.place_name,
                   detail: { ...placeDetail.data },
                 },

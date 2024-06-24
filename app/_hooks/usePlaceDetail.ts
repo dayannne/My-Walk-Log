@@ -1,8 +1,11 @@
-import { fetchPlaceDetail } from '../api/map';
+import axios from 'axios';
 
 const usePlaceDetail = () => {
   const handleClick = async (placeId: string) => {
-    const result = await fetchPlaceDetail(placeId);
+    try {
+      const result = await axios.post(`/api/search/result/${placeId}`);
+      console.log(result);
+    } catch (error) {}
   };
 
   return { handleClick };
