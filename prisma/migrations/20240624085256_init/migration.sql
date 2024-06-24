@@ -12,10 +12,29 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Place" (
+    "id" TEXT NOT NULL,
+    "categoryName" TEXT NOT NULL,
+    "placeName" TEXT NOT NULL,
+    "placeUrl" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "roadAddress" TEXT NOT NULL,
+    "distance" TEXT NOT NULL,
+    "x" TEXT NOT NULL,
+    "y" TEXT NOT NULL,
+
+    CONSTRAINT "Place_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "PlaceDetail" (
     "id" TEXT NOT NULL,
+    "placeId" TEXT NOT NULL,
+    "placeName" TEXT NOT NULL,
+    "detail" JSONB NOT NULL,
     "likedCount" INTEGER NOT NULL DEFAULT 0,
-    "eval" INTEGER NOT NULL,
+    "eval" INTEGER NOT NULL DEFAULT 0,
     "currentUserLiked" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "PlaceDetail_pkey" PRIMARY KEY ("id")
@@ -24,16 +43,17 @@ CREATE TABLE "PlaceDetail" (
 -- CreateTable
 CREATE TABLE "Review" (
     "id" SERIAL NOT NULL,
-    "placeId" TEXT NOT NULL,
     "reviewImages" TEXT[],
     "description" TEXT NOT NULL,
     "tip" TEXT,
     "likedCount" INTEGER NOT NULL DEFAULT 0,
-    "authorId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "eval" INTEGER NOT NULL,
     "tags" TEXT[],
+    "placeId" TEXT NOT NULL,
+    "placeDetailId" TEXT NOT NULL,
+    "authorId" INTEGER NOT NULL,
 
     CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
@@ -43,13 +63,13 @@ CREATE TABLE "Diary" (
     "id" TEXT NOT NULL,
     "placeId" TEXT NOT NULL,
     "diaryImages" TEXT[],
-    "authorId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
     "likedCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "weather" TEXT NOT NULL,
     "tags" TEXT[],
+    "authorId" INTEGER NOT NULL,
 
     CONSTRAINT "Diary_pkey" PRIMARY KEY ("id")
 );
@@ -98,6 +118,15 @@ CREATE TABLE "_DiaryToUser" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Place_id_key" ON "Place"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PlaceDetail_placeId_key" ON "PlaceDetail"("placeId");
+
+-- CreateIndex
+CREATE INDEX "placeId" ON "PlaceDetail"("placeId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_PlaceDetailToUser_AB_unique" ON "_PlaceDetailToUser"("A", "B");
 
 -- CreateIndex
@@ -116,7 +145,13 @@ CREATE UNIQUE INDEX "_DiaryToUser_AB_unique" ON "_DiaryToUser"("A", "B");
 CREATE INDEX "_DiaryToUser_B_index" ON "_DiaryToUser"("B");
 
 -- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_placeId_fkey" FOREIGN KEY ("placeId") REFERENCES "PlaceDetail"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PlaceDetail" ADD CONSTRAINT "PlaceDetail_placeId_fkey" FOREIGN KEY ("placeId") REFERENCES "Place"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Review" ADD CONSTRAINT "Review_placeId_fkey" FOREIGN KEY ("placeId") REFERENCES "Place"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Review" ADD CONSTRAINT "Review_placeDetailId_fkey" FOREIGN KEY ("placeDetailId") REFERENCES "PlaceDetail"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
