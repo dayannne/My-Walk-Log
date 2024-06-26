@@ -27,10 +27,8 @@ model User {
 
 model Place {
   id          String   @id 
-  categoryName String
   placeName   String
-  placeUrl    String
-  phone       String
+  categoryName String
   address     String
   roadAddress String
   distance    String
@@ -46,16 +44,15 @@ model PlaceDetail {
   id                String   @id  
   placeId String @unique
   placeName         String
-  detail            Json
   likedCount        Int      @default(0)
   eval              Int      @default(0)
-  currentUserLiked  Boolean  @default(false)
+  placeInfo            Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeDetail            Json
+  @@index([id], name: "id")
   reviews           Review[]
   diaries           Diary[]
   likedBy            User[]
 
-  place            Place    @relation(fields: [placeId], references: [id])
-  @@index([id], name: "id")
 }
 
 

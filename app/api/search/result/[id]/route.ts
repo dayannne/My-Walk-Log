@@ -1,7 +1,7 @@
 import prisma from '@/prisma/context';
 import { NextResponse } from 'next/server';
 
-export async function POST(
+export async function GET(
   request: Request,
   { params }: { params: { id: string } },
 ) {
@@ -12,7 +12,7 @@ export async function POST(
         id,
       },
       include: {
-        place: true,
+        placeInfo: true,
         reviews: true,
         diaries: true,
         likedBy: true,

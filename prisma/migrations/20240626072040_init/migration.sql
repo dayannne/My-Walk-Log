@@ -14,10 +14,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Place" (
     "id" TEXT NOT NULL,
-    "categoryName" TEXT NOT NULL,
     "placeName" TEXT NOT NULL,
-    "placeUrl" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
+    "categoryName" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "roadAddress" TEXT NOT NULL,
     "distance" TEXT NOT NULL,
@@ -30,11 +28,11 @@ CREATE TABLE "Place" (
 -- CreateTable
 CREATE TABLE "PlaceDetail" (
     "id" TEXT NOT NULL,
+    "placeId" TEXT NOT NULL,
     "placeName" TEXT NOT NULL,
-    "detail" JSONB NOT NULL,
     "likedCount" INTEGER NOT NULL DEFAULT 0,
     "eval" INTEGER NOT NULL DEFAULT 0,
-    "currentUserLiked" BOOLEAN NOT NULL DEFAULT false,
+    "placeDetail" JSONB NOT NULL,
 
     CONSTRAINT "PlaceDetail_pkey" PRIMARY KEY ("id")
 );
@@ -120,7 +118,7 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "Place_id_key" ON "Place"("id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PlaceDetail_id_key" ON "PlaceDetail"("id");
+CREATE UNIQUE INDEX "PlaceDetail_placeId_key" ON "PlaceDetail"("placeId");
 
 -- CreateIndex
 CREATE INDEX "id" ON "PlaceDetail"("id");
@@ -144,7 +142,7 @@ CREATE UNIQUE INDEX "_DiaryToUser_AB_unique" ON "_DiaryToUser"("A", "B");
 CREATE INDEX "_DiaryToUser_B_index" ON "_DiaryToUser"("B");
 
 -- AddForeignKey
-ALTER TABLE "PlaceDetail" ADD CONSTRAINT "PlaceDetail_id_fkey" FOREIGN KEY ("id") REFERENCES "Place"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PlaceDetail" ADD CONSTRAINT "PlaceDetail_placeId_fkey" FOREIGN KEY ("placeId") REFERENCES "Place"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Review" ADD CONSTRAINT "Review_placeId_fkey" FOREIGN KEY ("placeId") REFERENCES "Place"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

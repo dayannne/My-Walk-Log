@@ -18,15 +18,14 @@ export async function POST(request: Request) {
         if (!existingPlace) {
           //  장소 상세 데이터 받아오기
           const placeDetail = await axiosInstance.get(`/main/v/${place.id}`);
-
+          const category = place.category_name.split(` > `).pop();
           // 장소 데이터 생성
           await prisma.place.create({
             data: {
               id: place.id,
-              categoryName: place.category_name,
+              categoryName: (category as string) || '',
               placeName: place.place_name,
-              placeUrl: place.place_url,
-              phone: place.phone,
+
               address: place.address_name,
               roadAddress: place.road_address_name,
               distance: place.distance,
@@ -37,7 +36,7 @@ export async function POST(request: Request) {
                 create: {
                   id: place.id,
                   placeName: place.place_name,
-                  detail: { ...placeDetail.data },
+                  placeDetail: { ...placeDetail.data },
                 },
               },
             },
