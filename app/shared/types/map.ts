@@ -21,4 +21,6 @@ export interface IPlace {
   road_address_name: string;
   x: string;
   y: string;
+  reviews: [];
+  placeDetail: any;
 }

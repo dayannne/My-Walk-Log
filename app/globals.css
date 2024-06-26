@@ -127,3 +127,16 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgb(196, 198, 200);
+}
+
+::-webkit-scrollbar-track-piece {
+  background: rgb(233, 236, 239);
+}

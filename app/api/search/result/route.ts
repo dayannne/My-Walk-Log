@@ -35,6 +35,7 @@ export async function POST(request: Request) {
               // 장소 상세 데이터 함께 생성(PlaceDetail DB에 저장됨)
               placeDetail: {
                 create: {
+                  id: place.id,
                   placeName: place.place_name,
                   detail: { ...placeDetail.data },
                 },
@@ -51,7 +52,13 @@ export async function POST(request: Request) {
             },
           });
         } else {
-          return existingPlace;
+          return await prisma.place.findFirst({
+            where: { id: place.id },
+            include: {
+              reviews: true,
+              placeDetail: true,
+            },
+          });
         }
       }),
     );
