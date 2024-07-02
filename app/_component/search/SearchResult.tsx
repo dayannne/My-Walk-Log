@@ -3,15 +3,16 @@
 import React from 'react';
 
 import { useMap } from '@/app/shared/contexts/Map';
-import usePlaceDetail from '@/app/_hooks/usePlaceDetail';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUserStore } from '@/app/store/user';
+
+import { useParams } from 'next/navigation';
 
 const SearchResult = () => {
   const mapContext = useMap();
-  const { handleClick } = usePlaceDetail();
-  const { user } = useUserStore();
+
+  const keyword = decodeURIComponent(useParams().keyword as string);
 
   const HighlightText = ({
     placeId,
@@ -69,7 +70,10 @@ const SearchResult = () => {
                 alt='별모양 버튼'
               />
             </button>
-            <Link className='flex flex-col' href={`/place/result${place.id}`}>
+            <Link
+              className='flex flex-col'
+              href={`/place/search/${keyword}/detail/${place.id}`}
+            >
               <div className='flex items-center gap-2'>
                 <HighlightText
                   placeId={place.id}
