@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Noto_Sans_KR } from 'next/font/google';
 
-import './globals.css';
+import '../styles/globals.css';
 
 import Container from './_component/common/Container';
 import ClientOnly from './_component/common/ClientOnly';
+import ReactQueryProviders from './_hooks/useReactQuery';
 // import ToasterProvider from './provider/ToasterProvider';
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export default async function RootLayout({
           type='text/javascript'
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_JS_KEY}&libraries=services,clusterer&autoload=false`}
         ></Script>
-        <ClientOnly>{children}</ClientOnly>
+        <ReactQueryProviders>{children}</ReactQueryProviders>
       </body>
     </html>
   );
