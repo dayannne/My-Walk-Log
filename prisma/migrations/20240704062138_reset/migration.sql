@@ -7,6 +7,7 @@ CREATE TABLE "User" (
     "hashedPassword" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "likedPlaces" TEXT[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -33,6 +34,7 @@ CREATE TABLE "PlaceDetail" (
     "likedCount" INTEGER NOT NULL DEFAULT 0,
     "eval" INTEGER NOT NULL DEFAULT 0,
     "placeDetail" JSONB NOT NULL,
+    "likedBy" INTEGER[],
 
     CONSTRAINT "PlaceDetail_pkey" PRIMARY KEY ("id")
 );
@@ -94,12 +96,6 @@ CREATE TABLE "Trail" (
 );
 
 -- CreateTable
-CREATE TABLE "_PlaceDetailToUser" (
-    "A" TEXT NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "_ReviewToUser" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -122,12 +118,6 @@ CREATE UNIQUE INDEX "PlaceDetail_placeId_key" ON "PlaceDetail"("placeId");
 
 -- CreateIndex
 CREATE INDEX "id" ON "PlaceDetail"("id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_PlaceDetailToUser_AB_unique" ON "_PlaceDetailToUser"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_PlaceDetailToUser_B_index" ON "_PlaceDetailToUser"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ReviewToUser_AB_unique" ON "_ReviewToUser"("A", "B");
@@ -158,12 +148,6 @@ ALTER TABLE "Diary" ADD CONSTRAINT "Diary_placeId_fkey" FOREIGN KEY ("placeId") 
 
 -- AddForeignKey
 ALTER TABLE "Diary" ADD CONSTRAINT "Diary_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_PlaceDetailToUser" ADD CONSTRAINT "_PlaceDetailToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "PlaceDetail"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_PlaceDetailToUser" ADD CONSTRAINT "_PlaceDetailToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ReviewToUser" ADD CONSTRAINT "_ReviewToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Review"("id") ON DELETE CASCADE ON UPDATE CASCADE;

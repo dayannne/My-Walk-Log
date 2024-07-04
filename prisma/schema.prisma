@@ -22,7 +22,7 @@ model User {
   diaries        Diary[]  @relation("author")
   likedReviews   Review[]
   likedDiaries   Diary[]
-  likedPlaces    PlaceDetail[]
+  likedPlaces    String[]
 }
 
 model Place {
@@ -51,7 +51,7 @@ model PlaceDetail {
   @@index([id], name: "id")
   reviews           Review[]
   diaries           Diary[]
-  likedBy            User[]
+  likedBy            Int[]
 
 }
 
