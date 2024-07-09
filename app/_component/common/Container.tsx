@@ -15,12 +15,12 @@ const Container = ({ children }: ContainerProps) => {
   return (
     <>
       <MapProvider>
-        <div className='flex bg-white shadow-2xl z-10'>
+        <div className='z-10 flex bg-white shadow-2xl'>
           <Header />
-          <div className='bg-white flex flex-col w-80 min-w-80  gap-4 '>
+          <div className='relative flex w-80 min-w-80 flex-col gap-4 bg-white'>
             {children}
           </div>
-          <div className=' basis-full relative'>
+          <div className='relative basis-full'>
             <SearchCategory />
           </div>
           <SearchAgainButton />
