@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/prisma/context';
 import { IPlace } from '@/app/shared/types/map';
 
-import axiosInstance from '../../axiosInstance';
+import { kakaoInstance } from '../../_routes/axiosInstance';
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
         if (!existingPlace) {
           //  장소 상세 데이터 받아오기
-          const placeDetail = await axiosInstance.get(`/main/v/${place.id}`);
+          const placeDetail = await kakaoInstance.get(`/main/v/${place.id}`);
           const category = place.category_name.split(` > `).pop();
           // 장소 데이터 생성
           await prisma.place.create({

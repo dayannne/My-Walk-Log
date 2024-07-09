@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
+export const kakaoInstance = axios.create({
   baseURL: 'http://localhost:3000/api/kakao',
 });
-
-export default axiosInstance;
