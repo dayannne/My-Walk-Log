@@ -20,7 +20,7 @@ const SearchCategory = () => {
   };
 
   return (
-    <ul className='absolute left-0 top-4 flex items-center gap-3 px-5 py-4 text-sm font-medium'>
+    <ul className='absolute right-0 top-4 flex items-center gap-3 px-5 py-4 text-sm font-medium'>
       <li className='shrink-0'>
         <button
           className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'

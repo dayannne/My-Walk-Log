@@ -8,10 +8,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { useParams } from 'next/navigation';
+import { useUserStore } from '@/app/store/user';
 
 const SearchResult = () => {
   const mapContext = useMap();
-
+  const { user } = useUserStore();
   const keyword = decodeURIComponent(useParams().keyword as string);
 
   const HighlightText = ({
@@ -26,7 +27,7 @@ const SearchResult = () => {
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
 
     return (
-      <span className='text-base'>
+      <span className='mr-1 text-base'>
         {parts.map((part, index) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
             <strong className='font-bold' key={index}>
@@ -43,7 +44,7 @@ const SearchResult = () => {
   const CategoryFilter = ({ category }: { category: string }) => {
     const categories = category.split(` > `);
     return (
-      <span className='text-sm font-light text-gray-500'>
+      <span className='break-all text-sm font-light text-gray-500'>
         {categories[categories.length - 1]}
       </span>
     );
@@ -61,7 +62,7 @@ const SearchResult = () => {
               <Image
                 className='w-full'
                 src={
-                  place.placeDetail.currentUserLiked
+                  place.placeDetail.likedBy.includes(user?.id)
                     ? `/icons/icon-star-fill.svg`
                     : `/icons/icon-star.svg`
                 }
@@ -74,7 +75,7 @@ const SearchResult = () => {
               className='flex flex-col'
               href={`/place/search/${keyword}/detail/${place.id}`}
             >
-              <div className='flex items-center gap-2'>
+              <div className='max-w-60 items-center gap-1'>
                 <HighlightText
                   placeId={place.id}
                   text={place.placeName}
@@ -83,11 +84,11 @@ const SearchResult = () => {
                 <CategoryFilter category={place.categoryName}></CategoryFilter>
               </div>
               <span className='mb-2 mt-1 flex items-center gap-2 text-sm font-light text-gray-800'>
-                <span>별점 {place.placeDetail.eval}</span>
-                <span className='mb-[2px] text-gray-400'>|</span>
-                <span>좋아요 {place.placeDetail.likedCount}</span>
+                <span>찜 {place.placeDetail.likedCount}</span>
                 <span className='mb-[2px] text-gray-400'>|</span>
                 <span>리뷰 수{place.reviews.length}</span>
+                <span className='mb-[2px] text-gray-400'>|</span>
+                <span>별점 {place.placeDetail.eval}</span>
               </span>
               <span className='text-sm'>{place.address}</span>
               {place.roadAdress && (
