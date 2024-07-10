@@ -1,11 +1,10 @@
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const usePlaceDetail = () => {
+  // const router = useRouter();
   const handleClick = async (placeId: string) => {
-    try {
-      const result = await axios.post(`/api/search/result/${placeId}`);
-      console.log(result);
-    } catch (error) {}
+    // router.push(`/place/result/${placeId}`);
   };
 
   return { handleClick };

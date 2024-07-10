@@ -36,7 +36,11 @@ export async function POST(request: Request) {
                 create: {
                   id: place.id,
                   placeName: place.place_name,
-                  placeDetail: { ...placeDetail.data },
+                  placeDetail: {
+                    findway: placeDetail.data.findway,
+                    basicInfo: placeDetail.data.basicInfo,
+                    photo: placeDetail.data.photo,
+                  },
                 },
               },
             },

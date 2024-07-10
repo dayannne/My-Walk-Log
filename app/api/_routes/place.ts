@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getPlace = async (placeId: number) => {
+export const getPlace = async (placeId: string) => {
   const result = await axios.get(`/api/place/${placeId}`);
   return result;
 };

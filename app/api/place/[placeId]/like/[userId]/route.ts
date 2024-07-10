@@ -10,7 +10,7 @@ export async function POST(
   if (!userId || !params.placeId) {
     return new Response(
       JSON.stringify({
-        message: '잘못된 요청',
+        message: '잘못된 요청 : 로그인 상태 / 장소 정보 확인',
       }),
       {
         status: 400,
