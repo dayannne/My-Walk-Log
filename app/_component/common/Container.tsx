@@ -20,7 +20,7 @@ const Container = ({ children }: ContainerProps) => {
           <div className='relative flex w-80 min-w-80 flex-col gap-4 bg-white'>
             {children}
           </div>
-          <div className='relative basis-full'>
+          <div className='basis-full'>
             <SearchCategory />
           </div>
           <SearchAgainButton />
