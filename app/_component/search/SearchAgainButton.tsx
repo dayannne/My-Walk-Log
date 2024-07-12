@@ -36,7 +36,7 @@ const SearchAgainButton = () => {
 
   const handleSearchAgain = () => {
     setKeyword(keyword);
-    searchPlaces(keyword);
+    searchPlaces(keyword, 'SEARCH_AGAIN');
     setIsVisible(false);
   };
   return (

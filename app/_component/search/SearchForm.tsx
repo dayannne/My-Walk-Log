@@ -19,7 +19,7 @@ const SearchForm = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    searchPlaces(keyword);
+    searchPlaces(keyword, 'SEARCH');
     router.push(`/place/search/${keyword}`);
   };
 

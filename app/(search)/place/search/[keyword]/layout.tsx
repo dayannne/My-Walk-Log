@@ -18,7 +18,7 @@ const SearchResultLayout = ({ children }: layoutProps) => {
   useEffect(() => {
     if (mapContext?.mapData && keyword) {
       mapContext.setKeyword(keyword as string);
-      searchPlaces(keyword as string);
+      searchPlaces(keyword as string, 'SEARCH');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, mapContext?.mapData]);

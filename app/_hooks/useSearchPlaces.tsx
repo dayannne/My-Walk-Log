@@ -13,10 +13,10 @@ import MarkerInfo from '../_component/common/MarkerInfo';
 const useSearchPlaces = () => {
   const mapContext = useMap();
   const location = mapContext?.mapData?.getCenter();
-  const { handleClick } = usePlaceDetail();
+
   const { clusterer } = useMarkerClusterer();
 
-  const searchPlaces = (keyword: string) => {
+  const searchPlaces = (keyword: string, type: 'SEARCH_AGAIN' | string) => {
     if (keyword !== '') {
       const { mapData, setKeyword, setPrevKeyword, setPrevLocation } =
         mapContext!;
@@ -26,7 +26,7 @@ const useSearchPlaces = () => {
 
       places.keywordSearch(keyword, searchPlacesCB, {
         location,
-        bounds,
+        bounds: type === 'SEARCH_AGAIN' ? bounds : undefined,
       });
 
       setPrevKeyword((prev) => [...prev, keyword]);
@@ -111,8 +111,6 @@ const useSearchPlaces = () => {
       const markerInfo = document.createElement('div');
       markerInfo.innerHTML = ReactDOMServer.renderToString(markerInfoContent);
       markerInfo.addEventListener('click', () => {
-        handleClick(place.id);
-
         mapContext?.mapData?.panTo(marker.getPosition());
       });
       const newMarkerInfo = new kakao.maps.CustomOverlay({

@@ -15,7 +15,7 @@ const SearchCategory = () => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
     mapContext?.setKeyword(value);
-    searchPlaces(value);
+    searchPlaces(value, 'SEARCH');
     router.push(`/place/search/${value}`);
   };
 
