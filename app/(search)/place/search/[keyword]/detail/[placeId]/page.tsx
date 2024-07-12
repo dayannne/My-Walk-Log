@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { FACALTY_INFO } from '@/app/shared/constant';
 
 export interface PageProps {}
@@ -21,6 +21,7 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   const placeId = params.placeId;
   const { user } = useUserStore();
   const queryClient = useQueryClient();
+  const keyword = decodeURIComponent(useParams()?.keyword as string);
 
   // API 요청
   const { mutate: createLike } = useMutation({
@@ -394,7 +395,7 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
       {/* 상세페이지 닫기 버튼 */}
       <button
         className='hover:border-olive-green relative top-8 flex h-10 w-10 items-center justify-center rounded-r-lg border-b border-r border-t border-gray-300 bg-white shadow-2xl'
-        onClick={() => router.back()}
+        onClick={() => router.push(`/place/search/${keyword}`)}
       >
         <Image
           src='/icons/icon-cancel.svg'

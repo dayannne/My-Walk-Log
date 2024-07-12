@@ -28,9 +28,9 @@ const SearchResult = () => {
 
     return (
       <span className='mr-1 text-base'>
-        {parts.map((part, index) =>
+        {parts.map((part) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
-            <strong className='font-bold' key={index}>
+            <strong className='font-bold' key={placeId}>
               {part}
             </strong>
           ) : (
@@ -79,14 +79,14 @@ const SearchResult = () => {
                 <HighlightText
                   placeId={place.id}
                   text={place.placeName}
-                  highlight={mapContext?.keyword}
+                  highlight={keyword}
                 />
                 <CategoryFilter category={place.categoryName}></CategoryFilter>
               </div>
               <span className='mb-2 mt-1 flex items-center gap-2 text-sm font-light text-gray-800'>
-                <span>찜 {place.placeDetail.likedCount}</span>
+                <span>찜 {place.placeDetail.likedBy.length}</span>
                 <span className='mb-[2px] text-gray-400'>|</span>
-                <span>리뷰 수{place.reviews.length}</span>
+                <span>리뷰 수 {place.reviews.length}</span>
                 <span className='mb-[2px] text-gray-400'>|</span>
                 <span>별점 {place.placeDetail.eval}</span>
               </span>

@@ -8,13 +8,10 @@ export interface SearchCategoryProps {}
 
 const SearchCategory = () => {
   const router = useRouter();
-  const mapContext = useMap();
-
   const { searchPlaces } = useSearchPlaces();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    mapContext?.setKeyword(value);
     searchPlaces(value, 'SEARCH');
     router.push(`/place/search/${value}`);
   };

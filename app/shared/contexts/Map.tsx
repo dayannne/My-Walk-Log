@@ -16,7 +16,6 @@ interface MapProps {
 }
 
 interface IMapContextValue {
-  mapRef: React.MutableRefObject<HTMLDivElement | null>;
   mapData: kakao.maps.Map | null;
   markers: kakao.maps.Marker[];
   setMarkers: (markers: kakao.maps.Marker[]) => void;
@@ -26,8 +25,7 @@ interface IMapContextValue {
   setOverlays: (markers: kakao.maps.CustomOverlay[]) => void;
   places: IPlace[];
   setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
-  keyword: string;
-  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+
   prevKeyword: string[];
   setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
   currLocation: kakao.maps.LatLng | null;
@@ -41,7 +39,6 @@ interface IMapContextValue {
 }
 
 const MapContext = createContext<IMapContextValue | null>({
-  mapRef: { current: null },
   mapData: null,
   markers: [],
   setMarkers: () => {},
@@ -51,8 +48,7 @@ const MapContext = createContext<IMapContextValue | null>({
   setOverlays: () => {},
   places: [],
   setPlaces: () => {},
-  keyword: '',
-  setKeyword: () => {},
+
   prevKeyword: [],
   setPrevKeyword: () => {},
   currLocation: null,
@@ -117,7 +113,6 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       setCurrLocation,
       prevLocation,
       setPrevLocation,
-      mapRef,
       mapData: map,
       markers,
       setMarkers,
@@ -127,8 +122,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       setOverlays,
       places,
       setPlaces,
-      keyword,
-      setKeyword,
+
       prevKeyword,
       setPrevKeyword,
     }),
@@ -140,7 +134,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       markerClusterer,
       overlays,
       places,
-      keyword,
+
       prevKeyword,
     ],
   );

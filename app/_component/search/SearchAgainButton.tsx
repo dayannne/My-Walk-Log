@@ -4,20 +4,15 @@ import Image from 'next/image';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
 import { useMap } from '@/app/shared/contexts/Map';
+import { useParams } from 'next/navigation';
 
 export interface SearchAgainButtonProps {}
 
 const SearchAgainButton = () => {
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
-  const {
-    keyword,
-    setKeyword,
-    currLocation,
-    prevLocation,
-    setPrevLocation,
-    mapData,
-  } = mapContext!;
+  const keyword = decodeURIComponent(useParams()?.keyword as string);
+  const { currLocation, prevLocation, setPrevLocation, mapData } = mapContext!;
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -35,7 +30,6 @@ const SearchAgainButton = () => {
   }, [currLocation]);
 
   const handleSearchAgain = () => {
-    setKeyword(keyword);
     searchPlaces(keyword, 'SEARCH_AGAIN');
     setIsVisible(false);
   };

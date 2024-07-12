@@ -2,24 +2,24 @@ import axios from 'axios';
 import ReactDOMServer from 'react-dom/server';
 
 import { useMap } from '../shared/contexts/Map';
-import usePlaceDetail from './usePlaceDetail';
 import useMarkerClusterer from './useMarkerClusterer';
 
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 
 import MarkerInfo from '../_component/common/MarkerInfo';
+import { useParams, useRouter } from 'next/navigation';
 
 const useSearchPlaces = () => {
+  const router = useRouter();
   const mapContext = useMap();
-  const location = mapContext?.mapData?.getCenter();
-
   const { clusterer } = useMarkerClusterer();
+  const location = mapContext?.mapData?.getCenter();
+  const keyword = decodeURIComponent(useParams()?.keyword as string);
 
   const searchPlaces = (keyword: string, type: 'SEARCH_AGAIN' | string) => {
     if (keyword !== '') {
-      const { mapData, setKeyword, setPrevKeyword, setPrevLocation } =
-        mapContext!;
+      const { mapData, setPrevKeyword, setPrevLocation } = mapContext!;
 
       const places = new kakao.maps.services.Places();
       const bounds = mapData?.getBounds();
@@ -31,6 +31,7 @@ const useSearchPlaces = () => {
 
       setPrevKeyword((prev) => [...prev, keyword]);
       setPrevLocation(mapData?.getCenter() as kakao.maps.LatLng);
+
       mapContext?.markerClusterer?.clear();
     }
   };
@@ -80,7 +81,7 @@ const useSearchPlaces = () => {
       // 마커 이미지
       const imageSrc = '/icons/icon-marker.svg',
         imageSize = new kakao.maps.Size(56, 56),
-        imageOption = { offset: new kakao.maps.Point(26.5, 54) };
+        imageOption = { offset: new kakao.maps.Point(27, 54) };
       const markerImage = new kakao.maps.MarkerImage(
         imageSrc,
         imageSize,
@@ -106,17 +107,22 @@ const useSearchPlaces = () => {
 
       // 마커 인포윈도우
       const markerInfoContent = (
-        <MarkerInfo placeId={place.id} placeName={place.place_name} />
+        <MarkerInfo
+          placeId={place.id}
+          placeName={place.placeName}
+          keyword={keyword}
+        />
       );
       const markerInfo = document.createElement('div');
       markerInfo.innerHTML = ReactDOMServer.renderToString(markerInfoContent);
       markerInfo.addEventListener('click', () => {
         mapContext?.mapData?.panTo(marker.getPosition());
+        router.push(`/place/search/${keyword}/detail/${place.id}`);
       });
       const newMarkerInfo = new kakao.maps.CustomOverlay({
         position: position,
         content: markerInfo,
-        yAnchor: 2.8,
+        yAnchor: 2.4,
         clickable: true,
       });
 
