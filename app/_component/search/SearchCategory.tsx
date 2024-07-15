@@ -1,5 +1,4 @@
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-import { useMap } from '@/app/shared/contexts/Map';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -12,7 +11,7 @@ const SearchCategory = () => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    searchPlaces(value, 'SEARCH');
+    searchPlaces(value, 'SEARCH_CATEGORY');
     router.push(`/place/search/${value}`);
   };
 

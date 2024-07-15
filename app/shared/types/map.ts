@@ -25,4 +25,4 @@ export interface IPlace {
   placeDetail: any;
 }
 
-export type SearchType = 'SEARCH_AGAIN' | 'SEARCH';
+export type SearchType = 'SEARCH_AGAIN' | 'SEARCH' | 'SEARCH_CATEGORY';

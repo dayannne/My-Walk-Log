@@ -9,6 +9,7 @@ import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 import MarkerInfo from '../_component/common/MarkerInfo';
 import { useParams, useRouter } from 'next/navigation';
 import { searchPlace } from '../api/_routes/place';
+import { SearchType } from '../shared/types/map';
 
 const useSearchPlaces = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const useSearchPlaces = () => {
   const location = mapContext?.mapData?.getCenter();
   const keyword = decodeURIComponent(useParams()?.keyword as string);
 
-  const searchPlaces = (keyword: string, type: 'SEARCH_AGAIN' | string) => {
+  const searchPlaces = (keyword: string, type: SearchType) => {
     if (keyword !== '') {
       const { mapData, setPrevKeyword, setPrevLocation } = mapContext!;
 
@@ -26,7 +27,10 @@ const useSearchPlaces = () => {
 
       places.keywordSearch(keyword, searchPlacesCB, {
         location,
-        bounds: type === 'SEARCH_AGAIN' ? bounds : undefined,
+        bounds:
+          type === 'SEARCH_AGAIN' || type === 'SEARCH_CATEGORY'
+            ? bounds
+            : undefined,
       });
 
       setPrevKeyword((prev) => [...prev, keyword]);

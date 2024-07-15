@@ -10,10 +10,13 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 
 const SearchForm = () => {
   const router = useRouter();
-  const prevKeyword = decodeURIComponent(useParams().keyword as string);
+  const prevKeyword = useParams().keyword as string;
   const { searchPlaces } = useSearchPlaces();
 
-  const [keyword, setKeyword] = useState(prevKeyword ? prevKeyword : '');
+  const [keyword, setKeyword] = useState(
+    prevKeyword ? decodeURIComponent(prevKeyword) : '',
+  );
+  console.log(keyword);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ const SearchForm = () => {
   };
 
   useEffect(() => {
-    setKeyword(prevKeyword);
+    setKeyword(decodeURIComponent(prevKeyword));
   }, [prevKeyword]);
 
   return (
