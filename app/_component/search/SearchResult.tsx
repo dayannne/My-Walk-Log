@@ -28,9 +28,9 @@ const SearchResult = () => {
 
     return (
       <span className='mr-1 text-base'>
-        {parts.map((part) =>
+        {parts.map((part, index) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
-            <strong className='font-bold' key={placeId}>
+            <strong className='font-bold' key={`${placeId}-${index}`}>
               {part}
             </strong>
           ) : (
@@ -42,7 +42,7 @@ const SearchResult = () => {
   };
 
   const CategoryFilter = ({ category }: { category: string }) => {
-    const categories = category.split(` > `);
+    const categories = category.split(' > ');
     return (
       <span className='break-all text-sm font-light text-gray-500'>
         {categories[categories.length - 1]}
@@ -53,26 +53,13 @@ const SearchResult = () => {
   return (
     <ul className='flex basis-full flex-col overflow-y-scroll border-t border-solid border-gray-200'>
       {mapContext?.places &&
-        mapContext?.places?.map((place: any, index: number) => (
+        mapContext?.places.map((place: any) => (
           <li
             key={place.id}
-            className='hover:bg-hover relative border-b border-solid border-gray-200 p-6'
+            className='hover:bg-hover flex items-start border-b border-solid border-gray-200 p-6'
           >
-            <button className='absolute right-4 top-6 w-6'>
-              <Image
-                className='w-full'
-                src={
-                  place.placeDetail.likedBy.includes(user?.id)
-                    ? `/icons/icon-star-fill.svg`
-                    : `/icons/icon-star.svg`
-                }
-                width={32}
-                height={32}
-                alt='별모양 버튼'
-              />
-            </button>
             <Link
-              className='flex flex-col'
+              className='flex basis-full flex-col'
               href={`/place/search/${keyword}/detail/${place.id}`}
             >
               <div className='max-w-60 items-center gap-1'>
@@ -81,7 +68,7 @@ const SearchResult = () => {
                   text={place.placeName}
                   highlight={keyword}
                 />
-                <CategoryFilter category={place.categoryName}></CategoryFilter>
+                <CategoryFilter category={place.categoryName} />
               </div>
               <span className='mb-2 mt-1 flex items-center gap-2 text-sm font-light text-gray-800'>
                 <span>찜 {place.placeDetail.likedBy.length}</span>
@@ -98,6 +85,21 @@ const SearchResult = () => {
               )}
               <span className='tel'>{place.phone}</span>
             </Link>
+            {user?.id && (
+              <div className='w-5'>
+                <Image
+                  className='w-full'
+                  src={
+                    place.placeDetail.likedBy.includes(user?.id)
+                      ? '/icons/icon-star-fill.svg'
+                      : '/icons/icon-star.svg'
+                  }
+                  width={32}
+                  height={32}
+                  alt='별모양 버튼'
+                />
+              </div>
+            )}
           </li>
         ))}
     </ul>

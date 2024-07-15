@@ -7,29 +7,43 @@ import {
   createPlaceLike,
   deletePlaceLike,
   getPlace,
+  searchPlace,
 } from '@/app/api/_routes/place';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { FACALTY_INFO } from '@/app/shared/constant';
+import { useMap } from '@/app/shared/contexts/Map';
+import { IPlace } from '@/app/shared/types/map';
 
 export interface PageProps {}
 
 const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   const router = useRouter();
+  const mapContext = useMap();
   const placeId = params.placeId;
   const { user } = useUserStore();
   const queryClient = useQueryClient();
   const keyword = decodeURIComponent(useParams()?.keyword as string);
 
   // API 요청
+  const { mutate: search } = useMutation({
+    mutationFn: () => {
+      return searchPlace(mapContext?.places as IPlace[]);
+    },
+    onSuccess: async (result) => {
+      // 비동기 처리로 동시
+      await queryClient.invalidateQueries({ queryKey: ['place'] });
+      mapContext?.setPlaces(result.data.data);
+    },
+  });
   const { mutate: createLike } = useMutation({
     mutationFn: () => {
       return createPlaceLike(placeId, user?.id as number);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['place'] });
+      search();
     },
   });
   const { mutate: deleteLike } = useMutation({
@@ -37,7 +51,7 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
       return deletePlaceLike(placeId, user?.id as number);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['place'] });
+      search();
     },
   });
   const { isLoading, error, data, isFetching } = useQuery({
@@ -358,8 +372,8 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
                     >
                       <div className=''>•</div>
                       <div className='flex flex-col gap-1'>
-                        <div className='flex items-center gap-2'>
-                          <span>
+                        <div className='flex items-start gap-2'>
+                          <span className=''>
                             {busStop.busStopName}{' '}
                             <span className='text-gray-500'>
                               {'('}
@@ -367,10 +381,12 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
                               {')'}
                             </span>
                           </span>
-                          <span className='h-3 w-[1px] bg-gray-300'></span>
-                          <span className='text-gray-500'>
-                            {busStop.toBusstopDistance}m
-                          </span>
+                          <div className='flex items-center gap-2'>
+                            <span className='h-3 w-[1px] bg-gray-300'></span>
+                            <span className='text-gray-500'>
+                              {busStop.toBusstopDistance}m
+                            </span>
+                          </div>
                         </div>
                         {busStop.busInfo.map((info: any) => (
                           <div

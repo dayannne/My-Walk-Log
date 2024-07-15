@@ -9,6 +9,7 @@ import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 
 import MarkerInfo from '../_component/common/MarkerInfo';
 import { useParams, useRouter } from 'next/navigation';
+import { searchPlace } from '../api/_routes/place';
 
 const useSearchPlaces = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const useSearchPlaces = () => {
 
       // 장소 데이터 생성 및 받아오기
       try {
-        const result = await axios.post('/api/search/result', filteredPlaces);
+        const result = await searchPlace(filteredPlaces);
         mapContext?.setPlaces(result.data.data);
         displayMarkers(result.data.data);
       } catch (error) {
@@ -165,7 +166,7 @@ const useSearchPlaces = () => {
     }
   };
 
-  return { searchPlaces };
+  return { searchPlaces, displayMarkers };
 };
 
 export default useSearchPlaces;
