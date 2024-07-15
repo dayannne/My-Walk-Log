@@ -38,7 +38,7 @@ const SearchAgainButton = () => {
       {isVisible && (
         <button
           onClick={handleSearchAgain}
-          className='border-olive-green absolute bottom-12 left-1/2 flex translate-x-[80px] items-center gap-2 rounded-full border bg-white px-5 py-4 text-base font-medium shadow-lg'
+          className='border-olive-green bg-olive-green absolute bottom-12 left-1/2 flex translate-x-[80px] items-center gap-2 rounded-full border-2 px-5 py-4 text-lg text-white shadow-lg'
         >
           현재 위치에서 재검색하기
           <Image
