@@ -7,12 +7,11 @@ export async function DELETE(
 ) {
   const placeId = params.placeId;
   const userId = parseInt(params.userId);
+
   try {
-    // 해당 사용자가 해당 장소를 좋아요 했는지 확인합니다.
+    // 해당 사용자가 해당 장소를 좋아요 했는지 확인
     const placeDetail = await prisma.placeDetail.findUnique({
-      where: {
-        id: placeId,
-      },
+      where: { id: placeId },
     });
 
     if (
@@ -20,35 +19,37 @@ export async function DELETE(
       placeDetail.likedBy &&
       placeDetail.likedBy.includes(userId)
     ) {
-      // 장소 디테일의 likedBy 배열에서 해당 사용자 id를 제거합니다.
-      await prisma.placeDetail.update({
-        where: {
-          id: placeId,
-        },
-        data: {
-          likedBy: {
-            set: placeDetail.likedBy.filter((id) => id !== userId),
+      // 트랜잭션으로 두 개의 업데이트 수행
+      await prisma.$transaction([
+        prisma.placeDetail.update({
+          where: { id: placeId },
+          data: {
+            likedBy: {
+              set: placeDetail.likedBy.filter((id) => id !== userId),
+            },
           },
-        },
-      });
+        }),
+        prisma.user.update({
+          where: { id: userId },
+          data: {
+            likedPlaces: {
+              set: (
+                await prisma.user.findUnique({
+                  where: { id: userId },
+                })
+              )?.likedPlaces?.filter((id) => id !== placeId),
+            },
+          },
+        }),
+      ]);
 
-      // 사용자의 likedPlaces 배열에서 해당 장소 id를 제거합니다.
-      await prisma.user.update({
-        where: {
-          id: userId,
+      return NextResponse.json(
+        {
+          data: { likedBy: placeDetail.likedBy, params },
+          message: '좋아요가 취소되었습니다.',
         },
-        data: {
-          likedPlaces: {
-            set: (
-              await prisma.user.findUnique({
-                where: {
-                  id: userId,
-                },
-              })
-            )?.likedPlaces?.filter((id) => id !== placeId),
-          },
-        },
-      });
+        { status: 200 },
+      );
     } else {
       return NextResponse.json(
         {
@@ -57,16 +58,11 @@ export async function DELETE(
         { status: 400 },
       );
     }
-
-    return NextResponse.json(
-      {
-        data: { data: placeDetail?.likedBy, params },
-        message: '좋아요가 취소되었습니다.',
-      },
-      { status: 200 },
-    );
   } catch (error) {
-    console.error(error);
-    return null;
+    console.error('삭제 중 오류 발생:', error);
+    return new Response(JSON.stringify({ message: '서버 내부 오류' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

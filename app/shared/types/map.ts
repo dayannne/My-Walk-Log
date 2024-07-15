@@ -24,3 +24,5 @@ export interface IPlace {
   reviews: [];
   placeDetail: any;
 }
+
+export type SearchType = 'SEARCH_AGAIN' | 'SEARCH' | 'SEARCH_CATEGORY';

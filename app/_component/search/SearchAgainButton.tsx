@@ -4,20 +4,15 @@ import Image from 'next/image';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
 import { useMap } from '@/app/shared/contexts/Map';
+import { useParams } from 'next/navigation';
 
 export interface SearchAgainButtonProps {}
 
 const SearchAgainButton = () => {
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
-  const {
-    keyword,
-    setKeyword,
-    currLocation,
-    prevLocation,
-    setPrevLocation,
-    mapData,
-  } = mapContext!;
+  const keyword = decodeURIComponent(useParams()?.keyword as string);
+  const { currLocation, prevLocation, setPrevLocation, mapData } = mapContext!;
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -35,8 +30,7 @@ const SearchAgainButton = () => {
   }, [currLocation]);
 
   const handleSearchAgain = () => {
-    setKeyword(keyword);
-    searchPlaces(keyword);
+    searchPlaces(keyword, 'SEARCH_AGAIN');
     setIsVisible(false);
   };
   return (
@@ -44,7 +38,7 @@ const SearchAgainButton = () => {
       {isVisible && (
         <button
           onClick={handleSearchAgain}
-          className='border-olive-green absolute bottom-12 left-1/2 flex translate-x-[80px] items-center gap-2 rounded-full border bg-white px-5 py-4 text-base font-medium shadow-lg'
+          className='border-olive-green bg-olive-green absolute bottom-12 left-1/2 flex translate-x-[80px] items-center gap-2 rounded-full border-2 px-5 py-4 text-lg text-white shadow-lg'
         >
           현재 위치에서 재검색하기
           <Image

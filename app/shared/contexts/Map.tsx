@@ -16,18 +16,15 @@ interface MapProps {
 }
 
 interface IMapContextValue {
-  mapRef: React.MutableRefObject<HTMLDivElement | null>;
   mapData: kakao.maps.Map | null;
-  markers: kakao.maps.Marker[];
-  setMarkers: (markers: kakao.maps.Marker[]) => void;
+
   markerClusterer: kakao.maps.MarkerClusterer | null;
   setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];
   setOverlays: (markers: kakao.maps.CustomOverlay[]) => void;
   places: IPlace[];
   setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
-  keyword: string;
-  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+
   prevKeyword: string[];
   setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
   currLocation: kakao.maps.LatLng | null;
@@ -41,18 +38,13 @@ interface IMapContextValue {
 }
 
 const MapContext = createContext<IMapContextValue | null>({
-  mapRef: { current: null },
   mapData: null,
-  markers: [],
-  setMarkers: () => {},
   markerClusterer: null,
   setMarkerClusterer: () => {},
   overlays: [],
   setOverlays: () => {},
   places: [],
   setPlaces: () => {},
-  keyword: '',
-  setKeyword: () => {},
   prevKeyword: [],
   setPrevKeyword: () => {},
   currLocation: null,
@@ -65,13 +57,10 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
   const { location } = useGeolocation();
 
   const mapRef = useRef<HTMLDivElement>(null);
-
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
-  const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
   const [markerClusterer, setMarkerClusterer] =
     useState<kakao.maps.MarkerClusterer | null>(null);
   const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
-  const [keyword, setKeyword] = useState<string>('');
   const [prevKeyword, setPrevKeyword] = useState<string[]>([]);
   const [places, setPlaces] = useState<IPlace[]>([]);
   const [prevLocation, setPrevLocation] = useState<kakao.maps.LatLng | null>(
@@ -117,18 +106,13 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       setCurrLocation,
       prevLocation,
       setPrevLocation,
-      mapRef,
       mapData: map,
-      markers,
-      setMarkers,
       markerClusterer,
       setMarkerClusterer,
       overlays,
       setOverlays,
       places,
       setPlaces,
-      keyword,
-      setKeyword,
       prevKeyword,
       setPrevKeyword,
     }),
@@ -136,11 +120,9 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       currLocation,
       prevLocation,
       map,
-      markers,
       markerClusterer,
       overlays,
       places,
-      keyword,
       prevKeyword,
     ],
   );

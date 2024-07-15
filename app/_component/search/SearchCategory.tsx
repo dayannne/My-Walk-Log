@@ -1,5 +1,4 @@
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-import { useMap } from '@/app/shared/contexts/Map';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -8,14 +7,11 @@ export interface SearchCategoryProps {}
 
 const SearchCategory = () => {
   const router = useRouter();
-  const mapContext = useMap();
-
   const { searchPlaces } = useSearchPlaces();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    mapContext?.setKeyword(value);
-    searchPlaces(value);
+    searchPlaces(value, 'SEARCH_CATEGORY');
     router.push(`/place/search/${value}`);
   };
 
@@ -65,9 +61,10 @@ const SearchCategory = () => {
         <button
           className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
-          value='저수지'
+          value='수목원'
         >
-          저수지
+          <Image src='/icons/icon-tree.svg' alt='' width={20} height={20} />
+          수목원
         </button>
       </li>
     </ul>
