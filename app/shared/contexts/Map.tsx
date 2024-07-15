@@ -149,9 +149,9 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
     <>
       {location && (
         <MapContext.Provider value={values}>
-          <div className='w-full h-full flex'>
+          <div className='flex h-full w-full'>
             {children}
-            <div id='map' ref={mapRef} className='w-full h-full'></div>
+            <div id='map' ref={mapRef} className='h-full w-full'></div>
           </div>
         </MapContext.Provider>
       )}

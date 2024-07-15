@@ -10,8 +10,8 @@ export interface IMarker {
 
 export interface IPlace {
   address_name: string;
-  category_group_code: string;
-  category_group_name: string;
+  category_group_code?: string;
+  category_group_name?: string;
   category_name: string;
   distance: string;
   id: string;
@@ -21,4 +21,6 @@ export interface IPlace {
   road_address_name: string;
   x: string;
   y: string;
+  reviews: [];
+  placeDetail: any;
 }

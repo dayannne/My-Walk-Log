@@ -2,10 +2,12 @@ import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 import { useMap } from '@/app/shared/contexts/Map';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export interface SearchCategoryProps {}
 
 const SearchCategory = () => {
+  const router = useRouter();
   const mapContext = useMap();
 
   const { searchPlaces } = useSearchPlaces();
@@ -14,13 +16,14 @@ const SearchCategory = () => {
     const { value } = e.currentTarget;
     mapContext?.setKeyword(value);
     searchPlaces(value);
+    router.push(`/place/search/${value}`);
   };
 
   return (
-    <ul className='flex items-center gap-3  py-4 px-5 absolute top-4 left-0 font-medium text-sm'>
+    <ul className='absolute right-0 top-4 flex items-center gap-3 px-5 py-4 text-sm font-medium'>
       <li className='shrink-0'>
         <button
-          className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
+          className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
           value='공원'
         >
@@ -30,7 +33,7 @@ const SearchCategory = () => {
       </li>
       <li className='shrink-0'>
         <button
-          className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
+          className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
           value='하천'
         >
@@ -40,7 +43,7 @@ const SearchCategory = () => {
       </li>
       <li className='shrink-0'>
         <button
-          className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
+          className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
           value='산'
         >
@@ -50,7 +53,7 @@ const SearchCategory = () => {
       </li>
       <li className='shrink-0'>
         <button
-          className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
+          className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
           value='호수'
         >
@@ -60,7 +63,7 @@ const SearchCategory = () => {
       </li>
       <li className='shrink-0'>
         <button
-          className='flex items-center gap-2 bg-white py-1 px-3 rounded-full shadow-md focus:text-olive-green'
+          className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
           value='저수지'
         >

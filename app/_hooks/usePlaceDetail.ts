@@ -1,8 +1,10 @@
-import { fetchPlaceDetail } from '../api/map';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const usePlaceDetail = () => {
+  // const router = useRouter();
   const handleClick = async (placeId: string) => {
-    const result = await fetchPlaceDetail(placeId);
+    // router.push(`/place/result/${placeId}`);
   };
 
   return { handleClick };

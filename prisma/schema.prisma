@@ -22,49 +22,75 @@ model User {
   diaries        Diary[]  @relation("author")
   likedReviews   Review[]
   likedDiaries   Diary[]
-  likedPlaces    PlaceDetail[]
+  likedPlaces    String[]
+}
+
+model Place {
+  id          String   @id 
+  placeName   String
+  categoryName String
+  address     String
+  roadAddress String
+  distance    String
+  x           String
+  y           String
+  reviews     Review[]
+
+  placeDetail      PlaceDetail? 
+  @@unique([id], name: "PlaceDetail")
 }
 
 model PlaceDetail {
-  id              String   @id @default(uuid())
-  likedCount      Int      @default(0)
-  eval            Int
-  currentUserLiked Boolean  @default(false)
-  reviews         Review[]
-  diaries         Diary[]
-  ikedBy          User[]
+  id                String   @id  
+  placeId String @unique
+  placeName         String
+  likedCount        Int      @default(0)
+  eval              Int      @default(0)
+  placeInfo            Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeDetail            Json
+  @@index([id], name: "id")
+  reviews           Review[]
+  diaries           Diary[]
+  likedBy            Int[]
+
 }
+
+
 model Review {
   id           Int      @id @default(autoincrement())
-  placeId      String
-  placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
   reviewImages String[]
   description  String
   tip          String?
   likedCount   Int      @default(0)
   likedBy      User[]
-  authorId     Int
-  author       User     @relation("author", fields: [authorId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   eval         Int
   tags         String[]
+  placeId      String
+  placeDetailId      String
+  authorId     Int
+  
+  place Place? @relation(fields: [placeId], references: [id])
+  placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  author       User     @relation("author", fields: [authorId], references: [id])
 }
 
 model Diary {
   id           String   @id @default(uuid())
-  placeId      String   // 변경된 부분: String 타입으로 수정
-  placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
+  placeId      String  
   diaryImages  String[]
-  authorId     Int
   content      String
-  author       User     @relation("author", fields: [authorId], references: [id])
   likedCount   Int      @default(0)
   likedBy      User[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   weather      String
   tags         String[]
+  authorId     Int
+
+  placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
+  author       User     @relation("author", fields: [authorId], references: [id])
 }
 
 model Trail{

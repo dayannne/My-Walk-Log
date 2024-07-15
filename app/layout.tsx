@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
+
 import { Noto_Sans_KR } from 'next/font/google';
 
-import './globals.css';
+import '../styles/globals.css';
 
-import Container from './_component/common/Container';
-import ClientOnly from './_component/common/ClientOnly';
-// import ToasterProvider from './provider/ToasterProvider';
+import ReactQueryProviders from './_hooks/useReactQuery';
+import MaterialProvider from '@/styles/MaterialProvider';
 
 export const metadata: Metadata = {
   title: '나의 산책 일기',
@@ -29,7 +29,9 @@ export default async function RootLayout({
           type='text/javascript'
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_JS_KEY}&libraries=services,clusterer&autoload=false`}
         ></Script>
-        <ClientOnly>{children}</ClientOnly>
+        <ReactQueryProviders>
+          <MaterialProvider>{children}</MaterialProvider>
+        </ReactQueryProviders>
       </body>
     </html>
   );

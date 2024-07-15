@@ -46,6 +46,16 @@ const nextConfig = {
       },
     ];
   },
+  // 이미지 호스트 추가
+  images: {
+    domains: [
+      'storep-phinf.pstatic.net',
+      'postfiles.pstatic.net',
+      't1.daumcdn.net',
+      'blog.kakaocdn.net',
+      't1.kakaocdn.net',
+    ],
+  },
 };
 
 export default nextConfig;

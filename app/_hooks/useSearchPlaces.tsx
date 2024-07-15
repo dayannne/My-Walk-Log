@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import axios from 'axios';
 import ReactDOMServer from 'react-dom/server';
 
 import { useMap } from '../shared/contexts/Map';
@@ -36,7 +36,7 @@ const useSearchPlaces = () => {
   };
 
   // keywordSearch 콜백 함수
-  const searchPlacesCB = (
+  const searchPlacesCB = async (
     data: any,
     status: kakao.maps.services.Status,
     pagination: any,
@@ -47,16 +47,22 @@ const useSearchPlaces = () => {
       const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
 
       if (filteredPlaces.length === 0) {
-        alert('검색 결과가 존재하지 않습니다.');
+        return alert('검색 결과가 존재하지 않습니다.');
       }
 
-      mapContext?.setPlaces(filteredPlaces);
-      displayMarkers(filteredPlaces);
+      // 장소 데이터 생성 및 받아오기
+      try {
+        const result = await axios.post('/api/search/result', filteredPlaces);
+        mapContext?.setPlaces(result.data.data);
+        displayMarkers(result.data.data);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        alert('검색 결과가 존재하지 않습니다.');
+        return alert('검색 결과가 존재하지 않습니다.');
       } else if (status === kakao.maps.services.Status.ERROR) {
-        alert('검색 결과 중 오류가 발생했습니다.');
+        return alert('검색 결과 중 오류가 발생했습니다.');
       }
     }
   };
