@@ -20,34 +20,32 @@ export async function POST(
   }
 
   try {
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        likedPlaces: {
-          push: params.placeId,
+    // 두 개의 업데이트를 단일 트랜잭션으로 수행
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: {
+          likedPlaces: {
+            push: params.placeId,
+          },
         },
-      },
-    });
-
-    await prisma.placeDetail.update({
-      where: {
-        id: params.placeId,
-      },
-      data: {
-        likedBy: {
-          push: userId,
+      }),
+      prisma.placeDetail.update({
+        where: { id: params.placeId },
+        data: {
+          likedBy: {
+            push: userId,
+          },
         },
-      },
-    });
+      }),
+    ]);
 
     return NextResponse.json(
       { data: { userId, params }, message: '좋아요 성공' },
       { status: 200 },
     );
   } catch (error) {
-    console.error('Error updating user or placeDetail:', error);
+    console.error('사용자 또는 장소 세부정보 업데이트 오류:', error);
     return new Response(
       JSON.stringify({
         message: '서버 내부 오류',
