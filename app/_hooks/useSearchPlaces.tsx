@@ -1,4 +1,3 @@
-import axios from 'axios';
 import ReactDOMServer from 'react-dom/server';
 
 import { useMap } from '../shared/contexts/Map';
@@ -14,7 +13,7 @@ import { searchPlace } from '../api/_routes/place';
 const useSearchPlaces = () => {
   const router = useRouter();
   const mapContext = useMap();
-  const { clusterer } = useMarkerClusterer();
+  const { createClusterer } = useMarkerClusterer();
   const location = mapContext?.mapData?.getCenter();
   const keyword = decodeURIComponent(useParams()?.keyword as string);
 
@@ -70,96 +69,38 @@ const useSearchPlaces = () => {
   };
 
   const displayMarkers = (places: any[]) => {
-    let markers: kakao.maps.Marker[] = [];
     let overlays: kakao.maps.CustomOverlay[] = [];
-
-    // 마커 인포윈도우 객체 생성
-    let currentMarkerInfo: kakao.maps.CustomOverlay | null = null;
 
     places.forEach((place, index) => {
       const position = new kakao.maps.LatLng(place.y, place.x);
 
-      // 마커 이미지
-      const imageSrc = '/icons/icon-marker.svg',
-        imageSize = new kakao.maps.Size(56, 56),
-        imageOption = { offset: new kakao.maps.Point(27, 54) };
-      const markerImage = new kakao.maps.MarkerImage(
-        imageSrc,
-        imageSize,
-        imageOption,
-      );
-      // 마커
-      const marker = new kakao.maps.Marker({
-        map: mapContext?.mapData as kakao.maps.Map,
-        position: position,
-        image: markerImage,
-      });
-      kakao.maps.event.addListener(marker, 'click', () => {
-        // 현재 활성화된 오버레이가 있으면 제거
-        if (currentMarkerInfo) {
-          currentMarkerInfo.setMap(null);
-        } else {
-        }
-        // 클릭된 마커의 오버레이를 표시하고 현재 활성화된 오버레이로 설정
-        mapContext?.mapData?.panTo(marker.getPosition());
-        newMarkerInfo.setMap(mapContext?.mapData as kakao.maps.Map);
-        currentMarkerInfo = newMarkerInfo;
-      });
-
       // 마커 인포윈도우
-      const markerInfoContent = (
-        <MarkerInfo
-          placeId={place.id}
-          placeName={place.placeName}
-          keyword={keyword}
-        />
-      );
+      const markerInfoContent = <MarkerInfo placeName={place.placeName} />;
       const markerInfo = document.createElement('div');
       markerInfo.innerHTML = ReactDOMServer.renderToString(markerInfoContent);
       markerInfo.addEventListener('click', () => {
-        mapContext?.mapData?.panTo(marker.getPosition());
+        mapContext?.mapData?.panTo(position);
         router.push(`/place/search/${keyword}/detail/${place.id}`);
       });
       const newMarkerInfo = new kakao.maps.CustomOverlay({
         position: position,
         content: markerInfo,
-        yAnchor: 2.4,
+        yAnchor: 1.5,
         clickable: true,
       });
 
-      markers.push(marker);
       overlays.push(newMarkerInfo);
+      newMarkerInfo.setMap(mapContext?.mapData as kakao.maps.Map);
     });
 
     // 마커 클러스터러 생성
-    const newClusterer = new kakao.maps.MarkerClusterer({
-      ...clusterer,
-      markers: markers,
-    });
+    const newClusterer = createClusterer(overlays);
 
-    // 마커 클러스터러에 클릭이벤트를 등록
-    // 클릭할 때마다 zoomLevel을 1씩 확대
-    kakao.maps.event.addListener(
-      newClusterer,
-      'clusterclick',
-      (cluster: { getCenter: () => any }) => {
-        const level = mapContext?.mapData?.getLevel()! - 1;
-        // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대
-        mapContext?.mapData?.setLevel(level, { anchor: cluster.getCenter() });
-      },
-    );
-
-    mapContext?.setMarkers(markers);
     mapContext?.setOverlays(overlays);
     mapContext?.setMarkerClusterer(newClusterer);
   };
-  const clearMarkersAndInfo = () => {
-    if (mapContext?.markers) {
-      mapContext?.markers.forEach((marker) => marker.setMap(null));
-      mapContext?.setMarkers([]);
-      mapContext?.setMarkerClusterer(null);
-    }
 
+  const clearMarkersAndInfo = () => {
     if (mapContext?.overlays) {
       mapContext?.overlays.forEach((overlay) => overlay.setMap(null));
       mapContext?.setOverlays([]);

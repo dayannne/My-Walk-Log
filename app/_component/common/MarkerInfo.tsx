@@ -7,28 +7,26 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 interface MarkerInfoProps {
-  placeId: string;
   placeName: string;
-  keyword: string;
+  size?: number;
 }
 
-const MarkerInfo = ({ placeId, placeName, keyword }: MarkerInfoProps) => {
-  const { handleClick } = usePlaceDetail();
-
+const MarkerInfo = ({ placeName, size }: MarkerInfoProps) => {
   return (
-    <div className='flex overflow-hidden rounded-md bg-white text-base shadow-md'>
-      <span className='px-3 py-2 font-medium'>{placeName}</span>
-      <button className='bg-olive-green flex w-10 basis-full items-center justify-center'>
-        <Image
-          className='pt-[1px]'
-          width={24}
-          height={24}
-          fill={false}
-          src='/icons/icon-arrow-right.svg'
-          alt='화살표 아이콘(오른쪽)'
-          onClick={() => handleClick(placeId)}
-        />
-      </button>
+    <div className='speech-bubble flex w-auto gap-2 px-3 py-2 text-lg font-medium'>
+      <span>{placeName}</span>
+      <Image
+        className='max-w-none'
+        width={20}
+        height={20}
+        src='/icons/icon-logo-mini(default).svg'
+        alt='로고 그림'
+      />
+      {size && (
+        <div className='border-olive-green 8 bg-olive-green absolute -right-4 -top-4 h-8 rounded-full border-2 border-solid px-1 text-white'>
+          +{size}
+        </div>
+      )}
     </div>
   );
 };
