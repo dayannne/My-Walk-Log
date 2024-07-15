@@ -62,9 +62,10 @@ const SearchCategory = () => {
         <button
           className='focus:text-olive-green flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-md'
           onClick={handleClick}
-          value='저수지'
+          value='수목원'
         >
-          저수지
+          <Image src='/icons/icon-tree.svg' alt='' width={20} height={20} />
+          수목원
         </button>
       </li>
     </ul>

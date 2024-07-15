@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import { useMap } from '@/app/shared/contexts/Map';
@@ -10,12 +10,10 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 
 const SearchForm = () => {
   const router = useRouter();
-  const prevKeyword = useParams().keyword as string;
+  const prevKeyword = decodeURIComponent(useParams().keyword as string);
   const { searchPlaces } = useSearchPlaces();
 
-  const [keyword, setKeyword] = useState(
-    prevKeyword ? decodeURIComponent(prevKeyword) : '',
-  );
+  const [keyword, setKeyword] = useState(prevKeyword ? prevKeyword : '');
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,6 +24,10 @@ const SearchForm = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value);
   };
+
+  useEffect(() => {
+    setKeyword(prevKeyword);
+  }, [prevKeyword]);
 
   return (
     <div className='border-olive-green border-b p-4'>
