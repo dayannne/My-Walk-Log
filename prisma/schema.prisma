@@ -45,7 +45,6 @@ model PlaceDetail {
   placeId String @unique
   placeName         String
   likedCount        Int      @default(0)
-  eval              Int      @default(0)
   placeInfo            Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
   placeDetail            Json
   @@index([id], name: "id")
@@ -60,16 +59,17 @@ model Review {
   id           Int      @id @default(autoincrement())
   reviewImages String[]
   description  String
-  tip          String?
+  tags         Int[]
+  walkDuration Int
+  hasEntryFee Boolean
   likedCount   Int      @default(0)
   likedBy      User[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  eval         Int
-  tags         String[]
+  
   placeId      String
   placeDetailId      String
   authorId     Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   
   place Place? @relation(fields: [placeId], references: [id])
   placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
