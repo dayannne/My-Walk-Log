@@ -24,7 +24,7 @@ const MarkerInfo = ({ placeName, size }: MarkerInfoProps) => {
       />
       {size && (
         <div className='border-olive-green 8 bg-olive-green absolute -right-4 -top-4 h-8 rounded-full border-2 border-solid px-1 text-white'>
-          +{size}
+          +{size - 1}
         </div>
       )}
     </div>
