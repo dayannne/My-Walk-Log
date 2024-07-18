@@ -1,5 +1,6 @@
 'use client';
 
+import PlaceDetailNavigation from '@/app/_component/place/PlaceDetailNavigation';
 import { WALK_DURATIONS } from '@/app/shared/constant';
 import PlaceBasicInfo from '@/app/_component/place/PlaceBasicInfo';
 import { getPlace } from '@/app/api/_routes/place';
@@ -194,6 +195,8 @@ const PlaceDetailLayout = ({ children }: { children: React.ReactNode }) => {
               </div>
             )}
           </div>
+          {/* 3. 네비게이션 메뉴 */}
+          <PlaceDetailNavigation placeId={placeId} keyword={keyword} />
           {children}
         </div>
       </div>
