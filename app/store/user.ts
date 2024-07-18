@@ -19,3 +19,15 @@ export const useUserStore = create<UserState>()(
     },
   ),
 );
+
+interface PlaceState {
+  place: any | null;
+  setPlace: (newPlace: any | null) => void;
+  clearPlace: () => void;
+}
+
+export const usePlaceStore = create<PlaceState>((set) => ({
+  place: null,
+  setPlace: (newPlace: any | null) => set({ place: newPlace }),
+  clearPlace: () => set({ place: null }),
+}));
