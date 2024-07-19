@@ -37,7 +37,7 @@ const PlaceKeywordsInput = ({ placeKeywords, setPlaceKeywords }: pageProps) => {
                       className='hidden'
                     />
                     <span
-                      className={`hover:bg-hover cursor-pointer rounded-md border border-solid border-gray-300 px-2 py-1 text-sm shadow-sm ${
+                      className={`hover:bg-hover cursor-pointer rounded-md border border-solid border-gray-300 px-2 py-1 text-xs shadow-sm ${
                         placeKeywords.includes(key)
                           ? 'bg-olive-green text-white'
                           : 'bg-white text-black'
