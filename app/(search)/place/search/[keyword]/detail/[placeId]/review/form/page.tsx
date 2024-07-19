@@ -2,11 +2,21 @@
 import PlaceKeywordsInput from '@/app/_component/review/PlaceKeywordsInput';
 import { ADMISSION_FEE, WALK_DURATIONS } from '@/app/shared/constant';
 import Image from 'next/image';
-import { SetStateAction, useRef, useState } from 'react';
+import { useState } from 'react';
+import { useImageUpload } from '@/app/_hooks/useImageUpload';
+import FileInput from '@/app/_component/common/Input/FileInput';
 
 export interface pageProps {}
 
 const ReviewFormPage = ({}: pageProps) => {
+  const {
+    previewImg,
+    fileInputRef,
+    handleButtonClick,
+    fileHandler,
+    uploadImage,
+  } = useImageUpload();
+
   const walkDurations = Object.entries(WALK_DURATIONS);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [placeKeywords, setPlaceKeywords] = useState<string[]>([]);
@@ -27,9 +37,10 @@ const ReviewFormPage = ({}: pageProps) => {
 
   return (
     <div className='flex h-full flex-col'>
-      <div className='flex items-center justify-between border-b border-solid border-b-gray-200 bg-white p-5'>
-        <span className='font-bold'>리뷰 쓰기</span>
-        <button className='bg-olive-green rounded-2xl px-3 py-2 text-white shadow-md'>
+          <button
+            className='bg-olive-green border-olive-green box-border h-full grow-0 rounded-lg border border-solid px-2 py-1 text-xs text-white shadow-md'
+            onClick={uploadImage}
+          >
           저장하기
         </button>
       </div>
@@ -39,14 +50,7 @@ const ReviewFormPage = ({}: pageProps) => {
           <span className='text-sm text-gray-500'>
             장소 관련 사진을 업로드해 주세요.(1개~3개)
           </span>
-          <input
-            ref={fileInputRef}
-            type='file'
-            multiple
-            accept='.png, .jpg, .jpeg'
-            className='hidden'
-            onChange={handleFileChange}
-          />
+          <FileInput ref={fileInputRef} onChange={fileHandler} />
           <button
             onClick={handleButtonClick}
             className='flex items-center justify-center gap-2 rounded-lg border border-solid border-gray-300 py-3 shadow-md'
