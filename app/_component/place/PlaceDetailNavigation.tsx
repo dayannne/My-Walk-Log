@@ -10,7 +10,7 @@ const PlaceDetailNavigation = ({
   placeId,
   keyword,
 }: PlaceDetailNavigationProps) => {
-  const pathname = usePathname().split('/').pop();
+  const pathname = usePathname().split('/');
 
   return (
     <nav>
@@ -18,7 +18,7 @@ const PlaceDetailNavigation = ({
         <li className='h-full basis-full py-2 text-center text-sm'>
           <Link
             href={`/place/search/${keyword}/detail/${placeId}`}
-            className={`${pathname !== 'review' && pathname !== 'diary' && 'border-b-2'} border-solid border-b-black py-2`}
+            className={`${!pathname.includes('review') && !pathname.includes('diary') && 'border-b-2'} border-solid border-b-black py-2`}
           >
             정보
           </Link>
@@ -26,7 +26,7 @@ const PlaceDetailNavigation = ({
         <li className='basis-full py-2 text-center text-sm'>
           <Link
             href={`${placeId}/review`}
-            className={`${pathname === 'review' && 'border-b-2'} border-solid border-b-black py-2`}
+            className={`${pathname.includes('review') && 'border-b-2'} border-solid border-b-black py-2`}
           >
             리뷰
           </Link>
@@ -34,7 +34,7 @@ const PlaceDetailNavigation = ({
         <li className='basis-full py-2 text-center text-sm'>
           <Link
             href={`${placeId}/diary`}
-            className={`${pathname === 'diary' && 'border-b-2'} border-solid border-b-black py-2`}
+            className={`${pathname.includes('diary') && 'border-b-2'} border-solid border-b-black py-2`}
           >
             일기
           </Link>
