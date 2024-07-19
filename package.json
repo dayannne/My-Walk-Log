@@ -10,6 +10,8 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.614.0",
+    "@aws-sdk/s3-request-presigner": "^3.614.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@material-tailwind/react": "^2.1.9",
