@@ -30,7 +30,7 @@ export const WALK_DURATIONS = {
   5: '2시간 이상',
 };
 
-export const ADMISSION_FEE = [
+export const ENTRY_FEE = [
   { id: 'free', value: 'free', label: '무료 입장' },
   { id: 'paid', value: 'paid', label: '유료 입장' },
 ];

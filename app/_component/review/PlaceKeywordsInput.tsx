@@ -3,13 +3,17 @@
 import { PLACE_KEYWORDS } from '@/app/shared/constant';
 
 interface pageProps {
-  placeKeywords: string[];
-  setPlaceKeywords: React.Dispatch<React.SetStateAction<string[]>>;
+  placeKeywords: number[];
+  setPlaceKeywords: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const PlaceKeywordsInput = ({ placeKeywords, setPlaceKeywords }: pageProps) => {
-  const handleToggle = (key: string) => {
-    if (placeKeywords.includes(key)) {
+  const handleKeywordToggle = (key: number) => {
+    if (!Array.isArray(placeKeywords)) {
+      return;
+    }
+
+    if (placeKeywords?.includes(key)) {
       setPlaceKeywords(placeKeywords.filter((item) => item !== key));
     } else if (placeKeywords.length < 5) {
       setPlaceKeywords([...placeKeywords, key]);
@@ -32,13 +36,13 @@ const PlaceKeywordsInput = ({ placeKeywords, setPlaceKeywords }: pageProps) => {
                   <label className='flex items-center'>
                     <input
                       type='checkbox'
-                      checked={placeKeywords.includes(key)}
-                      onChange={() => handleToggle(key)}
+                      checked={placeKeywords?.includes(parseInt(key))}
+                      onChange={() => handleKeywordToggle(parseInt(key))}
                       className='hidden'
                     />
                     <span
                       className={`hover:bg-hover cursor-pointer rounded-md border border-solid border-gray-300 px-2 py-1 text-xs shadow-sm ${
-                        placeKeywords.includes(key)
+                        placeKeywords?.includes(parseInt(key))
                           ? 'bg-olive-green text-white'
                           : 'bg-white text-black'
                       }`}
