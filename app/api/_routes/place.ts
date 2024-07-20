@@ -16,7 +16,7 @@ export const deletePlaceLike = async (placeId: string, userId: number) => {
   return result;
 };
 
-export const searchPlace = async (places: IPlace[]) => {
-  const result = await axios.post('/api/search/result', places);
+export const searchPlace = async (data: IPlace[]) => {
+  const result = await axios.post('/api/search/result', data);
   return result;
 };
