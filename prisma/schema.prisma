@@ -59,9 +59,9 @@ model Review {
   id           Int      @id @default(autoincrement())
   reviewImages String[]
   description  String
-  tags         Int[]
+  keywords         Int[]
   walkDuration Int
-  hasEntryFee Boolean
+  entryFee String?
   likedCount   Int      @default(0)
   likedBy      User[]
   
