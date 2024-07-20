@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { IUser } from '../shared/types/auth';
+import { IUser } from '../../shared/types/auth';
 
 interface UserState {
   user: IUser | null;

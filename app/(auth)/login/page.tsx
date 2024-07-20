@@ -6,7 +6,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { useUserStore } from '@/app/store/user';
+import { useUserStore } from '@/app/store/client/user';
 import { ILoginForm } from '@/app/shared/types/auth';
 
 export interface pageProps {}

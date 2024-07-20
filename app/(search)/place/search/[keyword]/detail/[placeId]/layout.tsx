@@ -4,7 +4,7 @@ import PlaceDetailNavigation from '@/app/_component/place/PlaceDetailNavigation'
 import PlaceAdditionalInfo from '@/app/_component/place/PlaceAdditionalInfo';
 import PlaceBasicInfo from '@/app/_component/place/PlaceBasicInfo';
 import { getPlace } from '@/app/api/_routes/place';
-import { usePlaceStore } from '@/app/store/user';
+import { usePlaceStore } from '@/app/store/client/user';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Image from 'next/image';

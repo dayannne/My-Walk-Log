@@ -5,7 +5,7 @@ import {
 } from '@/app/api/_routes/place';
 import { useMap } from '@/app/shared/contexts/Map';
 import { IPlace } from '@/app/shared/types/map';
-import { useUserStore } from '@/app/store/user';
+import { useUserStore } from '@/app/store/client/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 

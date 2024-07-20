@@ -1,8 +1,7 @@
 'use client';
 
 import PlaceFindWayInfo from '@/app/_component/place/PlaceFindWayInfo';
-import { usePlaceStore } from '@/app/store/user';
-import Image from 'next/image';
+import { usePlaceStore } from '@/app/store/client/user';
 import Link from 'next/link';
 
 export interface pageProps {}
