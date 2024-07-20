@@ -20,6 +20,7 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
     handleButtonClick,
     fileHandler,
     uploadImage,
+    removeImage,
   } = useImageUpload();
   const router = useRouter();
   const { user } = useUserStore();
@@ -79,10 +80,15 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
     setValue('walkDuration', e.target.value);
   };
 
-  const handleentryFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEntryFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('entryFee', e.target.value);
   };
 
+  const handleRemoveImage =
+    (index: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      removeImage(index);
+    };
   return (
     <div className='flex h-full flex-col'>
       <div className='flex items-start justify-between border-b border-solid border-b-gray-200 bg-white px-4 py-5'>
@@ -121,14 +127,34 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
             />
             사진 등록
           </button>
-          {previewImgs && (
-            <Image
-              src={URL.createObjectURL(previewImgs[0])}
-              alt='이미지 미리보기'
-              width={100}
-              height={100}
-            />
-          )}
+          <div className='flex gap-2'>
+            {previewImgs &&
+              Array.from(previewImgs)?.map((file, index) => (
+                <div key={index} className='relative'>
+                  <Image
+                    className='h-24 w-24 rounded-lg object-cover object-center'
+                    src={URL.createObjectURL(file)}
+                    alt={`이미지 미리보기 ${index + 1}`}
+                    width={100}
+                    height={100}
+                    onLoad={() =>
+                      URL.revokeObjectURL(URL.createObjectURL(file))
+                    }
+                  />
+                  <button
+                    className='absolute right-1 top-1 text-white'
+                    onClick={handleRemoveImage(index)}
+                  >
+                    <Image
+                      src='/icons/icon-cancel(white).svg'
+                      alt={`이미지 삭제 버튼`}
+                      width={20}
+                      height={20}
+                    />
+                  </button>
+                </div>
+              ))}
+          </div>
         </div>
         <div className='flex flex-col gap-2'>
           <span className='font-medium'>후기</span>
@@ -188,7 +214,7 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
                   value={option.value}
                   {...register('entryFee')}
                   className='peer hidden'
-                  onChange={handleentryFeeChange}
+                  onChange={handleEntryFeeChange}
                 />
                 <label
                   htmlFor={option.id}
