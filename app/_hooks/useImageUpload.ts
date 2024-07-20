@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
 
 export const useImageUpload = () => {
-  const [previewImg, setPreviewImg] = useState<FileList | null>(null);
+  const [previewImgs, setPreviewImgs] = useState<FileList | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -13,16 +14,16 @@ export const useImageUpload = () => {
   const fileHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      setPreviewImg(files);
+      setPreviewImgs(files);
     }
   };
 
   const uploadImage = async () => {
-    if (previewImg) {
+    if (previewImgs) {
       const formData = new FormData();
 
-      for (let i = 0; i < previewImg.length; i++) {
-        formData.append('img', previewImg[i]);
+      for (let i = 0; i < previewImgs.length; i++) {
+        formData.append('img', previewImgs[i]);
       }
 
       const result = await fetch('/api/image', {
@@ -31,7 +32,7 @@ export const useImageUpload = () => {
       }).then((res) => res.json());
 
       if (result.message === 'OK') {
-        alert('이미지가 저장되었습니다.');
+        return result.data;
       } else {
         alert('이미지 저장에 실패했습니다.');
       }
@@ -39,7 +40,7 @@ export const useImageUpload = () => {
   };
 
   return {
-    previewImg,
+    previewImgs,
     fileInputRef,
     handleButtonClick,
     fileHandler,

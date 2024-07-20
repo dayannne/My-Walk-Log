@@ -43,7 +43,7 @@ export async function POST(req: Request, res: Response) {
     // imgURL 배열 생성
     const imgUrls = await Promise.all(uploadPromises);
 
-    return new Response(JSON.stringify({ data: { imgUrls }, message: 'OK' }), {
+    return new Response(JSON.stringify({ data: [...imgUrls], message: 'OK' }), {
       status: 200,
     });
   } catch (error) {
