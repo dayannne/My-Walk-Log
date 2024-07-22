@@ -49,6 +49,7 @@ const nextConfig = {
   // 이미지 호스트 추가
   images: {
     domains: [
+      'my-walklog.s3.ap-southeast-2.amazonaws.com',
       'storep-phinf.pstatic.net',
       'postfiles.pstatic.net',
       't1.daumcdn.net',
