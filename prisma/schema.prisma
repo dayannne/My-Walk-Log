@@ -18,9 +18,9 @@ model User {
   hashedPassword String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  reviews        Review[] @relation("author")
+  reviews        Review[]
   diaries        Diary[]  @relation("author")
-  likedReviews   Review[]
+  likedReviews   Int[]
   likedDiaries   Diary[]
   likedPlaces    String[]
 }
@@ -59,22 +59,23 @@ model Review {
   id           Int      @id @default(autoincrement())
   reviewImages String[]
   description  String
-  keywords         Int[]
+  keywords     Int[]
   walkDuration Int
-  entryFee String?
+  entryFee     String?
   likedCount   Int      @default(0)
-  likedBy      User[]
+  likedBy      Int[]
   
   placeId      String
-  placeDetailId      String
+  placeDetailId String
   authorId     Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   
-  place Place? @relation(fields: [placeId], references: [id])
+  place        Place?       @relation(fields: [placeId], references: [id])
   placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
-  author       User     @relation("author", fields: [authorId], references: [id])
+  author       User         @relation(fields: [authorId], references: [id])
 }
+
 
 model Diary {
   id           String   @id @default(uuid())

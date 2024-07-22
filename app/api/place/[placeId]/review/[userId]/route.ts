@@ -46,7 +46,6 @@ export async function POST(
         keywords: keywords || [],
         walkDuration,
         entryFee: entryFee || null,
-
         placeId,
         placeDetailId: placeId,
         authorId: userId,
