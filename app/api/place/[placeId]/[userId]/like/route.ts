@@ -41,7 +41,7 @@ export async function POST(
     ]);
 
     return NextResponse.json(
-      { data: { userId, params }, message: '좋아요 성공' },
+      { data: { params }, message: '좋아요 성공' },
       { status: 200 },
     );
   } catch (error) {
