@@ -1,7 +1,11 @@
 'use client';
 
-import { getReviews } from '@/app/api/_routes/review';
-import { useQuery } from '@tanstack/react-query';
+import {
+  createReviewLike,
+  deleteReviewLike,
+  getReviews,
+} from '@/app/api/_routes/review';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import { formatDate } from '@/app/shared/function/format';
@@ -10,12 +14,14 @@ import {
   filterPlaceKeywords,
 } from '@/app/shared/function/filter';
 import { WALK_DURATIONS } from '@/app/shared/constant';
+import { useUserStore } from '@/app/store/client/user';
 
 export interface pageProps {}
 
 const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
   const { placeId } = params;
-
+  const { user } = useUserStore();
+  const queryClient = useQueryClient();
   const { isLoading, data: reviews } = useQuery({
     queryKey: ['review', placeId],
     queryFn: async () => {
@@ -23,6 +29,26 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
       return response.data;
     },
     staleTime: 0,
+  });
+
+  const { mutate: createLike } = useMutation({
+    mutationFn: (reviewId: number) => {
+      return createReviewLike(reviewId, user?.id as number);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['review'] });
+    },
+  });
+  const { mutate: deleteLike } = useMutation({
+    mutationFn: (reviewId: number) => {
+      return deleteReviewLike(reviewId, user?.id as number);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['review'] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   if (isLoading || !reviews) return null;
@@ -57,7 +83,7 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
 
             {review.reviewImages.length && (
               <Carousel
-                className='h-52 overflow-hidden rounded-xl'
+                className='h-48 overflow-hidden rounded-xl'
                 placeholder={undefined}
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
@@ -128,10 +154,22 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
 
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-1'>
-                <button>
+                <button
+                  onClick={() =>
+                    review.likedBy.some((id: number) => id === user?.id) ===
+                    true
+                      ? deleteLike(review.id)
+                      : createLike(review.id)
+                  }
+                >
                   <Image
                     className='w-6'
-                    src='/icons/icon-heart.svg'
+                    src={
+                      review.likedBy.some((id: number) => id === user?.id) ===
+                      true
+                        ? '/icons/icon-heart-fill.svg'
+                        : '/icons/icon-heart.svg'
+                    }
                     alt='리뷰 이미지'
                     width={32}
                     height={32}
