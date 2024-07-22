@@ -21,7 +21,7 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   return (
     <>
       {/* 4. 리뷰 */}
-      {reviews.length && (
+      {reviews.length > 0 && (
         <div className='flex flex-col gap-4 bg-white px-4 py-5 text-sm'>
           <div className='mb-2 flex justify-between'>
             <Link
@@ -35,14 +35,14 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
                 (review: IReview) => review.authorId === user.id,
               ) && (
                 <Link
-                  className='text-olive-green border-olive-green flex items-center rounded-full border border-solid px-2 text-xs shadow-md'
+                  className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
                   href={`${placeId}/review/form`}
                 >
                   <Image
                     className=''
                     src='/icons/icon-pencil.svg'
-                    width={18}
-                    height={18}
+                    width={16}
+                    height={16}
                     alt='리뷰 쓰기 아이콘'
                   />
                   리뷰 쓰기

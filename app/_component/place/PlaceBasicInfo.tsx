@@ -5,9 +5,11 @@ import {
 } from '@/app/api/_routes/place';
 import { useMap } from '@/app/shared/contexts/Map';
 import { IPlace } from '@/app/shared/types/map';
+import { IReview } from '@/app/shared/types/review';
 import { useUserStore } from '@/app/store/client/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export interface PlaceBasicInfoProps {
   data: any;
@@ -74,9 +76,31 @@ const PlaceBasicInfo = ({ data, placeId }: PlaceBasicInfoProps) => {
       )}
       <div className='bg-white'>
         <div className='px-4 py-5'>
-          <span>
-            <span className='mr-2 text-xl font-bold'>{data.placeName}</span>
-            <span className='text-gray-500'>{data.placeInfo.categoryName}</span>
+          <span className='flex items-center'>
+            <span className='basis-full'>
+              <span className='mr-2 text-xl font-bold'>{data.placeName}</span>
+              <span className='text-gray-500'>
+                {data.placeInfo.categoryName}
+              </span>
+            </span>
+            {user &&
+              !data.reviews.some(
+                (review: IReview) => review.authorId === user.id,
+              ) && (
+                <Link
+                  className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
+                  href={`${placeId}/review/form`}
+                >
+                  <Image
+                    className=''
+                    src='/icons/icon-pencil.svg'
+                    width={16}
+                    height={16}
+                    alt='리뷰 쓰기 아이콘'
+                  />
+                  리뷰 쓰기
+                </Link>
+              )}
           </span>
           <span className='mb-3 mt-2 flex items-center gap-2 text-sm font-light text-gray-800'>
             <span>찜 {data.likedBy.length}</span>

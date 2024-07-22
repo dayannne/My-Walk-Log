@@ -15,6 +15,7 @@ import {
 } from '@/app/shared/function/filter';
 import { WALK_DURATIONS } from '@/app/shared/constant';
 import { useUserStore } from '@/app/store/client/user';
+import EmptyReviews from '@/app/_component/review/EmptyReviews';
 
 export interface pageProps {}
 
@@ -53,7 +54,8 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
 
   if (isLoading || !reviews) return null;
 
-  console.log(reviews);
+  if (reviews.length === 0) return <EmptyReviews placeId={placeId} />;
+
   return (
     <div className='bg-white'>
       <ul>
@@ -81,7 +83,7 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
               </div>
             </div>
 
-            {review.reviewImages.length && (
+            {review.reviewImages.length > 0 && (
               <Carousel
                 className='h-48 overflow-hidden rounded-xl'
                 placeholder={undefined}
@@ -138,7 +140,7 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
                   ))}
               </div>
               <div className='flex flex-wrap gap-1'>
-                {review.keywords.length &&
+                {review.keywords.length > 0 &&
                   filterPlaceKeywords(review.keywords).map(
                     ({ key, value }: { key: number; value: string }) => (
                       <span
