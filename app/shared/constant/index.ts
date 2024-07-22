@@ -22,7 +22,11 @@ export const FACALTY_INFO = {
   smokingroom: '흡연실',
 };
 
-export const WALK_DURATIONS = {
+type WalkDurations = {
+  [key: number]: string;
+};
+
+export const WALK_DURATIONS: WalkDurations = {
   1: '10분 ~ 30분',
   2: '30분 ~ 1시간',
   3: '1시간 ~ 1시간 30분',

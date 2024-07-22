@@ -12,3 +12,8 @@ export const createReview = async (
   );
   return result;
 };
+
+export const getReviews = async (placeId: string) => {
+  const result = await axios.get(`/api/place/${placeId}/review`);
+  return result;
+};
