@@ -13,10 +13,7 @@ const SearchForm = () => {
   const prevKeyword = useParams().keyword as string;
   const { searchPlaces } = useSearchPlaces();
 
-  const [keyword, setKeyword] = useState(
-    prevKeyword ? decodeURIComponent(prevKeyword) : '',
-  );
-  console.log(keyword);
+  const [keyword, setKeyword] = useState('');
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,7 +26,9 @@ const SearchForm = () => {
   };
 
   useEffect(() => {
-    setKeyword(decodeURIComponent(prevKeyword));
+    if (prevKeyword) {
+      setKeyword(decodeURIComponent(prevKeyword));
+    }
   }, [prevKeyword]);
 
   return (

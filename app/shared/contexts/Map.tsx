@@ -86,15 +86,15 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
           smooth: true,
           tileAnimation: false,
         };
-        let zoomControl = new kakao.maps.ZoomControl();
         // 지도 생성
         const kakaoMap = new kakao.maps.Map(mapElement, options);
+
+        // 현재 중심좌표 값 갱신
         kakao.maps.event.addListener(kakaoMap, 'dragend', function () {
-          // 지도 중심좌표를 얻어옵니다
           const latlng = kakaoMap.getCenter();
           setCurrLocation(latlng);
         });
-        kakaoMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
         setMap(kakaoMap);
       }
     });

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { useParams } from 'next/navigation';
-import { useUserStore } from '@/app/store/user';
+import { useUserStore } from '@/app/store/client/user';
 
 const SearchResult = () => {
   const mapContext = useMap();

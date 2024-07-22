@@ -7,16 +7,16 @@ export const getPlace = async (placeId: string) => {
 };
 
 export const createPlaceLike = async (placeId: string, userId: number) => {
-  const result = await axios.post(`/api/place/${placeId}/like/${userId}`);
+  const result = await axios.post(`/api/place/${placeId}/${userId}/like`);
   return result;
 };
 
 export const deletePlaceLike = async (placeId: string, userId: number) => {
-  const result = await axios.delete(`/api/place/${placeId}/unlike/${userId}`);
+  const result = await axios.delete(`/api/place/${placeId}/${userId}/unlike`);
   return result;
 };
 
-export const searchPlace = async (places: IPlace[]) => {
-  const result = await axios.post('/api/search/result', places);
+export const searchPlace = async (data: IPlace[]) => {
+  const result = await axios.post('/api/search/result', data);
   return result;
 };
