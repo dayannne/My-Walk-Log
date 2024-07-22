@@ -17,14 +17,12 @@ interface MapProps {
 
 interface IMapContextValue {
   mapData: kakao.maps.Map | null;
-
   markerClusterer: kakao.maps.MarkerClusterer | null;
   setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];
   setOverlays: (markers: kakao.maps.CustomOverlay[]) => void;
   places: IPlace[];
   setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
-
   prevKeyword: string[];
   setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
   currLocation: kakao.maps.LatLng | null;
