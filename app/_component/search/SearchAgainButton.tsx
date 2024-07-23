@@ -11,7 +11,10 @@ export interface SearchAgainButtonProps {}
 const SearchAgainButton = () => {
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
-  const keyword = decodeURIComponent(useParams()?.keyword as string);
+  const params = useParams();
+  const keyword = params?.keyword
+    ? decodeURIComponent(params?.keyword as string)
+    : null;
   const { currLocation, prevLocation, setPrevLocation, mapData } = mapContext!;
   const [isVisible, setIsVisible] = useState(false);
 
@@ -22,7 +25,12 @@ const SearchAgainButton = () => {
     const prevLat = prevLocation?.getLat();
     const prevLng = prevLocation?.getLng();
 
-    if (keyword != '' && (currlat !== prevLat || currlng !== prevLng)) {
+    if (
+      keyword &&
+      keyword !== '' &&
+      (currlat !== prevLat || currlng !== prevLng)
+    ) {
+      console.log(keyword);
       setIsVisible(true);
       setPrevLocation(mapData?.getCenter() as kakao.maps.LatLng);
     }
@@ -30,7 +38,7 @@ const SearchAgainButton = () => {
   }, [currLocation]);
 
   const handleSearchAgain = () => {
-    searchPlaces(keyword, 'SEARCH_AGAIN');
+    searchPlaces(keyword as string, 'SEARCH_AGAIN');
     setIsVisible(false);
   };
   return (
