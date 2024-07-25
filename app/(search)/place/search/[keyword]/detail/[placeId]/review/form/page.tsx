@@ -9,8 +9,7 @@ import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useState } from 'react';
 import { useUserStore } from '@/app/store/client/user';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createReview } from '@/app/api/_routes/review';
+import { useCreateReview } from '@/app/store/server/review';
 import { IReviewReq } from '@/app/shared/types/review';
 
 const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
@@ -24,7 +23,6 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
   } = useImageUpload();
   const router = useRouter();
   const { user } = useUserStore();
-  const queryClient = useQueryClient();
 
   const walkDurations = Object.entries(WALK_DURATIONS);
   const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
@@ -46,17 +44,7 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
       entryFee: null,
     },
   });
-  const { mutate: review } = useMutation({
-    mutationFn: (data: IReviewReq) => {
-      return createReview(data, placeId, user?.id as number);
-    },
-    onSuccess: () => {
-      alert('리뷰가 등록되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['place'] });
-      queryClient.invalidateQueries({ queryKey: ['review'] });
-      router.back();
-    },
-  });
+  const { mutate: createReview } = useCreateReview();
   const onSubmit = async (formData: IReviewReq) => {
     // 이미지 업로드 받아오기
     const reviewImages = await uploadImage();
@@ -66,8 +54,8 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
       keywords: placeKeywords,
       reviewImages,
     };
-    console.log('폼 제출 데이터:', data);
-    review(data);
+
+    createReview({ data, placeId, userId: user?.id as number });
   };
 
   const handledescriptionChange = (

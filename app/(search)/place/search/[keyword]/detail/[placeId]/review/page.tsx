@@ -1,11 +1,15 @@
 'use client';
 
 import {
-  createReviewLike,
-  deleteReviewLike,
-  getReviews,
-} from '@/app/api/_routes/review';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+  useCreateReviewLike,
+  useDeleteReviewLike,
+  useGetReviews,
+} from '@/app/store/server/review';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import { formatDate } from '@/app/shared/function/format';
@@ -23,36 +27,12 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
   const { placeId } = params;
   const { user } = useUserStore();
   const queryClient = useQueryClient();
-  const { isLoading, data: reviews } = useQuery({
-    queryKey: ['review', placeId],
-    queryFn: async () => {
-      const response = await getReviews(placeId);
-      return response.data;
-    },
-    staleTime: 0,
-  });
+  const queryOptions = useGetReviews(placeId);
+  const { data: reviews } = useSuspenseQuery(queryOptions);
+  const { mutate: createLike } = useCreateReviewLike();
+  const { mutate: deleteLike } = useDeleteReviewLike();
 
-  const { mutate: createLike } = useMutation({
-    mutationFn: (reviewId: number) => {
-      return createReviewLike(reviewId, user?.id as number);
-    },
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ['review'] });
-    },
-  });
-  const { mutate: deleteLike } = useMutation({
-    mutationFn: (reviewId: number) => {
-      return deleteReviewLike(reviewId, user?.id as number);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['review'] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  if (isLoading || !reviews) return null;
+  if (!reviews) return null;
 
   if (reviews.length === 0) return <EmptyReviews placeId={placeId} />;
 
@@ -160,8 +140,14 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
                   onClick={() =>
                     review.likedBy.some((id: number) => id === user?.id) ===
                     true
-                      ? deleteLike(review.id)
-                      : createLike(review.id)
+                      ? deleteLike({
+                          reviewId: review.id,
+                          userId: user?.id as number,
+                        })
+                      : createLike({
+                          reviewId: review.id,
+                          userId: user?.id as number,
+                        })
                   }
                 >
                   <Image

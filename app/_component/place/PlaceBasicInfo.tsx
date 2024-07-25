@@ -1,8 +1,7 @@
 import {
-  searchPlace,
-  createPlaceLike,
-  deletePlaceLike,
-} from '@/app/api/_routes/place';
+  useCreatePlaceLike,
+  useDeletePlaceLike,
+} from '@/app/store/server/place';
 import { useMap } from '@/app/shared/contexts/Map';
 import { IPlace } from '@/app/shared/types/map';
 import { IReview } from '@/app/shared/types/review';
@@ -12,51 +11,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export interface PlaceBasicInfoProps {
-  data: any;
+  place: any;
   placeId: string;
 }
-
-const PlaceBasicInfo = ({ data, placeId }: PlaceBasicInfoProps) => {
+const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { user } = useUserStore();
   const mapContext = useMap();
   const queryClient = useQueryClient();
-  const { likedBy } = data;
-  const { mainphotourl, tags } = data.placeDetail.basicInfo;
+
+  const likedBy = place?.likedBy || [];
+  const { mainphotourl, tags } = place?.placeDetail?.basicInfo || {};
 
   // API 요청
-  const { mutate: search } = useMutation({
-    mutationFn: () => {
-      return searchPlace(mapContext?.places as IPlace[]);
-    },
-    onSuccess: async (result) => {
-      // 비동기 처리로 동시
-      await queryClient.invalidateQueries({ queryKey: ['place'] });
-      mapContext?.setPlaces(result.data.data);
-    },
-  });
-  const { mutate: createLike } = useMutation({
-    mutationFn: () => {
-      return createPlaceLike(placeId, user?.id as number);
-    },
-    onSuccess: () => {
-      search();
-    },
-  });
-  const { mutate: deleteLike } = useMutation({
-    mutationFn: () => {
-      return deletePlaceLike(placeId, user?.id as number);
-    },
-    onSuccess: () => {
-      search();
-    },
-  });
+  const { mutate: createLike } = useCreatePlaceLike();
+  const { mutate: deleteLike } = useDeletePlaceLike();
 
   // 사진 데이터 필터링
   const photos = mainphotourl
     ? [{ orgurl: mainphotourl }]
-    : data.placeDetail.photo
-      ? data.placeDetail.photo.photoList[0].list.slice(1)
-      : null;
+    : place?.placeDetail?.photo?.photoList[0]?.list.slice(1) || null;
 
   // 현재 사용자의 좋아요 여부
   const isLiked = likedBy.some((id: number) => id === user?.id);
@@ -78,13 +51,13 @@ const PlaceBasicInfo = ({ data, placeId }: PlaceBasicInfoProps) => {
         <div className='px-4 py-5'>
           <span className='flex items-center'>
             <span className='basis-full'>
-              <span className='mr-2 text-xl font-bold'>{data.placeName}</span>
+              <span className='mr-2 text-xl font-bold'>{place?.placeName}</span>
               <span className='text-gray-500'>
-                {data.placeInfo.categoryName}
+                {place?.placeInfo?.categoryName}
               </span>
             </span>
             {user &&
-              !data.reviews.some(
+              !place?.reviews.some(
                 (review: IReview) => review.authorId === user.id,
               ) && (
                 <Link
@@ -103,11 +76,11 @@ const PlaceBasicInfo = ({ data, placeId }: PlaceBasicInfoProps) => {
               )}
           </span>
           <span className='mb-3 mt-2 flex items-center gap-2 text-sm font-light text-gray-800'>
-            <span>찜 {data.likedBy.length}</span>
+            <span>찜 {likedBy.length}</span>
             <span className='mb-[2px] text-gray-400'>|</span>
-            <span>리뷰 수 {data.reviews.length}</span>
+            <span>리뷰 수 {place?.reviews.length}</span>
             <span className='mb-[2px] text-gray-400'>|</span>
-            <span>별점 {data.eval}</span>
+            <span>별점 {place?.eval}</span>
           </span>
           {/* 태그 */}
           <span className='flex flex-wrap gap-1'>
@@ -126,7 +99,11 @@ const PlaceBasicInfo = ({ data, placeId }: PlaceBasicInfoProps) => {
         <div className='border-gray-240 flex border-t border-solid border-gray-200 py-2'>
           <button
             className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'
-            onClick={() => (isLiked ? deleteLike() : createLike())}
+            onClick={() =>
+              isLiked
+                ? deleteLike({ placeId, userId: user?.id as number })
+                : createLike({ placeId, userId: user?.id as number })
+            }
           >
             <Image
               className='w-5'

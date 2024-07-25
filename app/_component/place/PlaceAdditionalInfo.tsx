@@ -10,14 +10,14 @@ export interface PlaceAdditionalInfoProps {
 
 const PlaceAdditionalInfo = ({ place }: PlaceAdditionalInfoProps) => {
   const { phonenum, homepage, openHour, facilityInfo } =
-    place.placeDetail.basicInfo;
+    place?.placeDetail?.basicInfo || {};
 
   return (
     <div className='flex flex-col gap-4 bg-white px-4 py-5 text-sm'>
       {/* 주소 */}
       <span className='flex items-center gap-2'>
         <Image src='/icons/icon-place.svg' alt='' width={24} height={24} />
-        {place.placeInfo.address}
+        {place?.placeInfo.address}
       </span>
       {/* 이용 시간 */}
       {openHour && (

@@ -3,9 +3,8 @@
 import PlaceDetailNavigation from '@/app/_component/place/PlaceDetailNavigation';
 import PlaceAdditionalInfo from '@/app/_component/place/PlaceAdditionalInfo';
 import PlaceBasicInfo from '@/app/_component/place/PlaceBasicInfo';
-import { getPlace } from '@/app/api/_routes/place';
+
 import { usePlaceStore } from '@/app/store/client/user';
-import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
@@ -16,21 +15,7 @@ const PlaceDetailLayout = ({ children }: { children: React.ReactNode }) => {
   const placeId = params?.placeId as string;
   const keyword = decodeURIComponent(useParams()?.keyword as string);
 
-  const { setPlace, place, clearPlace } = usePlaceStore();
-  const { isLoading, isFetching } = useQuery({
-    queryKey: ['place', placeId],
-    queryFn: async () => {
-      const response = await getPlace(placeId);
-      setPlace(response.data);
-      return response.data;
-    },
-    staleTime: 0,
-  });
-
-  if (isLoading || !place || isFetching) return null;
-
-  const { phonenum, homepage, openHour, facilityInfo } =
-    place.placeDetail.basicInfo;
+  const { place, clearPlace } = usePlaceStore();
 
   const handleCloseButton = () => {
     clearPlace();
@@ -47,7 +32,7 @@ const PlaceDetailLayout = ({ children }: { children: React.ReactNode }) => {
       <div className='box-content h-full w-96 border-l border-solid border-gray-200 bg-[#f0f0f3] shadow-2xl'>
         <div className='flex h-full flex-col gap-2 overflow-y-scroll'>
           {/* 1. 장소 이미지 & 기본 정보 */}
-          <PlaceBasicInfo data={place} placeId={placeId} />
+          <PlaceBasicInfo place={place} placeId={placeId} />
           {/* 2. 장소 추가 정보 */}
           <PlaceAdditionalInfo place={place} />
           {/* 3. 네비게이션 메뉴 */}
