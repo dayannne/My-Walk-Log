@@ -18,11 +18,12 @@ model User {
   hashedPassword String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  likedReviews   Int[]
+  likedDiaries   Int[]
+  likedPlaces    String[]
+
   reviews        Review[]
   diaries        Diary[]  @relation("author")
-  likedReviews   Int[]
-  likedDiaries   Diary[]
-  likedPlaces    String[]
 }
 
 model Place {
@@ -78,12 +79,12 @@ model Review {
 
 
 model Diary {
-  id           String   @id @default(uuid())
+  id           Int      @id @default(autoincrement())
   placeId      String  
   diaryImages  String[]
   content      String
   likedCount   Int      @default(0)
-  likedBy      User[]
+  likedBy      Int[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   weather      String
