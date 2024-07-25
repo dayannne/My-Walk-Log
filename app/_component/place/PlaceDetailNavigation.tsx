@@ -13,8 +13,8 @@ const PlaceDetailNavigation = ({
   const pathname = usePathname().split('/');
 
   return (
-    <nav>
-      <ul className='flex bg-white shadow-sm'>
+    <nav className='bg-white pb-1'>
+      <ul className='flex border-b border-solid border-gray-200 bg-white shadow-sm'>
         <li className='h-full basis-full py-2 text-center text-sm'>
           <Link
             href={`/place/search/${keyword}/detail/${placeId}`}

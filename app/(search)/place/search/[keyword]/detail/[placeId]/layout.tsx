@@ -8,6 +8,8 @@ import { usePlaceStore } from '@/app/store/client/user';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import LoadingSpinner from '@/app/_component/common/LoadingSpinner';
 
 const PlaceDetailLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -29,15 +31,17 @@ const PlaceDetailLayout = ({ children }: { children: React.ReactNode }) => {
       animate={{ x: 0 }}
       transition={{ ease: 'easeOut', duration: 0.5 }}
     >
-      <div className='box-content h-full w-96 border-l border-solid border-gray-200 bg-[#f0f0f3] shadow-2xl'>
-        <div className='flex h-full flex-col gap-2 overflow-y-scroll'>
+      <div className='box-content flex h-full w-96 flex-col overflow-y-scroll border-l border-solid border-gray-200 bg-[#f0f0f3] shadow-2xl'>
+        <div className='flex flex-col gap-2'>
           {/* 1. 장소 이미지 & 기본 정보 */}
           <PlaceBasicInfo place={place} placeId={placeId} />
           {/* 2. 장소 추가 정보 */}
           <PlaceAdditionalInfo place={place} />
           {/* 3. 네비게이션 메뉴 */}
           <PlaceDetailNavigation placeId={placeId} keyword={keyword} />
-          {children}
+        </div>
+        <div className='relative basis-full'>
+          <Suspense fallback={<LoadingSpinner />}> {children}</Suspense>
         </div>
       </div>
       {/* 상세페이지 닫기 버튼 */}

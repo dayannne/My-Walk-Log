@@ -20,12 +20,12 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   }, [place, setPlace]);
 
   return (
-    <>
+    <div className='flex flex-col gap-2'>
       {/* 4. 리뷰 */}
       <PlaceReview placeId={placeId} place={place} />
       {/* 5. 찾아가는 길 */}
       <PlaceFindWayInfo place={place} />
-    </>
+    </div>
   );
 };
 

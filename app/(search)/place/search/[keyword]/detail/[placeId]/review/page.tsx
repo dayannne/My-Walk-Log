@@ -34,7 +34,7 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
 
   if (!reviews) return null;
 
-  if (reviews.length === 0) return <EmptyReviews placeId={placeId} />;
+  if (reviews.length === 0) return <EmptyReviews />;
 
   return (
     <div className='bg-white'>

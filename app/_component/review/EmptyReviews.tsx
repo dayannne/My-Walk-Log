@@ -5,9 +5,9 @@ export interface EmptyReviewsProps {
   placeId: string;
 }
 
-const EmptyReviews = ({ placeId }: EmptyReviewsProps) => {
+const EmptyReviews = () => {
   return (
-    <div className='flex h-full flex-col items-center justify-center gap-2 bg-white p-5'>
+    <div className='box-border flex h-full flex-col items-center justify-center gap-2 bg-white p-5'>
       <Image
         className='w-24'
         src='/icons/icon-empty.png'
