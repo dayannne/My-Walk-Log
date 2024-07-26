@@ -35,7 +35,7 @@ const Header = () => {
       <div className='flex h-auto w-full flex-col items-center justify-center gap-2 border-t border-solid border-gray-200 p-4'>
         {user ? (
           <>
-            <Link href='/profile'>
+            <Link href='/profile/my'>
               <Image
                 className='rounded-full'
                 src={
