@@ -80,16 +80,17 @@ model Review {
 
 model Diary {
   id           Int      @id @default(autoincrement())
+  authorId     Int
   placeId      String  
   diaryImages  String[]
   content      String
+  weather      String
+  tags         String[]
+
   likedCount   Int      @default(0)
   likedBy      Int[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  weather      String
-  tags         String[]
-  authorId     Int
 
   placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
   author       User     @relation("author", fields: [authorId], references: [id])
