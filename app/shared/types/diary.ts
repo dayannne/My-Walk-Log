@@ -1,8 +1,10 @@
 export interface IDiaryReq {
-  description: string;
-  weather: number | string | null;
-  tags?: string[];
+  authorId: number;
+  placeId: string;
   diaryImages: string[];
+  content: string;
+  weather: string | null;
+  tags?: string[];
 }
 
 export interface IDiary {

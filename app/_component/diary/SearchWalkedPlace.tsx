@@ -2,11 +2,15 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 
-const SearchWalkedPlace = () => {
+interface Props {
+  selectedPlace: any;
+  setSelectedPlace: (place: any) => void;
+}
+
+const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
   const [places, setPlaces] = useState<any[]>([]);
   const [placeName, setPlaceName] = useState('');
   const mapRef = useRef<HTMLDivElement>(null);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceName(e.currentTarget.value);

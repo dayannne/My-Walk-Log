@@ -10,9 +10,9 @@ import { useState } from 'react';
 import { useUserStore } from '@/app/store/client/user';
 import { IDiaryReq } from '@/app/shared/types/diary';
 import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
+import { useCreateDiary } from '@/app/store/server/diary';
 
-const DiaryFormPage = ({ params }: { params: { placeId: string } }) => {
-  const { placeId } = params;
+const DiaryFormPage = () => {
   const {
     previewImgs,
     fileInputRef,
@@ -26,39 +26,41 @@ const DiaryFormPage = ({ params }: { params: { placeId: string } }) => {
 
   const weathers = Object.entries(WEATHERS);
   const [placeTags, setPlaceTags] = useState<string[]>([]);
+  const [selectedPlace, setSelectedPlace] = useState<any>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<IDiaryReq>({
     mode: 'onChange',
     reValidateMode: 'onChange',
     shouldFocusError: true,
     shouldUnregister: true,
     defaultValues: {
-      description: '',
+      content: '',
       weather: null,
       tags: [],
     },
   });
-  //   const { mutate: createReview } = useCreateReview();
+  const { mutate: createDiary } = useCreateDiary();
   const onSubmit = async (formData: IDiaryReq) => {
     // 이미지 업로드 받아오기
-    const reviewImages = await uploadImage();
-    const data = {
+    const diaryImages = await uploadImage();
+    const data: IDiaryReq = {
+      // TODO 여기 장소검색 input에서 placeId 받아와야 함
       ...formData,
-      reviewImages,
+      authorId: user?.id as number,
+      placeId: selectedPlace.id,
+      diaryImages,
+      tags: placeTags,
     };
-
-    // createReview({ data, placeId, userId: user?.id as number });
+    createDiary(data);
   };
 
-  const handledescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setValue('description', e.target.value);
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue('content', e.target.value);
   };
 
   const handleWeatherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +107,7 @@ const DiaryFormPage = ({ params }: { params: { placeId: string } }) => {
           <button
             className='bg-olive-green border-olive-green box-border h-full grow-0 rounded-lg border border-solid px-2 py-1 text-xs text-white shadow-md'
             onClick={handleSubmit(onSubmit)}
+            disabled={!isValid}
           >
             저장하기
           </button>
@@ -203,20 +206,23 @@ const DiaryFormPage = ({ params }: { params: { placeId: string } }) => {
             rows={7}
             className='resize-none rounded-lg border border-solid border-gray-500 p-2 text-xs shadow-sm focus:outline-none'
             placeholder='오늘, 산책하면서 어땠나요? 감정, 좋았던 점, 기억나는 순간 등 자유롭게 담아 봐요.'
-            {...register('description', {
+            {...register('content', {
               required: '이용 후기를 입력해 주세요.',
             })}
-            onChange={handledescriptionChange}
+            onChange={handleContentChange}
           />
-          {errors.description && (
+          {errors.content && (
             <span className='text-xs text-red-500'>
-              {errors.description.message}
+              {errors.content.message}
             </span>
           )}
         </div>
         <div className='flex flex-col gap-2 rounded-md bg-white p-3'>
           <span className='font-medium'>장소 등록하기</span>
-          <SearchWalkedPlace />
+          <SearchWalkedPlace
+            selectedPlace={selectedPlace}
+            setSelectedPlace={setSelectedPlace}
+          />
         </div>
         <div className='flex flex-col gap-2 rounded-md bg-white p-3'>
           <span className='font-medium'>태그 추가</span>
