@@ -75,3 +75,30 @@ export const PLACE_KEYWORDS: PlaceKeywords = {
     30: '🧺 피크닉하기 좋아요',
   },
 };
+
+type weathers = {
+  [key: string]: { emoji: string; name: string };
+};
+
+export const WEATHERS: weathers = {
+  sunny: {
+    emoji: '☀️',
+    name: '맑음',
+  },
+  cloudy: {
+    emoji: '☁️',
+    name: '흐림',
+  },
+  partlyCloudy: {
+    emoji: '⛅',
+    name: '부분 흐림',
+  },
+  rainy: {
+    emoji: '🌧️',
+    name: '비',
+  },
+  snowy: {
+    emoji: '❄️',
+    name: '눈',
+  },
+};

@@ -8,31 +8,11 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { IPlace } from '@/app/shared/types/map';
+import { IMapContextValue, IPlace } from '@/app/shared/types/map';
 import useGeolocation from '@/app/_hooks/useGeolocation';
 
 interface MapProps {
   children?: React.ReactNode;
-}
-
-interface IMapContextValue {
-  mapData: kakao.maps.Map | null;
-  markerClusterer: kakao.maps.MarkerClusterer | null;
-  setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
-  overlays: kakao.maps.CustomOverlay[];
-  setOverlays: (markers: kakao.maps.CustomOverlay[]) => void;
-  places: IPlace[];
-  setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
-  prevKeyword: string[];
-  setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
-  currLocation: kakao.maps.LatLng | null;
-  setCurrLocation: React.Dispatch<
-    React.SetStateAction<kakao.maps.LatLng | null>
-  >;
-  prevLocation: kakao.maps.LatLng | null;
-  setPrevLocation: React.Dispatch<
-    React.SetStateAction<kakao.maps.LatLng | null>
-  >;
 }
 
 const MapContext = createContext<IMapContextValue | null>({
