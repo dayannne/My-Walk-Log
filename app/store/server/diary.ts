@@ -21,3 +21,47 @@ export const useCreateDiary = () => {
     },
   });
 };
+
+export const useCreateDiaryLike = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      diaryId,
+      userId,
+    }: {
+      diaryId: number;
+      userId: number;
+    }) => {
+      return axios.post(`/api/diary/like/${diaryId}/${userId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};
+
+export const useDeleteDiaryLike = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      diaryId,
+      userId,
+    }: {
+      diaryId: number;
+      userId: number;
+    }) => {
+      return await axios.delete(`/api/diary/like/${diaryId}/${userId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};

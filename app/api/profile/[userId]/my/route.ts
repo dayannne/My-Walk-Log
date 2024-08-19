@@ -12,8 +12,16 @@ export async function GET(
         id: userId,
       },
       include: {
-        reviews: true,
-        diaries: true,
+        reviews: {
+          include: {
+            place: true,
+          },
+        },
+        diaries: {
+          include: {
+            placeDetail: true,
+          },
+        },
       },
     });
 
