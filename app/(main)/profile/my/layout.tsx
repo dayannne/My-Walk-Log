@@ -20,7 +20,7 @@ const ProfileLayout = ({ children }: layoutProps) => {
     <Container>
       <div className='flex h-full flex-col'>
         <div className='text-olive-green flex items-center gap-2 bg-white p-4 shadow-sm'>
-          <button onClick={() => router.back()}>
+          <button onClick={() => router.back()} className='mt-[2px]'>
             <Image
               src='/icons/icon-arrow-left(green).svg'
               alt='프로필 이미지'
@@ -54,7 +54,7 @@ const ProfileLayout = ({ children }: layoutProps) => {
               </div>
               <Link
                 className='text-olive-green border-olive-green mt-2 flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-3 py-2 text-sm font-medium shadow-md'
-                href={`my/diary/form`}
+                href={`/diary/form`}
               >
                 <Image
                   className=''

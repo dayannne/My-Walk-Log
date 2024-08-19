@@ -94,18 +94,27 @@ const DiaryFormPage = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <div className='flex items-start justify-between border-b border-solid border-b-gray-200 px-4 py-5'>
-        <span className='font-semibold'>산책일기 쓰기</span>
-
+      <div className='text-olive-green flex items-center justify-between border-b border-solid border-b-gray-200 bg-white p-4 shadow-sm'>
+        <div className='flex items-center gap-2'>
+          <button onClick={() => router.back()} className='mt-[2px]'>
+            <Image
+              src='/icons/icon-arrow-left(green).svg'
+              alt='프로필 이미지'
+              width={24}
+              height={24}
+            />
+          </button>
+          산책일기 쓰기
+        </div>
         <div className='flex gap-[6px]'>
           <button
-            className='bg-whit ep-1 box-border flex h-full grow-0 items-center justify-center rounded-lg border border-solid border-gray-500 px-2 py-1 text-xs text-black shadow-md'
+            className='ep-1 box-border flex h-full grow-0 items-center justify-center rounded-lg border border-solid border-gray-500 bg-white px-2 py-1 text-xs text-black shadow-md'
             onClick={() => router.back()}
           >
             취소
           </button>
           <button
-            className='bg-olive-green border-olive-green box-border h-full grow-0 rounded-lg border border-solid px-2 py-1 text-xs text-white shadow-md'
+            className={`box-border h-full grow-0 rounded-lg border border-solid px-2 py-1 text-xs shadow-md ${isValid ? 'bg-olive-green border-olive-green text-white' : 'border-gray-400 bg-gray-100 text-gray-400'}`}
             onClick={handleSubmit(onSubmit)}
             disabled={!isValid}
           >
