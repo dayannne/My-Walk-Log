@@ -65,3 +65,26 @@ export const useDeleteDiaryLike = () => {
     },
   });
 };
+
+export const useDeleteDiary = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      diaryId,
+      userId,
+    }: {
+      diaryId: number;
+      userId: number;
+    }) => {
+      return await axios.delete(`/api/diary/delete/${diaryId}/${userId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      alert('일기가 삭제되었습니다.');
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};

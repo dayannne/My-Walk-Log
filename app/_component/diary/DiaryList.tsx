@@ -3,10 +3,14 @@ import { formatDate } from '@/app/shared/function/format';
 import { useUserStore } from '@/app/store/client/user';
 import {
   useCreateDiaryLike,
+  useDeleteDiary,
   useDeleteDiaryLike,
 } from '@/app/store/server/diary';
 import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
+import MenuModal from '../common/Modal/MenuModal';
+import ConfirmModal from '../common/Modal/ConfirmModal';
+import useModal from '@/app/_hooks/useModal';
 
 export interface DiaryListProps {
   diaries: any;
@@ -16,6 +20,13 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
   const { user } = useUserStore();
   const { mutate: createLike } = useCreateDiaryLike();
   const { mutate: deleteLike } = useDeleteDiaryLike();
+  const { mutate: deleteDiary } = useDeleteDiary();
+  const { open, handleOpen, handleClose } = useModal();
+
+  const handleConfirm = (diaryId: number) => {
+    deleteDiary({ diaryId, userId: user?.id as number });
+  };
+
   return (
     <ul className='flex basis-full flex-col gap-2 overflow-y-scroll py-2'>
       {diaries.map((diary: any) => (
@@ -130,6 +141,18 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
                 </button>
                 <span className='text-sm'>{diary.likedBy.length}</span>
               </div>
+              {user?.id && user?.id === diary.authorId && (
+                <MenuModal
+                  firstMenu='일기 삭제하기'
+                  firstMenuClose={handleOpen}
+                />
+              )}
+              <ConfirmModal
+                description='정말로 삭제하시겠습니까?'
+                onConfirm={() => handleConfirm(diary.id)}
+                open={open}
+                handleClose={handleClose}
+              />
             </div>
           </div>
         </li>
