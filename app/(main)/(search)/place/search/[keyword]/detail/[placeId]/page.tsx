@@ -4,14 +4,25 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import PlaceFindWayInfo from '@/app/_component/place/PlaceFindWayInfo';
 import { useGetPlace } from '@/app/store/server/place';
 import PlaceReview from '@/app/_component/place/PleceReview';
-import { usePlaceStore } from '@/app/store/client/user';
+import { usePlaceMenuStore, usePlaceStore } from '@/app/store/client/place';
 import { useEffect } from 'react';
+import { useGetReviews } from '@/app/store/server/review';
+import ReviewList from '@/app/_component/review/ReviewList';
+import { useGetDiary } from '@/app/store/server/diary';
+import DiaryList from '@/app/_component/diary/DiaryList';
+import EmptyDiaries from '@/app/_component/diary/EmpryDiaries';
+import EmptyReviews from '@/app/_component/review/EmptyReviews';
 
 const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
-  const placeId = params.placeId;
+  const { placeId } = params;
   const { setPlace } = usePlaceStore();
-  const queryOptions = useGetPlace(placeId);
-  const { data: place } = useSuspenseQuery(queryOptions);
+  const { placeMenu } = usePlaceMenuStore();
+  const placeQueryOptions = useGetPlace(placeId);
+  const reviewQueryOptions = useGetReviews(placeId);
+  const diaryQueryOptions = useGetDiary(placeId);
+  const { data: place } = useSuspenseQuery(placeQueryOptions);
+  const { data: reviews } = useSuspenseQuery(reviewQueryOptions);
+  const { data: diaries } = useSuspenseQuery(diaryQueryOptions);
 
   useEffect(() => {
     if (place) {
@@ -20,12 +31,37 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   }, [place, setPlace]);
 
   return (
-    <div className='flex flex-col gap-2'>
-      {/* 4. 리뷰 */}
-      <PlaceReview placeId={placeId} place={place} />
-      {/* 5. 찾아가는 길 */}
-      <PlaceFindWayInfo place={place} />
-    </div>
+    <>
+      {/* 정보 */}
+      {placeMenu === 0 && (
+        <>
+          {/* 4. 리뷰 */}
+          <PlaceReview placeId={placeId} place={place} />
+          {/* 5. 찾아가는 길 */}
+          <PlaceFindWayInfo place={place} />
+        </>
+      )}
+      {/* 리뷰 */}
+      {placeMenu === 1 && (
+        <>
+          {diaries?.length === 0 ? (
+            <EmptyReviews placeId={placeId} />
+          ) : (
+            <ReviewList reviews={reviews} type='PLACE' />
+          )}
+        </>
+      )}
+      {/* 일기 */}
+      {placeMenu === 2 && (
+        <>
+          {diaries?.length === 0 ? (
+            <EmptyDiaries />
+          ) : (
+            <DiaryList diaries={diaries} />
+          )}
+        </>
+      )}
+    </>
   );
 };
 

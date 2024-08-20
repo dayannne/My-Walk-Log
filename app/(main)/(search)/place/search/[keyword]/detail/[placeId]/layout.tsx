@@ -1,10 +1,10 @@
 'use client';
 
-import PlaceDetailNavigation from '@/app/_component/place/PlaceDetailNavigation';
+import PlaceDetailMenu from '@/app/_component/place/PlaceDetailMenu';
 import PlaceAdditionalInfo from '@/app/_component/place/PlaceAdditionalInfo';
 import PlaceBasicInfo from '@/app/_component/place/PlaceBasicInfo';
 
-import { usePlaceStore } from '@/app/store/client/user';
+import { usePlaceStore } from '@/app/store/client/place';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
@@ -38,10 +38,8 @@ const PlaceDetailLayout = ({ children }: { children: React.ReactNode }) => {
           {/* 2. 장소 추가 정보 */}
           <PlaceAdditionalInfo place={place} />
           {/* 3. 네비게이션 메뉴 */}
-          <PlaceDetailNavigation placeId={placeId} keyword={keyword} />
-        </div>
-        <div className='relative basis-full'>
-          <Suspense fallback={<LoadingSpinner />}> {children}</Suspense>
+          <PlaceDetailMenu placeId={placeId} keyword={keyword} />
+          {children}
         </div>
       </div>
       {/* 상세페이지 닫기 버튼 */}
