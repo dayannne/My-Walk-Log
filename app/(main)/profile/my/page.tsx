@@ -1,6 +1,6 @@
 'use client';
 
-import DiaryList from '@/app/_component/diary/DiaryList';
+import ProfileDiaryList from '@/app/_component/diary/ProfileDiaryList';
 import { useProfileStore, useUserStore } from '@/app/store/client/user';
 import { useGetMyProfile } from '@/app/store/server/profile';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -26,7 +26,7 @@ const ProfilePage = ({}: ProfilePageProps) => {
   const { diaries } = profile;
   return (
     <>
-      <DiaryList diaries={diaries} />
+      <ProfileDiaryList diaries={diaries} />
     </>
   );
 };

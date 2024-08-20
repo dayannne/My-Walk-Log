@@ -4,6 +4,7 @@ import {
   useQueryClient,
   useMutation,
   queryOptions,
+  useInfiniteQuery,
 } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -15,6 +16,21 @@ export const useGetDiary = (placeId: string) =>
       const response = await axios.get(`/api/place/${placeId}/diary`);
       return response.data;
     },
+    staleTime: 0,
+  });
+
+export const useGetAllDiary = () =>
+  useInfiniteQuery({
+    queryKey: ['allDiary'],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await axios.get(`/api/diary?page=${pageParam}&size=10`);
+      return response.data;
+    },
+    getNextPageParam: (lastPage) => {
+      const { page, totalPages } = lastPage;
+      return page < totalPages ? page + 1 : undefined;
+    },
+    initialPageParam: 1,
     staleTime: 0,
   });
 
