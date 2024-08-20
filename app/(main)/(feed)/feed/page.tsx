@@ -51,10 +51,12 @@ const FeedPage = () => {
   } = flattenedDiaries;
   return (
     <>
-      <div className='text-olive-green flex items-center gap-2 bg-white p-4 shadow-sm'>
+      <div className='text-olive-green flex items-center bg-white p-4 shadow-sm'>
         피드
       </div>
-      <DiaryList diaries={diaries} />
+      <div className='h-full basis-full overflow-y-scroll'>
+        <DiaryList diaries={diaries} />
+      </div>
     </>
   );
 };
