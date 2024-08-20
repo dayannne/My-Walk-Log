@@ -42,6 +42,7 @@ export interface IPlace {
   x: string;
   y: string;
   reviews: [];
+  diaries: [];
   placeDetail: any;
 }
 

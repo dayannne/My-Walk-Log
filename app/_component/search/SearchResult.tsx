@@ -75,7 +75,7 @@ const SearchResult = () => {
                 <span className='mb-[2px] text-gray-400'>|</span>
                 <span>리뷰 수 {place.reviews.length}</span>
                 <span className='mb-[2px] text-gray-400'>|</span>
-                <span>별점 {place.placeDetail.eval}</span>
+                <span>일기 수 {place.diaries.length}</span>
               </span>
               <span className='text-sm'>{place.address}</span>
               {place.roadAdress && (

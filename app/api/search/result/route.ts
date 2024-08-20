@@ -58,6 +58,7 @@ export async function POST(request: Request) {
       where: { id: { in: places.map((place) => place.id) } },
       include: {
         reviews: true,
+        diaries: true,
         placeDetail: true,
       },
     });

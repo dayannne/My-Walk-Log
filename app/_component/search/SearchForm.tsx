@@ -33,13 +33,6 @@ const SearchForm = () => {
 
   return (
     <div className='border-olive-green border-b p-4'>
-      <Image
-        src='/icons/icon-logo(default).svg'
-        alt=''
-        className='mb-2 pl-1'
-        width={140}
-        height={80}
-      />
       <form
         onSubmit={onSubmit}
         className='border-olive-green box-content flex h-9 justify-between gap-1 rounded-lg border border-solid bg-white py-1 pl-2 pr-3 shadow-md'
