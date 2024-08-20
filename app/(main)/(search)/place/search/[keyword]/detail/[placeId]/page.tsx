@@ -3,7 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import PlaceFindWayInfo from '@/app/_component/place/PlaceFindWayInfo';
 import { useGetPlace } from '@/app/store/server/place';
-import PlaceReview from '@/app/_component/place/PleceReview';
+import PleceReviewSummary from '@/app/_component/place/PleceReviewSummary';
 import { usePlaceMenuStore, usePlaceStore } from '@/app/store/client/place';
 import { useEffect } from 'react';
 import { useGetReviews } from '@/app/store/server/review';
@@ -12,6 +12,7 @@ import { useGetDiary } from '@/app/store/server/diary';
 import DiaryList from '@/app/_component/diary/DiaryList';
 import EmptyDiaries from '@/app/_component/diary/EmpryDiaries';
 import EmptyReviews from '@/app/_component/review/EmptyReviews';
+import PlaceDiaryAlbum from '@/app/_component/place/PlaceDiaryAlbum';
 
 const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   const { placeId } = params;
@@ -35,9 +36,11 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
       {/* 정보 */}
       {placeMenu === 0 && (
         <>
-          {/* 4. 리뷰 */}
-          <PlaceReview placeId={placeId} place={place} />
-          {/* 5. 찾아가는 길 */}
+          {/* 4. 일기 */}
+          <PlaceDiaryAlbum placeId={placeId} place={place} />
+          {/* 5. 리뷰 */}
+          <PleceReviewSummary placeId={placeId} place={place} />
+          {/* 6. 찾아가는 길 */}
           <PlaceFindWayInfo place={place} />
         </>
       )}

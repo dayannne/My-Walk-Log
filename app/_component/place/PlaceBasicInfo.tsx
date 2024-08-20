@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { filterUrl } from '@/app/shared/function/filter';
 
 export interface PlaceBasicInfoProps {
   place: any;
@@ -17,7 +18,6 @@ export interface PlaceBasicInfoProps {
 }
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { user } = useUserStore();
-  const pathname = usePathname().split('/');
 
   const likedBy = place?.likedBy || [];
   const { mainphotourl, tags } = place?.placeDetail?.basicInfo || {};
@@ -33,6 +33,19 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
 
   // 현재 사용자의 좋아요 여부
   const isLiked = likedBy.some((id: number) => id === user?.id);
+
+  // 공유 url 복사
+
+  const handleShareClick = async () => {
+    const currentUrl = filterUrl(window.location.href);
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      alert('URL이 클립보드에 복사되었습니다 :)');
+    } catch (err) {
+      alert('URL 복사에 실패했습니다.');
+      console.error('복사 오류:', err);
+    }
+  };
 
   return (
     <div>
@@ -62,14 +75,10 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
               ) && (
                 <Link
                   className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
-                  href={
-                    pathname.pop() === 'review'
-                      ? `review/form`
-                      : `${placeId}/review/form`
-                  }
+                  href={`${placeId}/review/form`}
                 >
                   <Image
-                    className=''
+                    className='w-4'
                     src='/icons/icon-pencil.svg'
                     width={16}
                     height={16}
@@ -84,7 +93,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
             <span className='mb-[2px] text-gray-400'>|</span>
             <span>리뷰 수 {place?.reviews.length}</span>
             <span className='mb-[2px] text-gray-400'>|</span>
-            <span>별점 {place?.eval}</span>
+            <span>일기 수 {place?.diaries.length}</span>
           </span>
           {/* 태그 */}
           <span className='flex flex-wrap gap-1'>
@@ -120,7 +129,10 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
             />
             저장
           </button>
-          <button className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'>
+          <button
+            className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'
+            onClick={handleShareClick}
+          >
             <Image
               className='w-5'
               src={`/icons/icon-share.svg`}

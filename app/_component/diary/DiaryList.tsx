@@ -26,13 +26,12 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
   const { mutate: deleteDiary } = useDeleteDiary();
   const { open, handleOpen, handleClose } = useModal();
 
-  
   const handleConfirm = (diaryId: number) => {
     deleteDiary({ diaryId, userId: user?.id as number });
   };
 
   return (
-    <ul className='flex basis-full flex-col gap-2 overflow-y-scroll'>
+    <ul className='flex flex-col gap-2 bg-white'>
       {diaries.map((diary: any) => (
         <li
           key={diary.id}
@@ -89,7 +88,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
 
           {diary.diaryImages.length === 1 && (
             <Image
-              className='aspect-video w-full rounded-xl object-cover object-center'
+              className='aspect-video h-auto w-full rounded-xl object-cover object-center'
               src={diary.diaryImages[0]}
               alt='일기 상세 사진'
               width={300}

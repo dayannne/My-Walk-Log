@@ -19,6 +19,7 @@ export async function GET(
           },
         },
         place: true,
+        placeDetail: true,
       },
     });
 

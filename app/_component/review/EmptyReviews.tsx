@@ -5,7 +5,7 @@ export interface EmptyReviewsProps {
   placeId: string;
 }
 
-const EmptyReviews = () => {
+const EmptyReviews = ({ placeId }: EmptyReviewsProps) => {
   return (
     <div className='box-border flex h-full flex-col items-center justify-center gap-2 bg-white p-5'>
       <Image
@@ -18,7 +18,7 @@ const EmptyReviews = () => {
       아직 작성된 리뷰가 없어요.
       <Link
         className='text-olive-green border-olive-green flex w-full max-w-44 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-sm shadow-md'
-        href={`review/form`}
+        href={`${placeId}/review/form`}
       >
         <Image
           className=''

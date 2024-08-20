@@ -13,7 +13,11 @@ export async function GET(
       },
       include: {
         placeInfo: true,
-        reviews: true,
+        reviews: {
+          include: {
+            author: true,
+          },
+        },
         diaries: true,
       },
     });
