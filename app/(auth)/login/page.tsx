@@ -57,7 +57,7 @@ const LoginPage = ({}: pageProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='flex w-full flex-col rounded-md border-solid border-gray-300 p-6 md:max-w-[520px] md:border md:p-10'
+      className='flex w-full flex-col rounded-md border-solid border-gray-300 bg-white p-6 md:max-w-[520px] md:border md:p-10'
     >
       <input
         className='w-full border-b-[1.5px] border-gray-300 py-3 pl-1 outline-none'
