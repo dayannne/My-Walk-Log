@@ -31,3 +31,15 @@ export const usePlaceStore = create<PlaceState>((set) => ({
   setPlace: (newPlace: any | null) => set({ place: newPlace }),
   clearPlace: () => set({ place: null }),
 }));
+
+interface ProfileState {
+  profile: any | null;
+  setProfile: (newProfile: any | null) => void;
+  clearProfile: () => void;
+}
+
+export const useProfileStore = create<ProfileState>((set) => ({
+  profile: null,
+  setProfile: (newProfile: any | null) => set({ profile: newProfile }),
+  clearProfile: () => set({ profile: null }),
+}));

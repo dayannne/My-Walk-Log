@@ -57,6 +57,7 @@ const useSearchPlaces = () => {
       }
 
       searchPlace(filteredPlaces);
+      displayMarkers(filteredPlaces);
     } else {
       if (status === kakao.maps.services.Status.ZERO_RESULT) {
         return alert('검색 결과가 존재하지 않습니다.');
@@ -72,8 +73,7 @@ const useSearchPlaces = () => {
     places.forEach((place, index) => {
       const position = new kakao.maps.LatLng(place.y, place.x);
 
-      // 마커 인포윈도우
-      const markerInfoContent = <MarkerInfo placeName={place.placeName} />;
+      const markerInfoContent = <MarkerInfo placeName={place.place_name} />;
       const markerInfo = document.createElement('div');
       markerInfo.innerHTML = ReactDOMServer.renderToString(markerInfoContent);
       markerInfo.addEventListener('click', () => {

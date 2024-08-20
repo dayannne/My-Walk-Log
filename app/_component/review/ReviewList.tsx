@@ -1,67 +1,60 @@
 'use client';
 
-import {
-  useCreateReviewLike,
-  useDeleteReviewLike,
-  useGetReviews,
-} from '@/app/store/server/review';
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
-import { Carousel } from '@material-tailwind/react';
-import Image from 'next/image';
-import { formatDate } from '@/app/shared/function/format';
+import { WALK_DURATIONS } from '@/app/shared/constant';
 import {
   filterEntryFee,
   filterPlaceKeywords,
 } from '@/app/shared/function/filter';
-import { WALK_DURATIONS } from '@/app/shared/constant';
+import { formatDate } from '@/app/shared/function/format';
 import { useUserStore } from '@/app/store/client/user';
-import EmptyReviews from '@/app/_component/review/EmptyReviews';
+import {
+  useCreateReviewLike,
+  useDeleteReviewLike,
+} from '@/app/store/server/review';
+import { Carousel } from '@material-tailwind/react';
+import Image from 'next/image';
 
-export interface pageProps {}
+export interface ReviewListProps {
+  reviews: any;
+  type: 'PLACE' | 'PROFILE';
+}
 
-const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
-  const { placeId } = params;
+const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const { user } = useUserStore();
-  const queryClient = useQueryClient();
-  const queryOptions = useGetReviews(placeId);
-  const { data: reviews } = useSuspenseQuery(queryOptions);
   const { mutate: createLike } = useCreateReviewLike();
   const { mutate: deleteLike } = useDeleteReviewLike();
 
-  if (!reviews) return null;
-
-  if (reviews.length === 0) return <EmptyReviews />;
-
   return (
-    <div className='bg-white'>
+    <>
       <ul>
         {reviews.map((review: any) => (
-          <li key={review.id} className='flex flex-col gap-3 p-3'>
-            <div className='flex items-center gap-2'>
-              <Image
-                className='w-9 shrink-0'
-                key={`user_${review.authorId}_profile_image`}
-                src={review.author.profileImage}
-                alt='프로필 이미지'
-                width={500}
-                height={500}
-              />
-              <div className='flex basis-full flex-col'>
-                <span className='text-sm font-semibold'>
-                  {review.author.username}
-                </span>
-                <span className='text-xs text-gray-600'>
-                  리뷰 {review.author.reviews.length}
-                </span>
+          <li
+            key={review.id}
+            className='flex flex-col gap-3 border-b border-solid border-gray-200 p-4'
+          >
+            {type === 'PLACE' && (
+              <div className='flex items-center gap-2'>
+                <Image
+                  className='w-9 shrink-0'
+                  key={`user_${review.authorId}_profile_image`}
+                  src={review.author.profileImage}
+                  alt='프로필 이미지'
+                  width={500}
+                  height={500}
+                />
+                <div className='flex basis-full flex-col'>
+                  <span className='text-sm font-semibold'>
+                    {review.author.username}
+                  </span>
+                  <span className='text-xs text-gray-600'>
+                    리뷰 {review.author.reviews.length}
+                  </span>
+                </div>
+                <div className='bg-hover text-olive-green shrink-0 rounded-lg px-3 py-1 text-xs font-medium'>
+                  팔로우
+                </div>
               </div>
-              <div className='bg-hover text-olive-green shrink-0 rounded-lg px-3 py-1 text-xs font-medium'>
-                팔로우
-              </div>
-            </div>
+            )}
 
             {review.reviewImages.length > 0 && (
               <Carousel
@@ -167,14 +160,18 @@ const PlaceReviewPage = ({ params }: { params: { placeId: string } }) => {
               </div>
 
               <span className='text-xs text-gray-600'>
-                {formatDate(review.createdAt)}
+                {`${formatDate(review.createdAt).year}년 ${
+                  formatDate(review.createdAt).month
+                }월 ${formatDate(review.createdAt).day}일 (${
+                  formatDate(review.createdAt).dayOfWeek
+                })`}
               </span>
             </div>
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 };
 
-export default PlaceReviewPage;
+export default ReviewList;

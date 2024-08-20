@@ -20,16 +20,42 @@ const Navigation = ({}: NavigationProps) => {
   };
 
   return (
-    <nav className='w-16 list-none flex flex-col text-xs basis-full'>
+    <nav className='flex w-16 basis-full list-none flex-col text-xs'>
+      <li>
+        <Link
+          id='feed'
+          className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
+            pathname.includes('feed')
+              ? 'bg-olive-green text-white'
+              : 'hover:text-olive-green text-black'
+          }`}
+          href={'/feed'}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Image
+            src={
+              pathname.includes('feed')
+                ? `/icons/icon-feed(white).svg`
+                : isHovered === 'feed'
+                  ? `/icons/icon-feed(hover).svg`
+                  : `/icons/icon-feed.svg`
+            }
+            width={30}
+            height={30}
+            alt='마커 아이콘'
+          />
+          피드
+        </Link>
+      </li>
       <li>
         <Link
           id='place'
-          className={`h-[72px] flex flex-col gap-1 items-center justify-center border border-olive-green basis-full p-2 
-              ${
-                pathname.includes('place')
-                  ? 'bg-olive-green text-white'
-                  : 'text-black hover:text-olive-green'
-              }`}
+          className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
+            pathname.includes('place')
+              ? 'bg-olive-green text-white'
+              : 'hover:text-olive-green text-black'
+          }`}
           href={'/place'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -39,8 +65,8 @@ const Navigation = ({}: NavigationProps) => {
               pathname.includes('place')
                 ? `/icons/icon-marker(white).svg`
                 : isHovered === 'place'
-                ? `/icons/icon-marker(hover).svg`
-                : `/icons/icon-marker(black).svg`
+                  ? `/icons/icon-marker(hover).svg`
+                  : `/icons/icon-marker(gray).svg`
             }
             width={30}
             height={30}
@@ -52,13 +78,11 @@ const Navigation = ({}: NavigationProps) => {
       <li>
         <Link
           id='trail'
-          className={`h-[72px] flex flex-col gap-1 items-center justify-center border border-olive-green basis-full p-2 
-            ${
-              pathname.includes('trail')
-                ? 'bg-olive-green text-white'
-                : 'text-black hover:text-olive-green'
-            }
-          `}
+          className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
+            pathname.includes('trail')
+              ? 'bg-olive-green text-white'
+              : 'hover:text-olive-green text-black'
+          } `}
           href={'/trail'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -68,8 +92,8 @@ const Navigation = ({}: NavigationProps) => {
               pathname.includes('trail')
                 ? `/icons/icon-walk(white).svg`
                 : isHovered === 'trail'
-                ? `/icons/icon-walk(hover).svg`
-                : `/icons/icon-walk.svg`
+                  ? `/icons/icon-walk(hover).svg`
+                  : `/icons/icon-walk.svg`
             }
             width={30}
             height={30}
