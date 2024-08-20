@@ -17,7 +17,7 @@ const Container = ({ children }: ContainerProps) => {
       <MapProvider>
         <div className='z-10 flex bg-white shadow-2xl'>
           <Header />
-          <div className='relative flex w-80 min-w-80 flex-col gap-4 bg-white'>
+          <div className='relative flex w-80 min-w-80 flex-col bg-white'>
             {children}
           </div>
           <div className='basis-full'>

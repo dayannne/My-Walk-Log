@@ -75,7 +75,7 @@ const Navigation = ({}: NavigationProps) => {
           장소
         </Link>
       </li>
-      <li>
+      {/* <li>
         <Link
           id='trail'
           className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
@@ -101,7 +101,7 @@ const Navigation = ({}: NavigationProps) => {
           />
           산책로
         </Link>
-      </li>
+      </li> */}
     </nav>
   );
 };
