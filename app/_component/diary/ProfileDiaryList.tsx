@@ -31,7 +31,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   };
 
   return (
-    <ul className='flex basis-full flex-col gap-2 overflow-y-scroll py-2'>
+    <ul className='flex basis-full flex-col gap-2 py-2'>
       {diaries.map((diary: any) => (
         <li
           key={diary.id}

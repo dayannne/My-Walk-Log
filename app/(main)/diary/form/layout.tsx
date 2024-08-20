@@ -5,7 +5,7 @@ export interface layoutProps {
 }
 
 const DiaryFormLayout = ({ children }: layoutProps) => {
-  return <Container>{children}</Container>;
+  return <>{children}</>;
 };
 
 export default DiaryFormLayout;
