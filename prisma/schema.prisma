@@ -36,6 +36,7 @@ model Place {
   x           String
   y           String
   reviews     Review[]
+  diaries     Diary[] 
 
   placeDetail      PlaceDetail? 
   @@unique([id], name: "PlaceDetail")
@@ -82,6 +83,7 @@ model Diary {
   id           Int      @id @default(autoincrement())
   authorId     Int
   placeId      String  
+  placeDetailId String
   diaryImages  String[]
   content      String
   weather      String
@@ -92,7 +94,8 @@ model Diary {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  placeDetail  PlaceDetail? @relation(fields: [placeId], references: [id])
+  place        Place?       @relation(fields: [placeId], references: [id])
+  placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
   author       User     @relation("author", fields: [authorId], references: [id])
 }
 
