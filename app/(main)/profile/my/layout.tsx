@@ -1,7 +1,8 @@
 'use client';
 
 import Container from '@/app/_component/common/Container';
-import { useProfileStore } from '@/app/store/client/user';
+import ProfileMenu from '@/app/_component/profile/ProfileMenu';
+import { useProfileStore } from '@/app/store/client/profile';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -67,34 +68,7 @@ const ProfileLayout = ({ children }: layoutProps) => {
           </div>
         </div>
       )}
-      <nav className='z-10'>
-        <ul className='flex bg-white shadow-sm'>
-          <li className='h-full basis-full py-2 text-center text-sm'>
-            <Link
-              href={`/profile/my`}
-              className={`${!pathname.includes('review') && !pathname.includes('diary') && 'border-b-2'} border-solid border-b-black py-2`}
-            >
-              일기
-            </Link>
-          </li>
-          <li className='basis-full py-2 text-center text-sm'>
-            <Link
-              href={`my/review`}
-              className={`${pathname.includes('review') && 'border-b-2'} border-solid border-b-black py-2`}
-            >
-              리뷰
-            </Link>
-          </li>
-          <li className='basis-full py-2 text-center text-sm'>
-            <Link
-              href={`likedPlaces`}
-              className={`${pathname.includes('likedPlaces') && 'border-b-2'} border-solid border-b-black py-2`}
-            >
-              장소
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <ProfileMenu />
       {children}
     </div>
   );

@@ -19,15 +19,3 @@ export const useUserStore = create<UserState>()(
     },
   ),
 );
-
-interface ProfileState {
-  profile: any | null;
-  setProfile: (newProfile: any | null) => void;
-  clearProfile: () => void;
-}
-
-export const useProfileStore = create<ProfileState>((set) => ({
-  profile: null,
-  setProfile: (newProfile: any | null) => set({ profile: newProfile }),
-  clearProfile: () => set({ profile: null }),
-}));

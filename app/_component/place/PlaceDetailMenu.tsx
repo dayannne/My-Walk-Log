@@ -1,13 +1,6 @@
 import { usePlaceMenuStore } from '@/app/store/client/place';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
-export interface PlaceDetailMenuProps {
-  placeId: string;
-  keyword: string;
-}
-
-const PlaceDetailMenu = ({ placeId, keyword }: PlaceDetailMenuProps) => {
+const PlaceDetailMenu = () => {
   const { placeMenu, setPlaceMenu } = usePlaceMenuStore();
 
   return (
