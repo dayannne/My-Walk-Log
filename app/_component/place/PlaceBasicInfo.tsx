@@ -9,6 +9,7 @@ import { useUserStore } from '@/app/store/client/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export interface PlaceBasicInfoProps {
   place: any;
@@ -16,8 +17,7 @@ export interface PlaceBasicInfoProps {
 }
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { user } = useUserStore();
-  const mapContext = useMap();
-  const queryClient = useQueryClient();
+  const pathname = usePathname().split('/');
 
   const likedBy = place?.likedBy || [];
   const { mainphotourl, tags } = place?.placeDetail?.basicInfo || {};
@@ -62,7 +62,11 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
               ) && (
                 <Link
                   className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
-                  href={`${placeId}/review/form`}
+                  href={
+                    pathname.pop() === 'review'
+                      ? `review/form`
+                      : `${placeId}/review/form`
+                  }
                 >
                   <Image
                     className=''

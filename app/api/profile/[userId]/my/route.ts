@@ -15,6 +15,7 @@ export async function GET(
         reviews: {
           include: {
             place: true,
+            placeDetail: true,
           },
         },
         diaries: {

@@ -1,8 +1,22 @@
 import { IDiaryReq } from '@/app/shared/types/diary';
 
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import {
+  useQueryClient,
+  useMutation,
+  queryOptions,
+} from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+
+export const useGetDiary = (placeId: string) =>
+  queryOptions({
+    queryKey: ['diary', placeId],
+    queryFn: async () => {
+      const response = await axios.get(`/api/place/${placeId}/diary`);
+      return response.data;
+    },
+    staleTime: 0,
+  });
 
 export const useCreateDiary = () => {
   const queryClient = useQueryClient();
@@ -37,6 +51,7 @@ export const useCreateDiaryLike = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['diary'] });
     },
     onError: (error) => {
       console.log(error);
@@ -59,6 +74,7 @@ export const useDeleteDiaryLike = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['diary'] });
     },
     onError: (error) => {
       console.log(error);
@@ -81,6 +97,7 @@ export const useDeleteDiary = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['diary'] });
       alert('일기가 삭제되었습니다.');
     },
     onError: (error) => {

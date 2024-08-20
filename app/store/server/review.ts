@@ -87,3 +87,27 @@ export const useDeleteReviewLike = () => {
     },
   });
 };
+
+export const useDeleteReview = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      reviewId,
+      userId,
+    }: {
+      reviewId: number;
+      userId: number;
+    }) => {
+      return await axios.delete(`/api/review/${reviewId}/${userId}/delete`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['review'] });
+      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      alert('리뷰가 삭제되었습니다.');
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+};

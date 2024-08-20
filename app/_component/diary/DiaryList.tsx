@@ -11,6 +11,8 @@ import Image from 'next/image';
 import MenuModal from '../common/Modal/MenuModal';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import useModal from '@/app/_hooks/useModal';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export interface DiaryListProps {
   diaries: any;
@@ -22,6 +24,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
   const { mutate: deleteLike } = useDeleteDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const { open, handleOpen, handleClose } = useModal();
+  const pathname = usePathname().split('/');
 
   const handleConfirm = (diaryId: number) => {
     deleteDiary({ diaryId, userId: user?.id as number });
@@ -111,6 +114,40 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
                   </span>
                 ))}
             </div>
+            {pathname.includes('my') && (
+              <Link
+                className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
+                href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}
+              >
+                <div className='flex basis-full items-center gap-2'>
+                  <Image
+                    src='/icons/icon-marker.svg'
+                    alt='마커 이미지'
+                    width={32}
+                    height={32}
+                  />
+                  <div className='flex flex-col'>
+                    <span className='text-sm font-medium'>
+                      {diary.placeDetail.placeName}
+                    </span>
+                    <span className='text-xs text-gray-600'>
+                      {
+                        diary.placeDetail.placeDetail.basicInfo.address.region
+                          .fullname
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <Image
+                  className='rotate-180'
+                  src='/icons/icon-arrow-left(green).svg'
+                  alt='바로가기'
+                  width={24}
+                  height={24}
+                />
+              </Link>
+            )}
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-1'>
                 <button
