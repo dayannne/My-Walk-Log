@@ -18,7 +18,12 @@ export async function POST(request: Request) {
 
     // 회원가입 데이터 생성
     const newUser = await prisma.user.create({
-      data: { username, email, hashedPassword },
+      data: {
+        username,
+        email,
+        hashedPassword,
+        profileImage: process.env.USER_DEFAULT_IMAGE,
+      },
     });
 
     // 비밀번호 제외한 사용자 정보 반환
