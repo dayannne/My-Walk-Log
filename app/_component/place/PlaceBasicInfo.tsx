@@ -2,15 +2,12 @@ import {
   useCreatePlaceLike,
   useDeletePlaceLike,
 } from '@/app/store/server/place';
-import { useMap } from '@/app/shared/contexts/Map';
-import { IPlace } from '@/app/shared/types/map';
 import { IReview } from '@/app/shared/types/review';
 import { useUserStore } from '@/app/store/client/user';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { filterUrl } from '@/app/shared/function/filter';
+import { Carousel } from '@material-tailwind/react';
 
 export interface PlaceBasicInfoProps {
   place: any;
@@ -29,7 +26,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   // 사진 데이터 필터링
   const photos = mainphotourl
     ? [{ orgurl: mainphotourl }]
-    : place?.placeDetail?.photo?.photoList[0]?.list.slice(1) || null;
+    : place?.placeDetail?.photo?.photoList[0]?.list || null;
 
   // 현재 사용자의 좋아요 여부
   const isLiked = likedBy.some((id: number) => id === user?.id);
@@ -51,13 +48,47 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
     <div>
       {photos && photos[0] && (
         <div className='h-48'>
-          <Image
-            src={photos[0].orgurl}
-            alt={`메인 장소 이미지`}
-            width={1000}
-            height={1000}
-            className={`h-full w-full object-cover`}
-          />
+          {photos.length === 1 && (
+            <Image
+              src={photos[0].orgurl}
+              alt={`메인 장소 이미지`}
+              width={1000}
+              height={1000}
+              className={`h-full w-full object-cover`}
+            />
+          )}
+          {photos.length > 1 && (
+            <Carousel
+              className='aspect-video w-full overflow-hidden object-cover object-center'
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
+              navigation={({ setActiveIndex, activeIndex, length }) => (
+                <div className='absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2'>
+                  {new Array(length).fill('').map((_, i) => (
+                    <span
+                      key={i}
+                      className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                        activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
+                      }`}
+                      onClick={() => setActiveIndex(i)}
+                    />
+                  ))}
+                </div>
+              )}
+            >
+              {photos.map((photo: any, idx: number) => (
+                <Image
+                  className='h-full w-full object-cover object-center'
+                  key={idx}
+                  src={photo.orgurl}
+                  alt='리뷰 이미지'
+                  width={500}
+                  height={500}
+                />
+              ))}
+            </Carousel>
+          )}
         </div>
       )}
       <div className='bg-white'>
