@@ -38,6 +38,7 @@ export const useSearchPlace = () => {
 };
 
 const usePlaceLike = (method: 'post' | 'delete') => {
+  const queryClient = useQueryClient();
   const { mutate: search } = useSearchPlace();
   const mapContext = useMap();
   return useMutation({
@@ -54,6 +55,7 @@ const usePlaceLike = (method: 'post' | 'delete') => {
     },
     onSuccess: async () => {
       search(mapContext?.places as IPlace[]);
+      queryClient.invalidateQueries({ queryKey: ['likedPlaces'] });
     },
     onError: (error) => {
       console.log(error);
@@ -64,3 +66,15 @@ const usePlaceLike = (method: 'post' | 'delete') => {
 export const useDeletePlaceLike = () => usePlaceLike('delete');
 
 export const useCreatePlaceLike = () => usePlaceLike('post');
+
+export const useGetLikedPlaces = (likedPlaces: string[]) =>
+  queryOptions({
+    queryKey: ['likedPlaces'],
+    queryFn: async () => {
+      const response = await axios.get(`/api/likedPlaces`, {
+        params: { likedPlaces },
+      });
+      return response.data;
+    },
+    staleTime: 0,
+  });
