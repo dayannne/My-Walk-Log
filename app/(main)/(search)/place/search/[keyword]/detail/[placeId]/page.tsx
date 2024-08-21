@@ -48,7 +48,7 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
       {placeMenu === 1 && (
         <>
           {diaries?.length === 0 ? (
-            <EmptyReviews placeId={placeId} />
+            <EmptyReviews url={`${placeId}/review/form`} />
           ) : (
             <ReviewList reviews={reviews} type='PLACE' />
           )}

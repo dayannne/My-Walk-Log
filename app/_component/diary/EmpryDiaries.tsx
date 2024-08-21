@@ -7,7 +7,7 @@ export interface EmptyDiariesProps {
 
 const EmptyDiaries = () => {
   return (
-    <div className='flex h-full flex-col items-center justify-center gap-2 bg-white p-5'>
+    <div className='flex basis-full flex-col items-center justify-center gap-2 bg-white p-5'>
       <Image
         className='w-24'
         src='/icons/icon-empty.png'
@@ -18,14 +18,14 @@ const EmptyDiaries = () => {
       아직 올라온 일기가 없어요.
       <Link
         className='text-olive-green border-olive-green flex w-full max-w-44 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-sm shadow-md'
-        href={`/profile/my`}
+        href={`/diary/form`}
       >
         <Image
           className=''
           src='/icons/icon-diary.svg'
           width={18}
           height={18}
-          alt='리뷰 쓰기 아이콘'
+          alt='다이어리 아이콘'
         />
         <span className='basis-full text-center'>
           산책하고
