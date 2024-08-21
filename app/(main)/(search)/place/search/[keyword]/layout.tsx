@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useMap } from '@/app/shared/contexts/Map';
 import SearchResult from '@/app/_component/search/SearchResult';
 
@@ -14,13 +14,17 @@ const SearchResultLayout = ({ children }: layoutProps) => {
   const mapContext = useMap();
   const { searchPlaces } = useSearchPlaces();
   const keyword = decodeURIComponent(useParams().keyword as string);
+  const pathname = usePathname().split('/')[4];
 
   useEffect(() => {
-    if (mapContext?.mapData && keyword) {
-      searchPlaces(keyword as string, 'SEARCH');
+    const isDetailPage = pathname === 'detail';
+    const hasMapData = mapContext?.mapData;
+
+    if (isDetailPage && hasMapData) {
+      searchPlaces(keyword, 'SEARCH');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyword, mapContext?.mapData]);
+  }, [keyword, mapContext?.mapData, pathname]);
 
   return (
     <>
