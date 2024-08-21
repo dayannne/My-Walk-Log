@@ -19,10 +19,8 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
   const { mutate: deleteLike } = useDeletePlaceLike();
   const queryOptions = useGetLikedPlaces(likedPlaces);
   const { data: places } = useSuspenseQuery(queryOptions);
-  console.log(places);
 
   if (!places) return null;
-  console.log(places[2].placeDetail.placeDetail.photo.photoList[0].list);
   return (
     <ul className='flex flex-col gap-2 px-4 py-2'>
       {places?.map((place: any) => (

@@ -30,7 +30,6 @@ const SearchAgainButton = () => {
       keyword !== '' &&
       (currlat !== prevLat || currlng !== prevLng)
     ) {
-      console.log(keyword);
       setIsVisible(true);
       setPrevLocation(mapData?.getCenter() as kakao.maps.LatLng);
     }

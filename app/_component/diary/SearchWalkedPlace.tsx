@@ -36,9 +36,7 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
   };
 
   useEffect(() => {
-    console.log('useEffect triggered');
     if (selectedPlace && mapRef.current) {
-      console.log('Map setup');
       const position = new kakao.maps.LatLng(selectedPlace.y, selectedPlace.x);
       const options = {
         center: position,

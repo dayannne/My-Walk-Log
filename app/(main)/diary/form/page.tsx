@@ -77,7 +77,6 @@ const DiaryFormPage = () => {
     if (e.key === 'Enter') {
       e.preventDefault();
       const tagValue = e.currentTarget.value;
-      console.log(tagValue);
       if (!placeTags.includes(tagValue)) {
         setPlaceTags((prevTags) => [...prevTags, tagValue]);
         e.currentTarget.value = '';
