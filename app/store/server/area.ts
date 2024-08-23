@@ -1,11 +1,16 @@
 import { mapInstance } from '@/app/api/_routes/axiosInstance';
+import { Latlng } from '@/app/shared/types/map';
 import { queryOptions } from '@tanstack/react-query';
 
-export const useGetArea = (areaCode: number | null) =>
+export interface AreaReq {
+  areaCode?: number | null; // 지역 코드
+  location?: Latlng;
+}
+export const useGetArea = ({ areaCode, location }: AreaReq) =>
   queryOptions({
-    queryKey: ['areaInfo', areaCode],
+    queryKey: ['areaInfo', areaCode, location],
     queryFn: async () => {
-      if (areaCode === null) {
+      if (!areaCode && !location) {
         return null;
       }
 
@@ -19,7 +24,10 @@ export const useGetArea = (areaCode: number | null) =>
           domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
           format: 'json',
           errorformat: 'json',
-          attrfilter: `emd_cd:like:${areaCode}`,
+          attrfilter: areaCode ? `emd_cd:like:${areaCode}` : '',
+          geomfilter: location
+            ? `POINT(${location?.longitude} ${location?.latitude})`
+            : '',
         },
       });
 
@@ -43,5 +51,6 @@ export const useGetArea = (areaCode: number | null) =>
       return data;
     },
     staleTime: 0,
-    enabled: areaCode !== null,
+    enabled:
+      (!!areaCode && location !== null) || (!!location && areaCode !== null),
   });
