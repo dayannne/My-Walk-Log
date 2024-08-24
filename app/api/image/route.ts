@@ -40,8 +40,14 @@ export async function POST(req: Request, res: Response) {
       return `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`;
     });
 
-    // imgURL 배열 생성
     const imgUrls = await Promise.all(uploadPromises);
+
+    // 파일의 개수가 1이면 배열 대신 단일 URL 반환
+    if (imgUrls.length === 1) {
+      return new Response(JSON.stringify({ data: imgUrls[0], message: 'OK' }), {
+        status: 200,
+      });
+    }
 
     return new Response(JSON.stringify({ data: [...imgUrls], message: 'OK' }), {
       status: 200,
