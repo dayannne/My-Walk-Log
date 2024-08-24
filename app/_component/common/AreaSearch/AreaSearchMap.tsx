@@ -1,25 +1,28 @@
+import { IAddress } from '@/app/shared/types/profile';
 import React, { useEffect, useRef } from 'react';
-import { calculateCenter } from '@/app/shared/function/calculator';
 
-function AreaSearchMap({ areaInfo }: { areaInfo: any }) {
+interface AreaSearchMapProps {
+  address: IAddress;
+}
+
+function AreaSearchMap({ address }: AreaSearchMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  console.log(areaInfo);
   useEffect(() => {
-    if (mapRef.current && areaInfo) {
-      const center = calculateCenter(areaInfo.bbox);
-      const position = new kakao.maps.LatLng(center.y, center.x);
+    if (mapRef.current && address) {
+      const position = new kakao.maps.LatLng(
+        address.center[1],
+        address.center[0],
+      );
       const options = {
         center: position,
         level: 7,
       };
-
       const kakaoMap = new kakao.maps.Map(mapRef.current, options);
 
-      const polygonPaths =
-        areaInfo?.features[0]?.geometry?.coordinates[0][0]?.map(
-          (polygonPath: number[]) =>
-            new kakao.maps.LatLng(polygonPath[1], polygonPath[0]),
-        );
+      const polygonPaths = address?.polygonPaths?.map(
+        (polygonPath: number[]) =>
+          new kakao.maps.LatLng(polygonPath[1], polygonPath[0]),
+      );
 
       const polygon = new kakao.maps.Polygon({
         path: polygonPaths, // 그려질 다각형의 좌표 배열
@@ -34,11 +37,11 @@ function AreaSearchMap({ areaInfo }: { areaInfo: any }) {
       polygon.setMap(kakaoMap);
       kakaoMap.panTo(position);
     }
-  }, [areaInfo]);
+  }, [address]);
 
   return (
     <>
-      {areaInfo && (
+      {address && (
         <div id='map-area' ref={mapRef} className='aspect-square h-56 w-full' />
       )}
     </>

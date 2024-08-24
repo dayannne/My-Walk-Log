@@ -6,8 +6,5 @@ export function calculateCenter(coords: number[]) {
   const centerX = (lon1 + lon2) / 2;
   const centerY = (lat1 + lat2) / 2;
 
-  return {
-    x: centerX,
-    y: centerY,
-  };
+  return [centerX, centerY];
 }

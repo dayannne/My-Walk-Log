@@ -35,7 +35,17 @@ const ProfileLayout = ({ children }: layoutProps) => {
                   height={300}
                 />
                 <div className='flex basis-full flex-col items-center gap-2'>
-                  <span className='font-semibold'>{profile.username}</span>
+                  <span className='flex items-center gap-1 font-semibold'>
+                    {profile.username}
+                    <Link className='mt-[2px]' href={`/profile/edit`}>
+                      <Image
+                        src='/icons/icon-pencil.svg'
+                        width={16}
+                        height={16}
+                        alt='프로필 수정하기'
+                      />
+                    </Link>
+                  </span>
                   <div className='flex items-center gap-2'>
                     <span className='text-xs text-gray-600'>
                       리뷰 {profile.reviews.length}

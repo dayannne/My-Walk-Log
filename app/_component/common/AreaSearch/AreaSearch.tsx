@@ -8,17 +8,27 @@ import AreaSearchMap from './AreaSearchMap';
 import useGeolocation from '@/app/_hooks/useGeolocation';
 import { Latlng } from '@/app/shared/types/map';
 import Image from 'next/image';
-function AreaSearch() {
+import { calculateCenter } from '@/app/shared/function/calculator';
+import { IAddress } from '@/app/shared/types/profile';
+
+interface AreaSearchProps {
+  address: IAddress | null;
+  setAddress: (address: IAddress | null) => void;
+}
+
+function AreaSearch({ address, setAddress }: AreaSearchProps) {
   const { location } = useGeolocation();
 
-  const [areaName, setAreaName] = useState<string | null>('');
+  const [areaName, setAreaName] = useState<string | null>(null);
   const [filteredResults, setFilteredResults] = useState<Area[]>([]);
   const [currLocation, setCurrLocation] = useState<Latlng | null>(null);
   const [selectedCode, setSelectedCode] = useState<number | null>(null);
+
   const queryOptions = useGetArea({
     areaCode: selectedCode as number,
     location: currLocation as Latlng,
   });
+
   const { data: areaInfo } = useSuspenseQuery(queryOptions);
 
   const data = filterAreaData(AreaCode as Area[]);
@@ -28,9 +38,7 @@ function AreaSearch() {
     setAreaName(term);
 
     if (term) {
-      const results = (data as Area[]).filter((item) =>
-        item.법정동명.includes(term),
-      );
+      const results = data.filter((item) => item.법정동명.includes(term));
       setFilteredResults(results);
     } else {
       setFilteredResults([]);
@@ -51,11 +59,24 @@ function AreaSearch() {
   };
 
   useEffect(() => {
-    if (areaInfo && currLocation) {
-      setSelectedCode(areaInfo?.features[0]?.properties?.emd_cd);
-      setAreaName(areaInfo?.features[0]?.properties?.full_nm);
+    if (areaInfo) {
+      const position = calculateCenter(areaInfo.bbox);
+      const areaData = areaInfo?.features[0]?.properties;
+      const polygonPaths: number[][] =
+        areaInfo?.features[0]?.geometry?.coordinates[0][0];
+      const newAddress = {
+        code: areaData.emd_cd,
+        areaName: areaData.full_nm,
+        center: position,
+        polygonPaths: polygonPaths,
+      };
+
+      setAddress(newAddress);
+      setSelectedCode(areaData.emd_cd);
+      setAreaName(areaData.full_nm);
     }
-  }, [areaInfo, currLocation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [areaInfo]);
 
   return (
     <div className='flex flex-col gap-2'>
@@ -65,11 +86,10 @@ function AreaSearch() {
         onClick={handleSearchCurrLocation}
       >
         <Image
-          className=''
           src={
             currLocation
-              ? `/icons/icon-my-location(white).svg`
-              : `/icons/icon-my-location.svg`
+              ? '/icons/icon-my-location(white).svg'
+              : '/icons/icon-my-location.svg'
           }
           alt=''
           width={24}
@@ -86,13 +106,15 @@ function AreaSearch() {
             width={20}
             height={20}
           />
-          <input
-            className={`w-full rounded-lg px-2 py-3 pl-8 focus:outline-none ${filteredResults.length > 0 && 'rounded-b-none border-b border-solid border-gray-400'}`}
-            type='text'
-            value={areaName as string}
-            onChange={handleSearchChange}
-            placeholder='동명(읍,면)으로 검색 (ex.고색동)'
-          />
+          {address && (
+            <input
+              className={`w-full rounded-lg px-2 py-3 pl-8 focus:outline-none ${filteredResults.length > 0 && 'rounded-b-none border-b border-solid border-gray-400'}`}
+              type='text'
+              value={areaName || address.areaName}
+              onChange={handleSearchChange}
+              placeholder='동명(읍,면)으로 검색 (ex.고색동)'
+            />
+          )}
         </div>
         {filteredResults.length > 0 && (
           <ul className='flex-col overflow-y-scroll rounded-b-lg'>
@@ -110,7 +132,7 @@ function AreaSearch() {
           </ul>
         )}
       </div>
-      {areaInfo && <AreaSearchMap areaInfo={areaInfo} />}
+      {address && <AreaSearchMap address={address} />}
     </div>
   );
 }
