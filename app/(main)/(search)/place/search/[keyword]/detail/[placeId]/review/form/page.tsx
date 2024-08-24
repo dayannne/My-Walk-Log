@@ -102,7 +102,11 @@ const ReviewFormPage = ({ params }: { params: { placeId: string } }) => {
           <span className='text-xs text-gray-500'>
             장소 관련 사진을 업로드해 주세요.(1개~3개)
           </span>
-          <FileInput ref={fileInputRef} onChange={fileHandler} />
+          <FileInput
+            ref={fileInputRef}
+            onChange={fileHandler}
+            multiple={true}
+          />
           <button
             onClick={handleButtonClick}
             className='flex items-center justify-center gap-2 rounded-lg border border-solid border-gray-300 py-3 text-sm shadow-md'

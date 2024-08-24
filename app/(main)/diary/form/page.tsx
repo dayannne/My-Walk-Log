@@ -60,11 +60,11 @@ const DiaryFormPage = () => {
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue('content', e.target.value);
+    setValue('content', e.target.value, { shouldValidate: true });
   };
 
   const handleWeatherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('weather', e.target.value);
+    setValue('weather', e.target.value, { shouldValidate: true });
   };
 
   const handleRemoveImage =
@@ -166,7 +166,11 @@ const DiaryFormPage = () => {
           <span className='text-xs text-gray-500'>
             일기와 함께 사진을 남겨 봐요.
           </span>
-          <FileInput ref={fileInputRef} onChange={fileHandler} />
+          <FileInput
+            ref={fileInputRef}
+            onChange={fileHandler}
+            multiple={true}
+          />
           <button
             onClick={handleButtonClick}
             className='flex items-center justify-center gap-2 rounded-lg border border-solid border-gray-300 py-3 text-sm shadow-md'
