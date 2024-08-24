@@ -27,7 +27,7 @@ const useSearchPlaces = () => {
       const bounds = mapData?.getBounds();
 
       places.keywordSearch(keyword, searchPlacesCB, {
-        location,
+        location: type === 'SEARCH_AGAIN' ? location : undefined,
         bounds:
           type === 'SEARCH_AGAIN' || type === 'SEARCH_CATEGORY'
             ? bounds
@@ -69,9 +69,13 @@ const useSearchPlaces = () => {
 
   const displayMarkers = (places: any[]) => {
     let overlays: kakao.maps.CustomOverlay[] = [];
+    let bounds = new kakao.maps.LatLngBounds();
 
     places.forEach((place, index) => {
       const position = new kakao.maps.LatLng(place.y, place.x);
+
+      // LatLngBounds 객체에 좌표를 추가
+      bounds.extend(position);
 
       const markerInfoContent = <MarkerInfo placeName={place.place_name} />;
       const markerInfo = document.createElement('div');
@@ -96,6 +100,8 @@ const useSearchPlaces = () => {
 
     mapContext?.setOverlays(overlays);
     mapContext?.setMarkerClusterer(newClusterer);
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정
+    mapContext?.mapData?.setBounds(bounds);
   };
 
   const clearMarkersAndInfo = () => {

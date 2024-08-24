@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       .then((places) => places.map((place) => place.id));
 
     // 새로운 장소 데이터 생성
-    const newPlaces = await Promise.all(
+    await Promise.all(
       places.map(async (place: IPlace) => {
         if (!existingPlaceIds.includes(place.id)) {
           // 장소 상세 데이터 받아오기
