@@ -1,0 +1,121 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING") 
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  username       String
+  email          String   @unique
+  address         Json @default("{}")
+  introduction   String @default("")
+  profileImage   String?
+  hashedPassword String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  likedReviews   Int[]
+  likedDiaries   Int[]
+  likedPlaces    String[]
+
+  reviews        Review[]
+  diaries        Diary[]  @relation("author")
+}
+
+model Place {
+  id          String   @id 
+  placeName   String
+  categoryName String
+  address     String
+  roadAddress String
+  distance    String
+  x           String
+  y           String
+  reviews     Review[]
+  diaries     Diary[] 
+
+  placeDetail      PlaceDetail? 
+  @@unique([id], name: "PlaceDetail")
+}
+
+model PlaceDetail {
+  id                String   @id  
+  placeId String @unique
+  placeName         String
+  likedCount        Int      @default(0)
+  placeInfo            Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeDetail            Json
+  @@index([id], name: "id")
+  reviews           Review[]
+  diaries           Diary[]
+  likedBy            Int[]
+
+}
+
+
+model Review {
+  id           Int      @id @default(autoincrement())
+  reviewImages String[]
+  description  String
+  keywords     Int[]
+  walkDuration Int
+  entryFee     String?
+  likedCount   Int      @default(0)
+  likedBy      Int[]
+  
+  placeId      String
+  placeDetailId String
+  authorId     Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  place        Place?       @relation(fields: [placeId], references: [id])
+  placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  author       User         @relation(fields: [authorId], references: [id])
+}
+
+
+model Diary {
+  id           Int      @id @default(autoincrement())
+  authorId     Int
+  placeId      String  
+  placeDetailId String
+  diaryImages  String[]
+  content      String
+  weather      String
+  tags         String[]
+
+  likedCount   Int      @default(0)
+  likedBy      Int[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  place        Place?       @relation(fields: [placeId], references: [id])
+  placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  author       User     @relation("author", fields: [authorId], references: [id])
+}
+
+model Trail{
+  ESNTL_ID           String @id 
+  WLK_COURS_FLAG_NM  String
+  WLK_COURS_NM       String
+  COURS_DC           String
+  SIGNGU_NM          String
+  COURS_LEVEL_NM     String
+  COURS_LT_CN        String
+  COURS_DETAIL_LT_CN String
+  ADIT_DC            String
+  COURS_TIME_CN      String
+  OPTN_DC            String
+  TOILET_DC          String
+  CVNTL_NM           String
+  LNM_ADDR           String
+  COURS_SPOT_LA      String
+  COURS_SPOT_LO      String
+}
