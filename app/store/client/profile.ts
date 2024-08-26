@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface ProfileState {
   profile: any | null;
@@ -6,11 +7,19 @@ interface ProfileState {
   clearProfile: () => void;
 }
 
-export const useProfileStore = create<ProfileState>((set) => ({
-  profile: null,
-  setProfile: (newProfile: any | null) => set({ profile: newProfile }),
-  clearProfile: () => set({ profile: null }),
-}));
+export const useProfileStore = create<ProfileState>()(
+  persist(
+    (set) => ({
+      profile: null,
+      setProfile: (newProfile) => set({ profile: newProfile }),
+      clearProfile: () => set({ profile: null }),
+    }),
+    {
+      name: 'profile-storage',
+      getStorage: () => localStorage,
+    },
+  ),
+);
 
 interface ProfileMenuState {
   profileMenu: number;

@@ -1,4 +1,5 @@
 import { ENTRY_FEE, PLACE_KEYWORDS } from '../constant';
+import { Area } from '../types/place';
 
 export const filterPlacesByKeyword = (places: any[], keywords: string[]) => {
   return places.filter((place) => {
@@ -35,4 +36,22 @@ export const filterUrl = (url: string) => {
   const decodedPathname = decodeURIComponent(pathname);
 
   return `${urlObj.origin}${decodedPathname}`;
+};
+
+export const filterAreaData = (data: Area[]) => {
+  const filteredData = data.filter((item) => {
+    const history = item.폐지여부;
+    const areaName = item.법정동명.split(' ');
+    const lastAreaName = areaName[areaName.length - 1].slice(-1);
+
+    // '읍면동' 체크
+    const isUbMyunDong =
+      lastAreaName === '읍' || lastAreaName === '면' || lastAreaName === '동';
+
+    // 폐지여부
+    const isExist = history === '존재';
+
+    return isUbMyunDong && isExist;
+  });
+  return filteredData;
 };

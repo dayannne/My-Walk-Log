@@ -14,12 +14,16 @@ const nextConfig = {
     ];
   },
 
-  // 카카오맵 place detaul api 경로 재설정
+  // 카카오맵, 국도교통부 API 경로 재설정
   async rewrites() {
     return [
       {
         source: '/api/kakao/:path*',
         destination: 'https://place.map.kakao.com/:path*',
+      },
+      {
+        source: '/api/vworld/:path*',
+        destination: 'https://api.vworld.kr/req/data/:path*',
       },
     ];
   },

@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import { useMap } from '@/app/shared/contexts/Map';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const SearchForm = () => {
   const router = useRouter();

@@ -8,9 +8,9 @@ interface Props {
 }
 
 const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
+  const mapRef = useRef<HTMLDivElement>(null);
   const [places, setPlaces] = useState<any[]>([]);
   const [placeName, setPlaceName] = useState('');
-  const mapRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceName(e.currentTarget.value);

@@ -14,6 +14,8 @@ model User {
   id             Int      @id @default(autoincrement())
   username       String
   email          String   @unique
+  address         Json @default("{}")
+  introduction   String @default("")
   profileImage   String?
   hashedPassword String
   createdAt      DateTime @default(now())
