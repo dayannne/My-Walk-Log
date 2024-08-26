@@ -4,7 +4,7 @@ const ProfileMenu = () => {
   const { profileMenu, setProfileMenu } = useProfileMenuStore();
 
   return (
-    <nav className='mb-2 flex list-none bg-white shadow-sm'>
+    <nav className='mb-2 flex list-none border-y border-solid border-gray-200 bg-white shadow-sm'>
       <li className='box-border h-full basis-full pt-2 text-center text-sm'>
         <button
           value={0}

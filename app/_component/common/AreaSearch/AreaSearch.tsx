@@ -77,7 +77,6 @@ function AreaSearch({ address, setAddress }: AreaSearchProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [areaInfo]);
-
   return (
     <div className='flex flex-col gap-2'>
       <button
@@ -106,15 +105,14 @@ function AreaSearch({ address, setAddress }: AreaSearchProps) {
             width={20}
             height={20}
           />
-          {address && (
-            <input
-              className={`w-full rounded-lg px-2 py-3 pl-8 focus:outline-none ${filteredResults.length > 0 && 'rounded-b-none border-b border-solid border-gray-400'}`}
-              type='text'
-              value={areaName || address.areaName}
-              onChange={handleSearchChange}
-              placeholder='동명(읍,면)으로 검색 (ex.고색동)'
-            />
-          )}
+
+          <input
+            className={`w-full rounded-lg px-2 py-3 pl-8 focus:outline-none ${filteredResults.length > 0 && 'rounded-b-none border-b border-solid border-gray-400'}`}
+            type='text'
+            value={areaName ?? address?.areaName ?? ''}
+            onChange={handleSearchChange}
+            placeholder='동명(읍,면)으로 검색 (ex.고색동)'
+          />
         </div>
         {filteredResults.length > 0 && (
           <ul className='flex-col overflow-y-scroll rounded-b-lg'>

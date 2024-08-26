@@ -16,4 +16,13 @@ export interface IUser {
   email: string;
   username: string;
   profileImage: string;
+  introduction: string;
+  address: string;
+  likedDiaries: [];
+  likedPlaces: [];
+  likedReviews: [];
+  reviews: [];
+  diaries: [];
+  createdAt: string;
+  updatedAt: string;
 }

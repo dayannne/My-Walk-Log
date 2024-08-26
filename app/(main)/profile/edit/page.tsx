@@ -46,7 +46,6 @@ const EditProfilePage = () => {
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('username', e.currentTarget.value, { shouldValidate: true });
   };
-  console.log(getValues('address'));
 
   const handleIntroductionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -71,7 +70,7 @@ const EditProfilePage = () => {
 
   useEffect(() => {
     if (profile) {
-      setAddress(profile.address);
+      setAddress(JSON.parse(profile.address));
     }
   }, [profile]);
 
