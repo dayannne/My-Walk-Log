@@ -23,7 +23,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={font.className}>
+      <body className={`${font.className} text-sm lg:text-base`}>
         <Script
           async
           type='text/javascript'

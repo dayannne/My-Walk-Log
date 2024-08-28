@@ -3,10 +3,10 @@
 import React, {
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useRef,
   useState,
+  useEffect,
 } from 'react';
 import { IMapContextValue, IPlace } from '@/app/shared/types/map';
 import useGeolocation from '@/app/_hooks/useGeolocation';
@@ -15,26 +15,11 @@ interface MapProps {
   children?: React.ReactNode;
 }
 
-const MapContext = createContext<IMapContextValue | null>({
-  mapData: null,
-  markerClusterer: null,
-  setMarkerClusterer: () => {},
-  overlays: [],
-  setOverlays: () => {},
-  places: [],
-  setPlaces: () => {},
-  prevKeyword: [],
-  setPrevKeyword: () => {},
-  currLocation: null,
-  setCurrLocation: () => {},
-  prevLocation: null,
-  setPrevLocation: () => {},
-});
+const MapContext = createContext<IMapContextValue | null>(null);
 
 const MapProvider: React.FC<MapProps> = ({ children }) => {
   const { location } = useGeolocation();
-
-  const mapRef = useRef<HTMLDivElement>(null);
+  const mapEl = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [markerClusterer, setMarkerClusterer] =
     useState<kakao.maps.MarkerClusterer | null>(null);
@@ -52,8 +37,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
     const { kakao } = window;
 
     kakao?.maps.load(() => {
-      const mapElement = mapRef.current;
-      // 컴포넌트 mount 후 DOM 요소에 접근
+      const mapElement = mapEl.current;
       if (mapElement) {
         const options = {
           center: new kakao.maps.LatLng(
@@ -64,11 +48,9 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
           smooth: true,
           tileAnimation: false,
         };
-        // 지도 생성
         const kakaoMap = new kakao.maps.Map(mapElement, options);
 
-        // 현재 중심좌표 값 갱신
-        kakao.maps.event.addListener(kakaoMap, 'dragend', function () {
+        kakao.maps.event.addListener(kakaoMap, 'dragend', () => {
           const latlng = kakaoMap.getCenter();
           setCurrLocation(latlng);
         });
@@ -80,11 +62,9 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
 
   const values: IMapContextValue = useMemo(
     () => ({
-      currLocation,
-      setCurrLocation,
-      prevLocation,
-      setPrevLocation,
+      mapEl,
       mapData: map,
+      setMapData: setMap,
       markerClusterer,
       setMarkerClusterer,
       overlays,
@@ -93,27 +73,26 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       setPlaces,
       prevKeyword,
       setPrevKeyword,
+      currLocation,
+      setCurrLocation,
+      prevLocation,
+      setPrevLocation,
     }),
     [
-      currLocation,
-      prevLocation,
       map,
       markerClusterer,
       overlays,
       places,
       prevKeyword,
+      currLocation,
+      prevLocation,
     ],
   );
 
   return (
     <>
       {location && (
-        <MapContext.Provider value={values}>
-          <div className='flex h-full w-full'>
-            {children}
-            <div id='map' ref={mapRef} className='h-full w-full'></div>
-          </div>
-        </MapContext.Provider>
+        <MapContext.Provider value={values}>{children}</MapContext.Provider>
       )}
     </>
   );

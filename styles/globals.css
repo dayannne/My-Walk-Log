@@ -105,6 +105,7 @@ section {
   display: block;
 }
 body {
+  min-width: 320px;
   height: 100dvh;
   line-height: 1;
 }

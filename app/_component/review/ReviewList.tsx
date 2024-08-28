@@ -47,7 +47,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
           {type === 'PLACE' && (
             <div className='flex items-center gap-2'>
               <Image
-                className='w-9 shrink-0'
+                className='h-9 w-9 shrink-0 rounded-full'
                 key={`user_${review.authorId}_profile_image`}
                 src={review.author.profileImage}
                 alt='프로필 이미지'
@@ -62,28 +62,28 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                   리뷰 {review.author.reviews.length}
                 </span>
               </div>
-              <div className='bg-hover text-olive-green shrink-0 rounded-lg px-3 py-1 text-xs font-medium'>
+              {/* <div className='bg-hover text-olive-green shrink-0 rounded-lg px-3 py-1 text-xs font-medium'>
                 팔로우
-              </div>
+              </div> */}
             </div>
           )}
           {review.reviewImages.length === 1 && (
             <Image
-              className='object-c aspect-square h-48 w-full rounded-xl object-cover object-center'
+              className='object-c aspect-video h-48 w-full rounded-xl object-cover object-center'
               src={review.reviewImages[0]}
-              alt='일기 상세 사진'
+              alt='리뷰 상세 사진'
               width={300}
               height={300}
             />
           )}
           {review.reviewImages.length > 1 && (
             <Carousel
-              className='h-48 overflow-hidden rounded-xl'
+              className='aspect-video overflow-hidden rounded-xl'
               placeholder={undefined}
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               navigation={({ setActiveIndex, activeIndex, length }) => (
-                <div className='absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2'>
+                <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
                   {new Array(length).fill('').map((_, i) => (
                     <span
                       key={i}

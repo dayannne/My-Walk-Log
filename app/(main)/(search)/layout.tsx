@@ -1,7 +1,9 @@
 'use client';
 
-import Container from '@/app/_component/common/Container';
 import SearchForm from '@/app/_component/search/SearchForm';
+import Link from 'next/link';
+import Image from 'next/image';
+import Header from '@/app/_component/common/Header';
 
 export interface layoutProps {
   children: React.ReactNode;
@@ -10,9 +12,7 @@ export interface layoutProps {
 const SearchResultLayout = ({ children }: layoutProps) => {
   return (
     <>
-      <div className='text-olive-green flex items-center gap-2 bg-white p-4 shadow-sm'>
-        산책 장소 찾기
-      </div>
+      <Header title='산책 장소 찾기' />
       <SearchForm />
       {children}
     </>

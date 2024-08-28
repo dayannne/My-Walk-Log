@@ -10,6 +10,9 @@ import {
   useGetAllDiary,
 } from '@/app/store/server/diary';
 import { useRef, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import Header from '@/app/_component/common/Header';
 
 const FeedPage = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -50,14 +53,12 @@ const FeedPage = () => {
     totalDiaries,
   } = flattenedDiaries;
   return (
-    <>
-      <div className='text-olive-green flex items-center bg-white p-4 shadow-sm'>
-        피드
-      </div>
-      <div className='h-full basis-full overflow-y-scroll'>
+    <div className='flex h-full w-full basis-full flex-col'>
+      <Header title='피드' />
+      <div className='flex basis-full flex-col overflow-y-scroll'>
         <DiaryList diaries={diaries} />
       </div>
-    </>
+    </div>
   );
 };
 
