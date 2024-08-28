@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 
 interface PlaceState {
-  place: any | null;
-  setPlace: (newPlace: any | null) => void;
+  placeId: string | null;
+  setPlaceId: (newPlace: string | null) => void;
   clearPlace: () => void;
 }
 
-export const usePlaceStore = create<PlaceState>((set) => ({
-  place: null,
-  setPlace: (newPlace: any | null) => set({ place: newPlace }),
-  clearPlace: () => set({ place: null }),
+export const usePlaceIdStore = create<PlaceState>((set) => ({
+  placeId: null,
+  setPlaceId: (newPlaceId: string | null) => set({ placeId: newPlaceId }),
+  clearPlace: () => set({ placeId: null }),
 }));
 
 interface PlaceMenuState {

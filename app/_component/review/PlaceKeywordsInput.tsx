@@ -23,7 +23,7 @@ const PlaceKeywordsInput = ({ placeKeywords, setPlaceKeywords }: pageProps) => {
   };
 
   return (
-    <div className='box-content flex h-full max-h-60 grow-0 flex-col overflow-y-scroll rounded-lg border border-solid border-gray-500 px-4 py-3'>
+    <div className='flex h-full max-h-60 grow-0 flex-col overflow-y-scroll rounded-lg border border-solid border-gray-500 px-4 py-3'>
       {Object.entries(PLACE_KEYWORDS).map(([category], idx: number) => (
         <div key={category}>
           <div key={category} className='flex flex-col gap-1'>

@@ -1,10 +1,6 @@
 'use client';
 
-import usePlaceDetail from '@/app/_hooks/usePlaceDetail';
-import { useMap } from '@/app/shared/contexts/Map';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
 
 interface MarkerInfoProps {
   placeName: string;
@@ -13,7 +9,7 @@ interface MarkerInfoProps {
 
 const MarkerInfo = ({ placeName, size }: MarkerInfoProps) => {
   return (
-    <div className='speech-bubble flex w-auto gap-2 px-3 py-2 text-lg font-medium'>
+    <div className='speech-bubble flex w-auto gap-2 px-3 py-2 text-sm font-medium lg:text-lg'>
       <span>{placeName}</span>
       <Image
         className='max-w-none'
@@ -23,7 +19,7 @@ const MarkerInfo = ({ placeName, size }: MarkerInfoProps) => {
         alt='로고 그림'
       />
       {size && (
-        <div className='border-olive-green 8 bg-olive-green absolute -right-4 -top-4 h-8 rounded-full border-2 border-solid px-1 text-white'>
+        <div className='border-olive-green bg-olive-green absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full border-2 border-solid text-white lg:-right-4 lg:-top-4 lg:h-8 lg:w-8'>
           +{size - 1}
         </div>
       )}
