@@ -21,8 +21,7 @@ const PlaceDetailLayout = ({ children }: PlaceDetailLayoutProps) => {
 
   return (
     <motion.div
-      //   className='relative top-0 h-full w-full overflow-y-hidden lg:absolute lg:left-0 lg:max-w-96 lg:overflow-auto lg:py-3 lg:pl-3'
-      className='absolute top-0 z-20 h-full w-full overflow-y-scroll lg:absolute lg:-right-96 lg:-z-10 lg:w-96 lg:overflow-y-hidden lg:py-3 lg:pl-4'
+      className='sm-md:z-10 absolute top-0 h-full w-full overflow-y-scroll lg:-right-96 lg:-z-10 lg:w-96 lg:overflow-y-hidden lg:py-3 lg:pl-4'
       initial={{ x: initialX }}
       animate={{ x: 0 }}
       transition={{ ease: 'easeOut', duration: 0.5 }}

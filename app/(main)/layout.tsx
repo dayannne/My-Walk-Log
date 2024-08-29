@@ -22,12 +22,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         <Navigation />
         <main className='flex basis-full flex-col overflow-y-hidden lg:flex-row lg:overflow-auto'>
           <div
-            className={`relative z-10 flex w-full shrink-0 flex-col bg-white lg:w-80 lg:min-w-80 ${(pathname.includes('profile') || pathname.includes('detail') || pathname.includes('feed')) && 'basis-full'} overflow-y-hidden lg:flex lg:basis-auto`}
+            className={`sm-md:overflow-y-hidden relative z-20 flex w-full shrink-0 flex-col bg-white lg:flex lg:w-96 lg:min-w-96 lg:basis-auto ${(pathname.includes('profile') || pathname.includes('detail') || pathname.includes('feed')) && 'basis-full'} `}
           >
             {children}
           </div>
           <div
-            className={`relative flex basis-full ${!pathname.includes('place') ? 'hidden' : pathname.includes('detail') ? 'hidden' : ''} z-0 overflow-y-hidden lg:flex lg:overflow-auto`}
+            className={`relative z-0 flex basis-full overflow-y-hidden lg:flex lg:overflow-auto ${!pathname.includes('place') ? 'hidden' : pathname.includes('detail') ? 'hidden' : ''} `}
           >
             <div
               className={`basis-full ${pathname.includes('detail') && 'hidden lg:block'}`}
