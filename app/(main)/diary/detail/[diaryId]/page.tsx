@@ -1,19 +1,22 @@
-import React from 'react';
+'use client';
+
+import Header from '@/app/_component/common/Header';
+import DiaryItem from '@/app/_component/diary/DiaryItem';
+import { useUserStore } from '@/app/store/client/user';
 import {
   useCreateDiaryLike,
   useDeleteDiary,
   useDeleteDiaryLike,
+  useGetDiaryDetail,
 } from '@/app/store/server/diary';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { useUserStore } from '@/app/store/client/user';
-import DiaryItem from './DiaryItem';
+export interface DiaryPageProps {}
 
-export interface DiaryListProps {
-  diaries: any;
-}
-
-const DiaryList = ({ diaries }: DiaryListProps) => {
+const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { user } = useUserStore();
+  const queryOptions = useGetDiaryDetail(params.diaryId);
+  const { data: diary } = useSuspenseQuery(queryOptions);
   const { mutate: createLike } = useCreateDiaryLike();
   const { mutate: deleteLike } = useDeleteDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
@@ -23,10 +26,10 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
   };
 
   return (
-    <ul className='flex flex-col gap-2 bg-white'>
-      {diaries.map((diary: any) => (
+    <div>
+      <Header title='일기 상세' />
+      {diary && (
         <DiaryItem
-          key={diary.id}
           diary={diary}
           onConfirm={handleConfirm}
           onClick={() =>
@@ -41,9 +44,9 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
                 })
           }
         />
-      ))}
-    </ul>
+      )}
+    </div>
   );
 };
 
-export default DiaryList;
+export default DiaryPage;
