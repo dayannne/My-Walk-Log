@@ -27,7 +27,7 @@ const SearchResult = () => {
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
 
     return (
-      <span className='mr-1 text-base'>
+      <span className='mr-1 lg:text-base'>
         {parts.map((part, index) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
             <strong className='font-bold' key={`${placeId}-${index}`}>
@@ -51,12 +51,12 @@ const SearchResult = () => {
   };
 
   return (
-    <ul className='flex basis-full flex-col overflow-y-scroll border-t border-solid border-gray-200'>
+    <ul className='flex max-h-60 basis-full flex-col overflow-y-scroll border-t border-solid border-gray-200 bg-white lg:max-h-full'>
       {mapContext?.places &&
         mapContext?.places.map((place: any) => (
           <li
             key={place.id}
-            className='hover:bg-hover flex items-start border-b border-solid border-gray-200 p-6'
+            className='hover:bg-hover flex items-start border-b border-solid border-gray-200 px-6 py-4 lg:py-6'
           >
             <Link
               className='flex basis-full flex-col'
@@ -70,14 +70,14 @@ const SearchResult = () => {
                 />
                 <CategoryFilter category={place.categoryName} />
               </div>
-              <span className='mb-2 mt-1 flex items-center gap-2 text-sm font-light text-gray-800'>
+              <span className='mb-2 mt-1 flex items-center gap-2 text-xs font-light text-gray-800 lg:text-sm'>
                 <span>찜 {place.placeDetail.likedBy.length}</span>
                 <span className='mb-[2px] text-gray-400'>|</span>
                 <span>리뷰 수 {place.reviews.length}</span>
                 <span className='mb-[2px] text-gray-400'>|</span>
                 <span>일기 수 {place.diaries.length}</span>
               </span>
-              <span className='text-sm'>{place.address}</span>
+              <span className='text-xs lg:text-sm'>{place.address}</span>
               {place.roadAdress && (
                 <span className='text-sm text-gray-500'>
                   ({place.roadAdress})

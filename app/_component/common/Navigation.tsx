@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useUserStore } from '@/app/store/client/user';
 import { useState } from 'react';
-export interface NavigationProps {}
 
-const Navigation = ({}: NavigationProps) => {
+const Navigation = () => {
+  const router = useRouter();
   const pathname = usePathname();
+  const { user, setUser } = useUserStore();
   const [isHovered, setIsHovered] = useState('');
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -18,13 +20,25 @@ const Navigation = ({}: NavigationProps) => {
   const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
     setIsHovered('');
   };
-
   return (
-    <nav className='flex w-16 basis-full list-none flex-col text-xs'>
-      <li>
+    <nav className='flex list-none border-solid border-gray-200 text-xs lg:w-16 lg:flex-col lg:border-r-[1.5px]'>
+      <li className='hidden basis-full lg:block lg:basis-auto'>
+        <Link
+          className='h-20 w-full items-center justify-center border-b border-solid border-gray-200 p-1 lg:flex'
+          href='/'
+        >
+          <Image
+            src='/icons/icon-logo-mini(default).svg'
+            alt=''
+            width={32}
+            height={32}
+          />
+        </Link>
+      </li>
+      <li className='basis-full lg:basis-auto'>
         <Link
           id='feed'
-          className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
+          className={`border-olive-green flex h-full basis-full flex-col items-center justify-center gap-1 border p-2 lg:h-[72px] ${
             pathname.includes('feed')
               ? 'bg-olive-green text-white'
               : 'hover:text-olive-green text-black'
@@ -48,10 +62,10 @@ const Navigation = ({}: NavigationProps) => {
           피드
         </Link>
       </li>
-      <li>
+      <li className='basis-full lg:basis-auto'>
         <Link
           id='place'
-          className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
+          className={`border-olive-green flex h-full basis-full flex-col items-center justify-center gap-1 border p-2 lg:h-[72px] ${
             pathname.includes('place')
               ? 'bg-olive-green text-white'
               : 'hover:text-olive-green text-black'
@@ -75,10 +89,10 @@ const Navigation = ({}: NavigationProps) => {
           장소
         </Link>
       </li>
-      {/* <li>
+      <li className='basis-full lg:basis-auto'>
         <Link
           id='trail'
-          className={`border-olive-green flex h-[72px] basis-full flex-col items-center justify-center gap-1 border p-2 ${
+          className={`border-olive-green flex h-full basis-full flex-col items-center justify-center gap-1 border p-2 lg:h-[72px] ${
             pathname.includes('trail')
               ? 'bg-olive-green text-white'
               : 'hover:text-olive-green text-black'
@@ -101,7 +115,44 @@ const Navigation = ({}: NavigationProps) => {
           />
           산책로
         </Link>
-      </li> */}
+      </li>
+      <li className={`basis-full lg:flex lg:flex-col lg:justify-end`}>
+        {user ? (
+          <Link
+            href='/profile/my'
+            className={`flex basis-full flex-col items-center justify-center gap-1 border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto lg:border-t ${
+              pathname.includes('profile')
+                ? 'bg-olive-green text-white'
+                : 'hover:text-olive-green text-black'
+            } `}
+          >
+            <Image
+              className='aspect-square rounded-full object-cover'
+              src={
+                user.profileImage ? user.profileImage : '/icons/icon-user.svg'
+              }
+              alt=''
+              width={32}
+              height={32}
+            />
+            <span className='lg:hidden'>프로필</span>
+          </Link>
+        ) : (
+          <Link
+            href='/login'
+            className={`flex basis-full flex-col items-center justify-center gap-1 border-t border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto`}
+          >
+            <Image
+              className='rounded-full'
+              src={'/icons/icon-login.svg'}
+              alt=''
+              width={32}
+              height={32}
+            />
+            <span className='lg:hidden'>로그인</span>
+          </Link>
+        )}
+      </li>
     </nav>
   );
 };

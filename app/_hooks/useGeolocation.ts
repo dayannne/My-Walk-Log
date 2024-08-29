@@ -17,6 +17,7 @@ const useGeolocation = () => {
 
   const errorHandler = (error: GeolocationPositionError) => {
     console.log(error);
+    setLocation({ latitude: 37.5665, longitude: 126.978 });
   };
 
   return { location };

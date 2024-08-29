@@ -1,29 +1,39 @@
 'use client';
 
-import Container from '@/app/_component/common/Container';
+import Header from '@/app/_component/common/Header';
 import ProfileMenu from '@/app/_component/profile/ProfileMenu';
 import { useProfileStore } from '@/app/store/client/profile';
+import { useUserStore } from '@/app/store/client/user';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { Fragment } from 'react';
 export interface layoutProps {
   children: React.ReactNode;
 }
 
 const ProfileLayout = ({ children }: layoutProps) => {
   const router = useRouter();
-  const pathname = usePathname().split('/');
-
+  const { setUser } = useUserStore();
   const { profile } = useProfileStore();
+
+  const handleLogout = () => {
+    //TODO: 로그아웃 확인 팝업 추가
+    alert('로그아웃 되었습니다.');
+    setUser(null);
+    router.refresh();
+  };
 
   const address = JSON.parse(profile.address);
 
   return (
-    <div className='flex h-full flex-col'>
-      <div className='text-olive-green flex items-center gap-2 bg-white p-4 shadow-sm'>
-        나의 프로필
-      </div>
+    <div className='flex h-full w-full flex-col'>
+      <Header title='나의 프로필'>
+        <button onClick={handleLogout}>
+          <Image src='/icons/icon-logout.svg' alt='' width={32} height={32} />
+        </button>
+      </Header>
       <div className='flex basis-full flex-col overflow-y-scroll'>
         {profile && (
           <div className='flex flex-col gap-2 p-6'>
@@ -63,10 +73,10 @@ const ProfileLayout = ({ children }: layoutProps) => {
                   {profile.introduction
                     .split('\n')
                     .map((str: string, idx: number) => (
-                      <>
+                      <Fragment key={idx}>
                         {str}
                         <br />
-                      </>
+                      </Fragment>
                     ))}
                 </p>
               </div>
@@ -87,8 +97,8 @@ const ProfileLayout = ({ children }: layoutProps) => {
           </div>
         )}
         <ProfileMenu />
+        {children}
       </div>
-      <div className='basis-full'> {children}</div>
     </div>
   );
 };

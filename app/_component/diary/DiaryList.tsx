@@ -39,7 +39,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
         >
           <div className='flex items-center gap-2'>
             <Image
-              className='w-9 shrink-0'
+              className='h-9 w-9 shrink-0 rounded-full object-cover'
               key={`user_${diary.authorId}_profile_image`}
               src={diary.author.profileImage}
               alt='프로필 이미지'
@@ -75,7 +75,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
             ))}
           </div>
           <div className='flex flex-wrap gap-1'>
-            {diary.tags.length &&
+            {diary.tags.length > 0 &&
               diary.tags.map((tag: string, idx: number) => (
                 <span
                   className='bg-hover rounded-md px-2 py-1 text-xs'
@@ -102,7 +102,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
               onPointerEnterCapture={undefined}
               onPointerLeaveCapture={undefined}
               navigation={({ setActiveIndex, activeIndex, length }) => (
-                <div className='absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2'>
+                <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
                   {new Array(length).fill('').map((_, i) => (
                     <span
                       key={i}

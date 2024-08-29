@@ -62,12 +62,12 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
             {index < 3 && (
               <li
                 key={review.id}
-                className={`flex items-start gap-3 border-solid border-gray-200 ${index !== reviews.length - 1 && 'border-b'}`}
+                className={`flex items-start gap-3 border-solid border-gray-200 py-3 ${index === 0 && 'pt-0'} ${index === 2 && 'pb-0'} ${index < 2 && 'border-b'}`}
               >
                 <div className='basis-full'>
                   <div className='mb-2 flex items-center gap-2'>
                     <Image
-                      className='w-8 shrink-0'
+                      className='h-8 w-8 shrink-0 rounded-full'
                       key={`user_${review.authorId}_profile_image`}
                       src={review.author.profileImage}
                       alt='프로필 이미지'
@@ -121,7 +121,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                 </div>
                 {review.reviewImages.length > 0 && (
                   <Image
-                    className='object-c aspect-square h-24 w-auto rounded-xl object-cover object-center pt-2'
+                    className='aspect-square h-24 w-24 rounded-xl object-cover object-center'
                     src={review.reviewImages[0]}
                     alt='일기 상세 사진'
                     width={300}

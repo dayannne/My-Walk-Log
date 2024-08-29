@@ -31,7 +31,7 @@ const SearchForm = () => {
   }, [prevKeyword]);
 
   return (
-    <div className='border-olive-green border-b p-4'>
+    <div className='border-olive-green border-b bg-white p-4'>
       <form
         onSubmit={onSubmit}
         className='border-olive-green box-content flex h-9 justify-between gap-1 rounded-lg border border-solid bg-white py-1 pl-2 pr-3 shadow-md'

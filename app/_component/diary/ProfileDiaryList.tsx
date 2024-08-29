@@ -42,7 +42,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               {formatDate(diary.createdAt).day}
             </span>
           </div>
-          <div className='flex flex-col gap-2'>
+          <div className='flex basis-full flex-col gap-2'>
             <div className='flex justify-between text-xs'>
               <div className='flex flex-col'>
                 <span>{formatDate(diary.createdAt).dayOfWeek}요일</span>
@@ -62,7 +62,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               ))}
             </div>
             <div className='flex flex-wrap gap-1'>
-              {diary.tags.length &&
+              {diary.tags.length > 0 &&
                 diary.tags.map((tag: string, idx: number) => (
                   <span
                     className='bg-hover rounded-md px-2 py-1 text-xs'
@@ -88,7 +88,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
                 navigation={({ setActiveIndex, activeIndex, length }) => (
-                  <div className='absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2'>
+                  <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
                     {new Array(length).fill('').map((_, i) => (
                       <span
                         key={i}
