@@ -26,6 +26,7 @@ model User {
 
   reviews        Review[]
   diaries        Diary[]  @relation("author")
+  comment        Comment[] @relation("commentAuthor")
 }
 
 model Place {
@@ -90,6 +91,7 @@ model Diary {
   content      String
   weather      String
   tags         String[]
+  isPublic     Boolean  @default(false)
 
   likedCount   Int      @default(0)
   likedBy      Int[]
@@ -98,8 +100,24 @@ model Diary {
 
   place        Place?       @relation(fields: [placeId], references: [id])
   placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  comments     Comment[]  
   author       User     @relation("author", fields: [authorId], references: [id])
+
 }
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  diaryId    Int
+  authorId   Int
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  diary      Diary    @relation(fields: [diaryId], references: [id])
+  author     User     @relation("commentAuthor", fields: [authorId], references: [id])
+}
+
+
 
 model Trail{
   ESNTL_ID           String @id 
