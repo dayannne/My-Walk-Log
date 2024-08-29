@@ -13,6 +13,7 @@ import { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/app/_component/common/Header';
+import FeedDiary from '@/app/_component/diary/FeedDiaryList';
 
 const FeedPage = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -56,7 +57,7 @@ const FeedPage = () => {
     <div className='flex h-full w-full basis-full flex-col'>
       <Header title='피드' />
       <div className='flex basis-full flex-col overflow-y-scroll'>
-        <DiaryList diaries={diaries} />
+        <FeedDiary diaries={diaries} />
       </div>
     </div>
   );

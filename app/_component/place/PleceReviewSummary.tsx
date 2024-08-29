@@ -89,7 +89,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                   </div>
                   <div className='flex flex-col gap-2 text-sm'>
                     <button
-                      className={`${flipped === true && 'text-overflow'}`}
+                      className={`${flipped === true && 'text-overflow-m'}`}
                       onClick={() => {
                         setFlipped((prev) => !prev);
                       }}
