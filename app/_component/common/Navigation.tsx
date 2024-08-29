@@ -120,7 +120,7 @@ const Navigation = () => {
         {user ? (
           <Link
             href='/profile/my'
-            className={`border-olive-green flex basis-full flex-col items-center justify-center gap-1 border p-2 lg:h-20 lg:basis-auto ${
+            className={`flex basis-full flex-col items-center justify-center gap-1 border-t border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto ${
               pathname.includes('profile')
                 ? 'bg-olive-green text-white'
                 : 'hover:text-olive-green text-black'
@@ -138,8 +138,18 @@ const Navigation = () => {
             <span className='lg:hidden'>프로필</span>
           </Link>
         ) : (
-          <Link href='/login'>
-            <Image src='/icons/icon-login.svg' alt='' width={32} height={32} />
+          <Link
+            href='/login'
+            className={`flex basis-full flex-col items-center justify-center gap-1 border-t border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto`}
+          >
+            <Image
+              className='rounded-full'
+              src={'/icons/icon-login.svg'}
+              alt=''
+              width={32}
+              height={32}
+            />
+            <span className='lg:hidden'>로그인</span>
           </Link>
         )}
       </li>
