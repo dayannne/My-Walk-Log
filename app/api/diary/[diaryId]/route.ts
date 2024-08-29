@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 
 export async function GET(
   req: Request,
-  { params }: { params: { placeId: string } },
+  { params }: { params: { diaryId: string } },
 ) {
-  const { placeId } = params;
+  const id = parseInt(params.diaryId);
 
   try {
-    const diaries = await prisma.diary.findMany({
-      where: { placeId },
+    const diary = await prisma.diary.findUnique({
+      where: { id },
       include: {
         author: {
           include: {
@@ -23,7 +23,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(diaries);
+    return NextResponse.json(diary);
   } catch (error) {
     return NextResponse.json(
       { message: '일기를 불러오는 중 에러가 발생했습니다.' },
