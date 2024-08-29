@@ -39,7 +39,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
         >
           <div className='flex items-center gap-2'>
             <Image
-              className='w-9 shrink-0'
+              className='h-9 w-9 shrink-0 rounded-full object-cover'
               key={`user_${diary.authorId}_profile_image`}
               src={diary.author.profileImage}
               alt='프로필 이미지'

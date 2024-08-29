@@ -21,7 +21,7 @@ const Navigation = () => {
     setIsHovered('');
   };
   return (
-    <nav className='flex list-none border-r-[1.5px] border-solid border-gray-200 text-xs lg:w-16 lg:flex-col'>
+    <nav className='flex list-none border-solid border-gray-200 text-xs lg:w-16 lg:flex-col lg:border-r-[1.5px]'>
       <li className='hidden basis-full lg:block lg:basis-auto'>
         <Link
           className='h-20 w-full items-center justify-center border-b border-solid border-gray-200 p-1 lg:flex'
@@ -120,14 +120,14 @@ const Navigation = () => {
         {user ? (
           <Link
             href='/profile/my'
-            className={`flex basis-full flex-col items-center justify-center gap-1 border-t border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto ${
+            className={`flex basis-full flex-col items-center justify-center gap-1 border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto lg:border-t ${
               pathname.includes('profile')
                 ? 'bg-olive-green text-white'
                 : 'hover:text-olive-green text-black'
             } `}
           >
             <Image
-              className='rounded-full'
+              className='aspect-square rounded-full object-cover'
               src={
                 user.profileImage ? user.profileImage : '/icons/icon-user.svg'
               }
