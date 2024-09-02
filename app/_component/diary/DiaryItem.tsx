@@ -52,61 +52,65 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           handleClose={handleClose}
         />
       </div>
-      <div className='text-sm'>
-        {diary.content.split('\n').map((str: string, idx: number) => (
-          <p key={idx}>{str}</p>
-        ))}
-      </div>
-      <div className='flex flex-wrap gap-1'>
-        {diary.tags.length > 0 &&
-          diary.tags.map((tag: string, idx: number) => (
-            <span className='bg-hover rounded-md px-2 py-1 text-xs' key={idx}>
-              #{tag}
-            </span>
-          ))}
-      </div>
-
-      {diary.diaryImages.length === 1 && (
-        <Image
-          className='aspect-video h-auto w-full rounded-xl object-cover object-center'
-          src={diary.diaryImages[0]}
-          alt='일기 상세 사진'
-          width={300}
-          height={300}
-        />
-      )}
-      {diary.diaryImages.length > 1 && (
-        <Carousel
-          className='aspect-video w-full overflow-hidden rounded-xl object-cover object-center'
-          placeholder={undefined}
-          onPointerEnterCapture={undefined}
-          onPointerLeaveCapture={undefined}
-          navigation={({ setActiveIndex, activeIndex, length }) => (
-            <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
-              {new Array(length).fill('').map((_, i) => (
-                <span
-                  key={i}
-                  className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                    activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
-                  }`}
-                  onClick={() => setActiveIndex(i)}
-                />
-              ))}
-            </div>
-          )}
-        >
-          {diary.diaryImages.map((image: string, idx: number) => (
-            <Image
-              className='h-full w-full object-cover object-center'
-              key={idx}
-              src={image}
-              alt='리뷰 이미지'
-              width={500}
-              height={500}
-            />
-          ))}
-        </Carousel>
-      )}
+      <Link className='flex flex-col gap-2' href={`/diary/detail/${diary.id}`}>
+        {diary.content.length > 0 && (
+          <div className='text-sm'>
+            {diary.content.split('\n').map((str: string, idx: number) => (
+              <p key={idx}>{str}</p>
+            ))}
+          </div>
+        )}
+        {diary.tags.length > 0 && (
+          <div className='flex flex-wrap gap-1'>
+            {diary.tags.map((tag: string, idx: number) => (
+              <span className='bg-hover rounded-md px-2 py-1 text-xs' key={idx}>
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+        {diary.diaryImages.length === 1 && (
+          <Image
+            className='aspect-video h-auto w-full rounded-xl object-cover object-center'
+            src={diary.diaryImages[0]}
+            alt='일기 상세 사진'
+            width={300}
+            height={300}
+          />
+        )}
+        {diary.diaryImages.length > 1 && (
+          <Carousel
+            className='aspect-video w-full overflow-hidden rounded-xl object-cover object-center'
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+            navigation={({ setActiveIndex, activeIndex, length }) => (
+              <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
+                {new Array(length).fill('').map((_, i) => (
+                  <span
+                    key={i}
+                    className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                      activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
+                    }`}
+                    onClick={() => setActiveIndex(i)}
+                  />
+                ))}
+              </div>
+            )}
+          >
+            {diary.diaryImages.map((image: string, idx: number) => (
+              <Image
+                className='h-full w-full object-cover object-center'
+                key={idx}
+                src={image}
+                alt='리뷰 이미지'
+                width={500}
+                height={500}
+              />
+            ))}
+          </Carousel>
+        )}
+      </Link>
       <Link
         className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
         href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}

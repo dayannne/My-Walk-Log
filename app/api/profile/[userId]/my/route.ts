@@ -20,6 +20,7 @@ export async function GET(
         },
         diaries: {
           include: {
+            comments: true,
             placeDetail: true,
           },
         },
