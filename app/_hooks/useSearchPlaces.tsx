@@ -3,7 +3,6 @@ import ReactDOMServer from 'react-dom/server';
 import { useMap } from '../shared/contexts/Map';
 import useMarkerClusterer from './useMarkerClusterer';
 
-import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 
 import MarkerInfo from '../_component/common/MarkerInfo';
@@ -50,7 +49,7 @@ const useSearchPlaces = () => {
     if (status === kakao.maps.services.Status.OK) {
       clearMarkersAndInfo();
 
-      const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
+      const filteredPlaces = filterPlacesByKeyword(data);
 
       if (filteredPlaces.length === 0) {
         return alert('검색 결과가 존재하지 않습니다.');

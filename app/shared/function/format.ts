@@ -1,3 +1,5 @@
+import { PLACE_KEYWORDS } from '../constant';
+
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
 
@@ -46,3 +48,19 @@ export function formatTimeAgo(dateString: string): string {
     }
   }
 }
+
+export const formatPlaceKeyword = (
+  keys: number[],
+): { key: number; value: string }[] => {
+  const result: { key: number; value: string }[] = [];
+
+  for (const key of keys) {
+    for (const category in PLACE_KEYWORDS) {
+      if (PLACE_KEYWORDS[category].hasOwnProperty(key)) {
+        result.push({ key, value: PLACE_KEYWORDS[category][key] });
+      }
+    }
+  }
+
+  return result;
+};

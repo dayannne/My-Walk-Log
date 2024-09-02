@@ -5,11 +5,8 @@ import Image from 'next/image';
 import { IReview } from '@/app/shared/types/review';
 import { useUserStore } from '@/app/store/client/user';
 import { WALK_DURATIONS } from '@/app/shared/constant';
-import {
-  filterEntryFee,
-  filterPlaceKeywords,
-} from '@/app/shared/function/filter';
-import { formatDate } from '@/app/shared/function/format';
+import { filterEntryFee } from '@/app/shared/function/filter';
+import { formatDate, formatPlaceKeyword } from '@/app/shared/function/format';
 import { Carousel } from '@material-tailwind/react';
 import { type } from 'os';
 import { usePlaceMenuStore } from '@/app/store/client/place';
@@ -109,7 +106,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                       {review.keywords.length > 0 && (
                         <>
                           <span className='bg-hover rounded-md p-1 text-xs'>
-                            {filterPlaceKeywords(reviews[0].keywords)[0].value}
+                            {formatPlaceKeyword(reviews[0].keywords)[0].value}
                           </span>
                           <span className='bg-hover rounded-md p-1 text-xs'>
                             + {review.keywords.length - 1}

@@ -1,11 +1,8 @@
 'use client';
 
 import { WALK_DURATIONS } from '@/app/shared/constant';
-import {
-  filterEntryFee,
-  filterPlaceKeywords,
-} from '@/app/shared/function/filter';
-import { formatDate } from '@/app/shared/function/format';
+import { filterEntryFee } from '@/app/shared/function/filter';
+import { formatDate, formatPlaceKeyword } from '@/app/shared/function/format';
 import { useUserStore } from '@/app/store/client/user';
 import {
   useCreateReviewLike,
@@ -47,7 +44,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
           {type === 'PLACE' && (
             <div className='flex items-center gap-2'>
               <Image
-                className='h-9 w-9 shrink-0 rounded-full'
+                className='h-9 w-9 shrink-0 rounded-full object-cover'
                 key={`user_${review.authorId}_profile_image`}
                 src={review.author.profileImage}
                 alt='프로필 이미지'
@@ -134,7 +131,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
             </div>
             <div className='flex flex-wrap gap-1'>
               {review.keywords.length > 0 &&
-                filterPlaceKeywords(review.keywords).map(
+                formatPlaceKeyword(review.keywords).map(
                   ({ key, value }: { key: number; value: string }) => (
                     <span className='bg-hover rounded-md p-1 text-xs' key={key}>
                       {value}
