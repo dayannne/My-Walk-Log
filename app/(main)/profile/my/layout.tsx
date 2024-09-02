@@ -21,8 +21,8 @@ const ProfileLayout = ({ children }: layoutProps) => {
   const handleLogout = () => {
     //TODO: 로그아웃 확인 팝업 추가
     alert('로그아웃 되었습니다.');
+    router.push('/feed');
     setUser(null);
-    router.refresh();
   };
 
   const address = JSON.parse(profile.address);
