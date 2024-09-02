@@ -18,7 +18,11 @@ export async function GET(
             diaries: true,
           },
         },
-        comments: true,
+        comments: {
+          include: {
+            author: true,
+          },
+        },
         placeDetail: true,
       },
     });
