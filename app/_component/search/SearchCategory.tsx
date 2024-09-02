@@ -1,3 +1,5 @@
+'use client';
+
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
 import Image from 'next/image';

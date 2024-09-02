@@ -1,8 +1,8 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { useMap } from '@/app/shared/contexts/Map';
 import useGeolocation from '@/app/_hooks/useGeolocation';
-import SearchCategory from '../search/SearchCategory';
-import SearchAgainButton from '../search/SearchAgainButton';
 
 const MapContainer: React.FC = () => {
   const { location } = useGeolocation();

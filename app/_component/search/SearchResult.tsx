@@ -51,7 +51,7 @@ const SearchResult = () => {
   };
 
   return (
-    <ul className='flex max-h-60 basis-full flex-col overflow-y-scroll border-t border-solid border-gray-200 bg-white lg:max-h-full'>
+    <ul className='flex max-h-60 shrink-0 flex-col overflow-y-scroll border-t border-solid border-gray-200 bg-white lg:max-h-full'>
       {mapContext?.places &&
         mapContext?.places.map((place: any) => (
           <li
