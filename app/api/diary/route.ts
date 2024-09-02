@@ -21,6 +21,7 @@ export async function GET(req: Request) {
             diaries: true,
           },
         },
+        comments: true,
         placeDetail: true,
       },
     });

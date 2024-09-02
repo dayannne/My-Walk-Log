@@ -7,9 +7,8 @@ import { useUserStore } from '@/app/store/client/user';
 import { useState } from 'react';
 
 const Navigation = () => {
-  const router = useRouter();
   const pathname = usePathname();
-  const { user, setUser } = useUserStore();
+  const { user } = useUserStore();
   const [isHovered, setIsHovered] = useState('');
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -21,7 +20,9 @@ const Navigation = () => {
     setIsHovered('');
   };
   return (
-    <nav className='flex list-none border-solid border-gray-200 text-xs lg:w-16 lg:flex-col lg:border-r-[1.5px]'>
+    <nav
+      className={`flex list-none border-solid border-gray-200 text-xs lg:w-16 lg:flex-col lg:border-r-[1.5px] ${pathname.includes('diary') && pathname.includes('detail') && 'sm-md:hidden'} `}
+    >
       <li className='hidden basis-full lg:block lg:basis-auto'>
         <Link
           className='h-20 w-full items-center justify-center border-b border-solid border-gray-200 p-1 lg:flex'

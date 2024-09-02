@@ -56,7 +56,7 @@ const PlaceAdditionalInfo = ({ place }: PlaceAdditionalInfoProps) => {
             width={24}
             height={24}
           />
-          <Link className='text-overflow grow-0' href={homepage}>
+          <Link className='text-overflow-m grow-0' href={homepage}>
             {homepage}
           </Link>
         </span>

@@ -1,27 +1,12 @@
-import { ENTRY_FEE, PLACE_KEYWORDS } from '../constant';
+import { ENTRY_FEE, FILTER_CATEGORIES } from '../constant';
 import { Area } from '../types/place';
 
-export const filterPlacesByKeyword = (places: any[], keywords: string[]) => {
+export const filterPlacesByKeyword = (places: any[]) => {
   return places.filter((place) => {
     const categories = place.category_name.split(` > `);
-    return keywords.some((keyword) => categories.includes(keyword));
+
+    return FILTER_CATEGORIES.some((keyword) => categories.includes(keyword));
   });
-};
-
-export const filterPlaceKeywords = (
-  keys: number[],
-): { key: number; value: string }[] => {
-  const result: { key: number; value: string }[] = [];
-
-  for (const key of keys) {
-    for (const category in PLACE_KEYWORDS) {
-      if (PLACE_KEYWORDS[category].hasOwnProperty(key)) {
-        result.push({ key, value: PLACE_KEYWORDS[category][key] });
-      }
-    }
-  }
-
-  return result;
 };
 
 export const filterEntryFee = (id: string): string | undefined => {

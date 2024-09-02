@@ -19,6 +19,16 @@ export const useGetDiary = (placeId: string) =>
     staleTime: 0,
   });
 
+export const useGetDiaryDetail = (diaryId: number) =>
+  queryOptions({
+    queryKey: ['diaryDetail', diaryId],
+    queryFn: async () => {
+      const response = await axios.get(`/api/diary/${diaryId}`);
+      return response.data;
+    },
+    staleTime: 0,
+  });
+
 export const useGetAllDiary = () =>
   useInfiniteQuery({
     queryKey: ['allDiary'],

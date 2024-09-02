@@ -56,63 +56,73 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                 <span>{WEATHERS[diary.weather].name}</span>
               </div>
             </div>
-            <div className='text-sm'>
-              {diary.content.split('\n').map((str: string, idx: number) => (
-                <p key={idx}>{str}</p>
-              ))}
-            </div>
-            <div className='flex flex-wrap gap-1'>
-              {diary.tags.length > 0 &&
-                diary.tags.map((tag: string, idx: number) => (
-                  <span
-                    className='bg-hover rounded-md px-2 py-1 text-xs'
-                    key={idx}
-                  >
-                    #{tag}
-                  </span>
-                ))}
-            </div>
-            {diary.diaryImages.length === 1 && (
-              <Image
-                className='aspect-square h-full w-full rounded-xl'
-                src={diary.diaryImages[0]}
-                alt='일기 상세 사진'
-                width={300}
-                height={300}
-              />
-            )}
-            {diary.diaryImages.length > 1 && (
-              <Carousel
-                className='aspect-square h-full w-full overflow-hidden rounded-xl'
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                navigation={({ setActiveIndex, activeIndex, length }) => (
-                  <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
-                    {new Array(length).fill('').map((_, i) => (
-                      <span
-                        key={i}
-                        className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                          activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
-                        }`}
-                        onClick={() => setActiveIndex(i)}
-                      />
-                    ))}
-                  </div>
-                )}
-              >
-                {diary.diaryImages.map((image: string, idx: number) => (
-                  <Image
-                    className='h-full w-full object-cover object-center'
-                    key={idx}
-                    src={image}
-                    alt='리뷰 이미지'
-                    width={500}
-                    height={500}
-                  />
-                ))}
-              </Carousel>
-            )}
+            <Link
+              className='flex flex-col gap-2'
+              href={`/diary/detail/${diary.id}`}
+            >
+              {diary.content.length > 0 && (
+                <div className='text-sm'>
+                  {diary.content.split('\n').map((str: string, idx: number) => (
+                    <p key={idx}>{str}</p>
+                  ))}
+                </div>
+              )}
+              {diary.tags.length > 0 && (
+                <div className='flex flex-wrap gap-1'>
+                  {diary.tags.map((tag: string, idx: number) => (
+                    <span
+                      className='bg-hover rounded-md px-2 py-1 text-xs'
+                      key={idx}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {diary.diaryImages.length === 1 && (
+                <Image
+                  className='aspect-video h-full w-full rounded-xl object-cover'
+                  src={diary.diaryImages[0]}
+                  alt='일기 상세 사진'
+                  width={300}
+                  height={300}
+                />
+              )}
+              {diary.diaryImages.length > 1 && (
+                <Carousel
+                  className='aspect-video h-full w-full rounded-xl object-cover'
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  navigation={({ setActiveIndex, activeIndex, length }) => (
+                    <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
+                      {new Array(length).fill('').map((_, i) => (
+                        <span
+                          key={i}
+                          className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                            activeIndex === i
+                              ? 'w-8 bg-white'
+                              : 'w-4 bg-white/50'
+                          }`}
+                          onClick={() => setActiveIndex(i)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                >
+                  {diary.diaryImages.map((image: string, idx: number) => (
+                    <Image
+                      className='h-full w-full object-cover object-center'
+                      key={idx}
+                      src={image}
+                      alt='리뷰 이미지'
+                      width={500}
+                      height={500}
+                    />
+                  ))}
+                </Carousel>
+              )}
+            </Link>
             {pathname.includes('my') && (
               <Link
                 className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
@@ -148,34 +158,50 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               </Link>
             )}
             <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-1'>
-                <button
-                  onClick={() =>
-                    diary.likedBy.some((id: number) => id === user?.id) === true
-                      ? deleteLike({
-                          diaryId: diary.id,
-                          userId: user?.id as number,
-                        })
-                      : createLike({
-                          diaryId: diary.id,
-                          userId: user?.id as number,
-                        })
-                  }
-                >
-                  <Image
-                    className='w-6'
-                    src={
+              <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-1'>
+                  <button
+                    onClick={() =>
                       diary.likedBy.some((id: number) => id === user?.id) ===
                       true
-                        ? '/icons/icon-heart-fill.svg'
-                        : '/icons/icon-heart.svg'
+                        ? deleteLike({
+                            diaryId: diary.id,
+                            userId: user?.id as number,
+                          })
+                        : createLike({
+                            diaryId: diary.id,
+                            userId: user?.id as number,
+                          })
                     }
-                    alt='좋아요 버튼'
+                  >
+                    <Image
+                      className='mt-[2px] w-6'
+                      src={
+                        diary.likedBy.some((id: number) => id === user?.id) ===
+                        true
+                          ? '/icons/icon-heart-fill.svg'
+                          : '/icons/icon-heart.svg'
+                      }
+                      alt='좋아요 버튼'
+                      width={32}
+                      height={32}
+                    />
+                  </button>
+                  <span className='text-sm'>{diary.likedBy.length}</span>
+                </div>
+                <Link
+                  className='flex items-center gap-1'
+                  href={`/diary/detail/${diary.id}`}
+                >
+                  <Image
+                    className='mt-[2px] w-6'
+                    src='/icons/icon-comment.svg'
+                    alt='댓글'
                     width={32}
                     height={32}
                   />
-                </button>
-                <span className='text-sm'>{diary.likedBy.length}</span>
+                  {diary.comments.length}
+                </Link>
               </div>
               {user?.id && user?.id === diary.authorId && (
                 <MenuModal

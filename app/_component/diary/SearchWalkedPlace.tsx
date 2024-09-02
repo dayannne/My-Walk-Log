@@ -18,7 +18,7 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
       const ps = new kakao.maps.services.Places();
       ps.keywordSearch(e.currentTarget.value, (data, status) => {
         if (status === kakao.maps.services.Status.OK) {
-          const filteredPlaces = filterPlacesByKeyword(data, FILTER_CATEGORIES);
+          const filteredPlaces = filterPlacesByKeyword(data);
           setPlaces(filteredPlaces);
         } else {
           setPlaces([]);
