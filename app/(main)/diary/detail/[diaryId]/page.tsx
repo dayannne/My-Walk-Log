@@ -32,7 +32,7 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
 
   return (
     <div className='relative flex basis-full flex-col overflow-y-auto'>
-      <Header title='일기 상세' />
+      <Header title='일기 상세' enableBackButton />
       <div className='flex basis-full flex-col overflow-y-scroll'>
         {diary && (
           <DiaryItem
