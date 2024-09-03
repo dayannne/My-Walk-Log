@@ -111,36 +111,37 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           </Carousel>
         )}
       </Link>
-      <Link
-        className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-        href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}
-      >
-        <div className='flex basis-full items-center gap-2'>
-          <Image
-            src='/icons/icon-marker.svg'
-            alt='마커 이미지'
-            width={32}
-            height={32}
-          />
-          <div className='flex flex-col'>
-            <span className='text-sm font-medium'>
-              {diary.placeDetail.placeName}
-            </span>
-            <span className='text-xs text-gray-600'>
-              {diary.placeDetail.placeDetail.basicInfo.address.region.fullname}
-            </span>
+      {diary?.placeDetail && (
+        <Link
+          className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
+          href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}
+        >
+          <div className='flex basis-full items-center gap-2'>
+            <Image
+              src='/icons/icon-marker.svg'
+              alt='마커 이미지'
+              width={32}
+              height={32}
+            />
+            <div className='flex flex-col'>
+              <span className='text-sm font-medium'>
+                {diary.placeDetail.placeName}
+              </span>
+              <span className='text-xs text-gray-600'>
+                {diary.placeDetail.basicInfo.address.region.fullname}
+              </span>
+            </div>
           </div>
-        </div>
 
-        <Image
-          className='rotate-180'
-          src='/icons/icon-arrow-left(green).svg'
-          alt='바로가기'
-          width={24}
-          height={24}
-        />
-      </Link>
-
+          <Image
+            className='rotate-180'
+            src='/icons/icon-arrow-left(green).svg'
+            alt='바로가기'
+            width={24}
+            height={24}
+          />
+        </Link>
+      )}
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-1'>
           <button onClick={onClick}>

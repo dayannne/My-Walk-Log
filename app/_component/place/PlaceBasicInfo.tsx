@@ -1,7 +1,4 @@
-import {
-  useCreatePlaceLike,
-  useDeletePlaceLike,
-} from '@/app/store/server/place';
+import { usePlaceLike } from '@/app/store/server/place';
 import { IReview } from '@/app/shared/types/review';
 import { useUserStore } from '@/app/store/client/user';
 import Image from 'next/image';
@@ -15,9 +12,7 @@ export interface PlaceBasicInfoProps {
 }
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { user } = useUserStore();
-
-  const likedBy = place?.likedBy || [];
-  const { mainphotourl, tags } = place?.placeDetail?.basicInfo || {};
+  const { mainphotourl, tags } = place?.basicInfo || {};
 
   // API 요청
   const { mutate: createLike } = useCreatePlaceLike();
@@ -26,10 +21,12 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   // 사진 데이터 필터링
   const photos = mainphotourl
     ? [{ orgurl: mainphotourl }]
-    : place?.placeDetail?.photo?.photoList[0]?.list || null;
+    : place?.photo?.photoList && place.photo.photoList.length > 0
+      ? place.photo.photoList[0]?.list || null
+      : null;
 
   // 현재 사용자의 좋아요 여부
-  const isLiked = likedBy.some((id: number) => id === user?.id);
+  const isLiked = place?.likedBy?.some((id: number) => id === user?.id);
 
   // 공유 url 복사
 
@@ -48,7 +45,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
     <div>
       {photos && photos[0] && (
         <div className='aspect-video'>
-          {photos.length === 1 && (
+          {photos?.length === 1 && (
             <Image
               src={photos[0].orgurl}
               alt={`메인 장소 이미지`}
@@ -57,7 +54,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
               className={`h-full w-full object-cover`}
             />
           )}
-          {photos.length > 1 && (
+          {photos?.length > 1 && (
             <Carousel
               className='aspect-video w-full overflow-hidden object-cover object-center'
               placeholder={undefined}
@@ -96,12 +93,10 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
           <span className='flex items-center'>
             <span className='basis-full'>
               <span className='mr-2 text-xl font-bold'>{place?.placeName}</span>
-              <span className='text-gray-500'>
-                {place?.placeInfo?.categoryName}
-              </span>
+              <span className='text-gray-500'>{place?.categoryName}</span>
             </span>
             {user &&
-              !place?.reviews.some(
+              place?.reviews?.some(
                 (review: IReview) => review.authorId === user.id,
               ) && (
                 <Link
@@ -120,11 +115,11 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
               )}
           </span>
           <span className='mb-3 mt-2 flex items-center gap-2 text-sm font-light text-gray-800'>
-            <span>찜 {likedBy.length}</span>
+            <span>찜 {place?.likedBy?.length}</span>
             <span className='mb-[2px] text-gray-400'>|</span>
-            <span>리뷰 수 {place?.reviews.length}</span>
+            <span>리뷰 수 {place?.reviews?.length}</span>
             <span className='mb-[2px] text-gray-400'>|</span>
-            <span>일기 수 {place?.diaries.length}</span>
+            <span>일기 수 {place?.diaries?.length}</span>
           </span>
           {/* 태그 */}
           <span className='flex flex-wrap gap-1'>

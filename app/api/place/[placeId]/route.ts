@@ -9,31 +9,27 @@ export async function GET(
   try {
     const placeDetail = await prisma.placeDetail.findFirst({
       where: {
-        placeId,
+        id: placeId,
       },
       include: {
-        placeInfo: true,
         reviews: {
-          include: {
-            author: true,
-          },
+          include: { author: true },
         },
-        diaries: true,
+        diaries: {
+          include: { author: true, comments: true },
+        },
       },
     });
 
     if (!placeDetail) {
       return NextResponse.json(
-        { message: 'PlaceDetail을 찾을 수 없습니다' },
+        { message: 'placeId에 해당하는 데이터를 찾을 수 없습니다' },
         { status: 404 },
       );
     }
 
     return NextResponse.json(placeDetail, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: 'PlaceDetail을 가져오는데 실패했습니다 : 서버 내부 오류' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
   }
 }

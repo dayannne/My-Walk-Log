@@ -7,13 +7,13 @@ import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 
 import MarkerInfo from '../_component/common/MarkerInfo';
 import { useParams, useRouter } from 'next/navigation';
-import { useSearchPlace } from '../store/server/place';
+import { useCreatePlace } from '../store/server/place';
 import { SearchType } from '../shared/types/map';
 
 const useSearchPlaces = () => {
   const router = useRouter();
   const mapContext = useMap();
-  const { mutate: searchPlace } = useSearchPlace();
+  const { mutate: createPlace } = useCreatePlace();
   const { createClusterer } = useMarkerClusterer();
   const location = mapContext?.mapData?.getCenter();
   const keyword = decodeURIComponent(useParams()?.keyword as string);
@@ -55,8 +55,9 @@ const useSearchPlaces = () => {
         return alert('검색 결과가 존재하지 않습니다.');
       }
 
-      searchPlace(filteredPlaces);
+      mapContext?.setPlaces(filteredPlaces);
       displayMarkers(filteredPlaces);
+      createPlace(filteredPlaces);
     } else {
       if (status === kakao.maps.services.Status.ZERO_RESULT) {
         return alert('검색 결과가 존재하지 않습니다.');

@@ -7,8 +7,8 @@ export interface IMapContextValue {
   setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];
   setOverlays: (overlays: kakao.maps.CustomOverlay[]) => void;
-  places: IPlace[];
-  setPlaces: React.Dispatch<React.SetStateAction<IPlace[]>>;
+  places: IPlaceInfo[];
+  setPlaces: React.Dispatch<React.SetStateAction<IPlaceInfo[]>>;
   prevKeyword: string[];
   setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
   currLocation: kakao.maps.LatLng | null;
@@ -31,7 +31,7 @@ export interface IMarker {
   content: string;
 }
 
-export interface IPlace {
+export interface IPlaceInfo {
   address_name: string;
   category_group_code?: string;
   category_group_name?: string;
@@ -44,9 +44,6 @@ export interface IPlace {
   road_address_name: string;
   x: string;
   y: string;
-  reviews: [];
-  diaries: [];
-  placeDetail: any;
 }
 
 export type SearchType = 'SEARCH_AGAIN' | 'SEARCH' | 'SEARCH_CATEGORY';

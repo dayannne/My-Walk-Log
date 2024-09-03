@@ -24,7 +24,7 @@ export interface ReviewListProps {
 
 const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const { user } = useUserStore();
-  const { mutate: createLike } = useCreateReviewLike();
+  const pathname = usePathname().split('/');
   const { mutate: deleteLike } = useDeleteReviewLike();
   const { mutate: deleteReview } = useDeleteReview();
   const { open, handleOpen, handleClose } = useModal();
@@ -35,6 +35,8 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   };
 
   return (
+    <>
+      {reviews && (
     <ul className='bg-white'>
       {reviews.map((review: any) => (
         <li
@@ -56,7 +58,11 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                   {review.author.username}
                 </span>
                 <span className='text-xs text-gray-600'>
-                  리뷰 {review.author.reviews.length}
+                      {`${formatDate(review.createdAt).year}년 ${
+                        formatDate(review.createdAt).month
+                      }월 ${formatDate(review.createdAt).day}일 (${
+                        formatDate(review.createdAt).dayOfWeek
+                      })`}
                 </span>
               </div>
               {/* <div className='bg-hover text-olive-green shrink-0 rounded-lg px-3 py-1 text-xs font-medium'>
@@ -85,7 +91,9 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                     <span
                       key={i}
                       className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                        activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
+                            activeIndex === i
+                              ? 'w-8 bg-white'
+                              : 'w-4 bg-white/50'
                       }`}
                       onClick={() => setActiveIndex(i)}
                     />
@@ -133,7 +141,10 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
               {review.keywords.length > 0 &&
                 formatPlaceKeyword(review.keywords).map(
                   ({ key, value }: { key: number; value: string }) => (
-                    <span className='bg-hover rounded-md p-1 text-xs' key={key}>
+                        <span
+                          className='bg-hover rounded-md p-1 text-xs'
+                          key={key}
+                        >
                       {value}
                     </span>
                   ),
@@ -156,10 +167,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                       {review.placeDetail.placeName}
                     </span>
                     <span className='text-xs text-gray-600'>
-                      {
-                        review.placeDetail.placeDetail.basicInfo.address.region
-                          .fullname
-                      }
+                          {review.placeDetail.basicInfo.address.region.fullname}
                     </span>
                   </div>
                 </div>
@@ -228,6 +236,8 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
         </li>
       ))}
     </ul>
+      )}
+    </>
   );
 };
 

@@ -18,7 +18,6 @@ export async function GET(
             reviews: true,
           },
         },
-        place: true,
         placeDetail: true,
       },
     });

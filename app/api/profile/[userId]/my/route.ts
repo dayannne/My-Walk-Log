@@ -14,7 +14,6 @@ export async function GET(
       include: {
         reviews: {
           include: {
-            place: true,
             placeDetail: true,
           },
         },
@@ -36,9 +35,6 @@ export async function GET(
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: 'PlaceDetail을 가져오는데 실패했습니다 : 서버 내부 오류' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
   }
 }
