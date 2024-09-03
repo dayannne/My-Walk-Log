@@ -1,126 +1,107 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING") 
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   username       String
-  email          String   @unique
-  address         Json @default("{}")
-  introduction   String @default("")
+  email          String    @unique
+  address        Json      @default("{}")
+  introduction   String    @default("")
   profileImage   String?
   hashedPassword String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   likedReviews   Int[]
   likedDiaries   Int[]
   likedPlaces    String[]
 
   reviews        Review[]
-  diaries        Diary[]  @relation("author")
+  diaries        Diary[]   @relation("author")
   comment        Comment[] @relation("commentAuthor")
 }
 
-model Place {
-  id          String   @id 
-  placeName   String
-  categoryName String
-  address     String
-  roadAddress String
-  distance    String
-  x           String
-  y           String
-  reviews     Review[]
-  diaries     Diary[] 
-
-  placeDetail      PlaceDetail? 
-  @@unique([id], name: "PlaceDetail")
-}
-
 model PlaceDetail {
-  id                String   @id  
-  placeId String @unique
-  placeName         String
-  likedCount        Int      @default(0)
-  placeInfo            Place      @relation(fields: [placeId], references: [id], onDelete: Cascade)
-  placeDetail            Json
-  @@index([id], name: "id")
+  id             String   @id
+  placeName      String
+  categoryName   String   
+  address        String   
+  distance       String   
+  roadAddress    String   
+  x              String   
+  y              String   
+  likedBy        Int[]
+
+  mainphotourl   String?
+  findway        Json?     
+  basicInfo      Json?     
+  photo          Json?     
+
   reviews           Review[]
   diaries           Diary[]
-  likedBy            Int[]
-
 }
-
 
 model Review {
-  id           Int      @id @default(autoincrement())
-  reviewImages String[]
-  description  String
-  keywords     Int[]
-  walkDuration Int
-  entryFee     String?
-  likedCount   Int      @default(0)
-  likedBy      Int[]
-  
-  placeId      String
-  placeDetailId String
-  authorId     Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  place        Place?       @relation(fields: [placeId], references: [id])
-  placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
-  author       User         @relation(fields: [authorId], references: [id])
+  id             Int       @id @default(autoincrement())
+  reviewImages   String[]
+  description    String
+  keywords       Int[]
+  walkDuration   Int
+  entryFee       String?
+  likedCount     Int       @default(0)
+  likedBy        Int[]
+
+  placeId        String
+  placeDetailId  String
+  authorId       Int
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  placeDetail    PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  author         User         @relation(fields: [authorId], references: [id])
 }
 
-
 model Diary {
-  id           Int      @id @default(autoincrement())
-  authorId     Int
-  placeId      String  
-  placeDetailId String
-  diaryImages  String[]
-  content      String
-  weather      String
-  tags         String[]
-  isPublic     Boolean  @default(false)
+  id             Int       @id @default(autoincrement())
+  authorId       Int
+  placeId        String
+  placeDetailId  String
+  diaryImages    String[]
+  content        String
+  weather        String
+  tags           String[]
+  isPublic       Boolean   @default(false)
 
-  likedCount   Int      @default(0)
-  likedBy      Int[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  likedCount     Int       @default(0)
+  likedBy        Int[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  place        Place?       @relation(fields: [placeId], references: [id])
-  placeDetail  PlaceDetail? @relation(fields: [placeDetailId], references: [id])
-  comments     Comment[]  
-  author       User     @relation("author", fields: [authorId], references: [id])
-
+  placeDetail    PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  comments       Comment[]
+  author         User        @relation("author", fields: [authorId], references: [id])
 }
 
 model Comment {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   diaryId    Int
   authorId   Int
   content    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
-  diary      Diary    @relation(fields: [diaryId], references: [id])
-  author     User     @relation("commentAuthor", fields: [authorId], references: [id])
+  diary      Diary     @relation(fields: [diaryId], references: [id])
+  author     User      @relation("commentAuthor", fields: [authorId], references: [id])
 }
 
-
-
-model Trail{
-  ESNTL_ID           String @id 
+model Trail {
+  ESNTL_ID           String @id
   WLK_COURS_FLAG_NM  String
   WLK_COURS_NM       String
   COURS_DC           String
