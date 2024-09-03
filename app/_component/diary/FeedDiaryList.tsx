@@ -2,10 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { useGetAllDiary } from '@/app/store/server/diary';
-import {
-  useCreateDiaryLike,
-  useDeleteDiaryLike,
-} from '@/app/store/server/diary';
+import { useDiaryLike } from '@/app/store/server/diary';
 import { WEATHERS } from '@/app/shared/constant';
 import { formatTimeAgo } from '@/app/shared/function/format';
 import Link from 'next/link';
@@ -20,8 +17,7 @@ const FeedDiaryList = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useGetAllDiary();
   const { user } = useUserStore();
-  const { mutate: createLike } = useCreateDiaryLike();
-  const { mutate: deleteLike } = useDeleteDiaryLike();
+  const { mutate: toggleLike } = useDiaryLike();
 
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastDiaryElementRef = useRef<HTMLDivElement | null>(null);
@@ -108,16 +104,10 @@ const FeedDiaryList = () => {
                   <div className='flex items-center gap-1'>
                     <button
                       onClick={() =>
-                        diary.likedBy.some((id: number) => id === user?.id) ===
-                        true
-                          ? deleteLike({
-                              diaryId: diary.id,
-                              userId: user?.id as number,
-                            })
-                          : createLike({
-                              diaryId: diary.id,
-                              userId: user?.id as number,
-                            })
+                        toggleLike({
+                          diaryId: diary.id,
+                          userId: user?.id as number,
+                        })
                       }
                     >
                       <Image

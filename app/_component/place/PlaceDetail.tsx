@@ -17,6 +17,9 @@ import PleceReviewSummary from './PleceReviewSummary';
 import Image from 'next/image';
 
 const PlaceDetail = ({ placeId }: { placeId: string }) => {
+  const router = useRouter();
+  const keyword = decodeURIComponent(useParams()?.keyword as string);
+  const { placeMenu } = usePlaceMenuStore();
   const { data: place } = useSuspenseQuery({
     queryKey: ['place', placeId],
     queryFn: async () => {
@@ -24,37 +27,10 @@ const PlaceDetail = ({ placeId }: { placeId: string }) => {
       return response.json();
     },
   });
-  const { data: reviews } = useSuspenseQuery({
-    queryKey: ['reviews', placeId],
-    queryFn: async () => {
-      const response = await fetch(`/api/place/${placeId}/review`);
-      return response.json();
-    },
-  });
-  const { data: diaries } = useSuspenseQuery({
-    queryKey: ['diaries', placeId],
-    queryFn: async () => {
-      const response = await fetch(`/api/place/${placeId}/diary`);
-      return response.json();
-    },
-  });
-
-  const router = useRouter();
-  const keyword = decodeURIComponent(useParams()?.keyword as string);
-  const { placeMenu } = usePlaceMenuStore();
-  const { screenSize } = useSmallScreenCheck();
-
-  const [initialX, setInitialX] = useState<number>(
-    screenSize <= 1023 ? 120 : -120,
-  );
 
   const handleCloseButton = () => {
     router.push(`/place/search/${keyword}`);
   };
-
-  useEffect(() => {
-    setInitialX(screenSize <= 1023 ? 240 : -240);
-  }, [screenSize]);
 
   return (
     <div className='flex h-full w-full flex-col gap-2 bg-[#f0f0f3] lg:overflow-y-scroll'>
@@ -70,19 +46,19 @@ const PlaceDetail = ({ placeId }: { placeId: string }) => {
       )}
       {placeMenu === 1 && (
         <>
-          {reviews?.length === 0 ? (
+          {place?.reviews?.length === 0 ? (
             <EmptyReviews url={`${placeId}/review/form`} />
           ) : (
-            <ReviewList reviews={reviews} type='PLACE' />
+            <ReviewList reviews={place?.reviews} type='PLACE' />
           )}
         </>
       )}
       {placeMenu === 2 && (
         <>
-          {diaries?.length === 0 ? (
+          {place?.diaries?.length === 0 ? (
             <EmptyDiaries />
           ) : (
-            <DiaryList diaries={diaries} />
+            <DiaryList diaries={place?.diaries} />
           )}
         </>
       )}

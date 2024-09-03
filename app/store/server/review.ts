@@ -44,7 +44,7 @@ export const useCreateReview = () => {
   });
 };
 
-export const useCreateReviewLike = () => {
+export const useReviewLike = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -58,28 +58,7 @@ export const useCreateReviewLike = () => {
       return axios.post(`/api/review/${reviewId}/${userId}/like`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['review'] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-};
-
-export const useDeleteReviewLike = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      reviewId,
-      userId,
-    }: {
-      reviewId: number;
-      userId: number;
-    }) => {
-      return await axios.delete(`/api/review/${reviewId}/${userId}/unlike`);
-    },
-    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['place'] });
       queryClient.invalidateQueries({ queryKey: ['review'] });
     },
     onError: (error) => {

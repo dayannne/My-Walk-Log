@@ -62,7 +62,7 @@ export const useCreateDiary = () => {
   });
 };
 
-export const useCreateDiaryLike = () => {
+export const useDiaryLike = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -76,31 +76,9 @@ export const useCreateDiaryLike = () => {
       return axios.post(`/api/diary/like/${diaryId}/${userId}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['place'] });
       queryClient.invalidateQueries({ queryKey: ['diary'] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-};
-
-export const useDeleteDiaryLike = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      diaryId,
-      userId,
-    }: {
-      diaryId: number;
-      userId: number;
-    }) => {
-      return await axios.delete(`/api/diary/like/${diaryId}/${userId}`);
-    },
-    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-      queryClient.invalidateQueries({ queryKey: ['diary'] });
     },
     onError: (error) => {
       console.log(error);

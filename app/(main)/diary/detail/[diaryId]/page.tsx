@@ -6,9 +6,8 @@ import CommentList from '@/app/_component/diary/CommentList';
 import DiaryItem from '@/app/_component/diary/DiaryItem';
 import { useUserStore } from '@/app/store/client/user';
 import {
-  useCreateDiaryLike,
+  useDiaryLike,
   useDeleteDiary,
-  useDeleteDiaryLike,
   useGetDiaryDetail,
 } from '@/app/store/server/diary';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -21,8 +20,7 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { user } = useUserStore();
   const queryOptions = useGetDiaryDetail(params.diaryId);
   const { data: diary } = useSuspenseQuery(queryOptions);
-  const { mutate: createLike } = useCreateDiaryLike();
-  const { mutate: deleteLike } = useDeleteDiaryLike();
+  const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const [content, setContent] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
@@ -39,15 +37,10 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
             diary={diary}
             onConfirm={handleConfirm}
             onClick={() =>
-              diary.likedBy.some((id: number) => id === user?.id) === true
-                ? deleteLike({
-                    diaryId: diary.id,
-                    userId: user?.id as number,
-                  })
-                : createLike({
-                    diaryId: diary.id,
-                    userId: user?.id as number,
-                  })
+              toggleLike({
+                diaryId: diary.id,
+                userId: user?.id as number,
+              })
             }
           />
         )}

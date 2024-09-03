@@ -15,8 +15,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { mainphotourl, tags } = place?.basicInfo || {};
 
   // API 요청
-  const { mutate: createLike } = useCreatePlaceLike();
-  const { mutate: deleteLike } = useDeletePlaceLike();
+  const { mutate: toggleLike } = usePlaceLike();
 
   // 사진 데이터 필터링
   const photos = mainphotourl
@@ -138,11 +137,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
         <div className='border-gray-240 flex border-t border-solid border-gray-200 py-2'>
           <button
             className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'
-            onClick={() =>
-              isLiked
-                ? deleteLike({ placeId, userId: user?.id as number })
-                : createLike({ placeId, userId: user?.id as number })
-            }
+            onClick={() => toggleLike({ placeId, userId: user?.id as number })}
           >
             <Image
               className='w-5'
