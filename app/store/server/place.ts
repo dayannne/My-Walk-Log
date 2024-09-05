@@ -1,4 +1,3 @@
-import { useMap } from '@/app/shared/contexts/Map';
 import { IPlaceInfo } from '@/app/shared/types/map';
 
 import {

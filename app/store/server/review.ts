@@ -7,16 +7,6 @@ import {
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-export const useGetReviews = (placeId: string) =>
-  queryOptions({
-    queryKey: ['review', placeId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/place/${placeId}/review`);
-      return response.data;
-    },
-    staleTime: 0,
-  });
-
 export const useCreateReview = () => {
   const queryClient = useQueryClient();
   const router = useRouter();

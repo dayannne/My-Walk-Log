@@ -12,6 +12,7 @@ import { IDiaryReq } from '@/app/shared/types/diary';
 import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
 import { useCreateDiary } from '@/app/store/server/diary';
 import Header from '@/app/_component/common/Header';
+import { useQueryClient } from '@tanstack/react-query';
 
 const DiaryFormPage = () => {
   const {
@@ -25,10 +26,12 @@ const DiaryFormPage = () => {
   const router = useRouter();
   const { user } = useUserStore();
 
+  const queryClient = useQueryClient();
+  const { mutate: createDiary } = useCreateDiary();
+
   const weathers = Object.entries(WEATHERS);
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
-
   const {
     register,
     handleSubmit,
@@ -45,7 +48,7 @@ const DiaryFormPage = () => {
       tags: [],
     },
   });
-  const { mutate: createDiary } = useCreateDiary();
+
   const onSubmit = async (formData: IDiaryReq) => {
     // 이미지 업로드 받아오기
     const diaryImages = await uploadImage();
@@ -57,7 +60,13 @@ const DiaryFormPage = () => {
       diaryImages,
       tags: placeTags,
     };
-    createDiary(data);
+    createDiary(data, {
+      onSuccess: () => {
+        alert('일기가 기록되었습니다.');
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+        router.back();
+      },
+    });
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

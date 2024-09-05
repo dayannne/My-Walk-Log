@@ -1,3 +1,4 @@
+import { useGetPlace } from '@/app/store/server/place';
 import {
   dehydrate,
   HydrationBoundary,
@@ -16,27 +17,9 @@ const PlaceDetailLayout = async ({
   const { placeId } = params;
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['place', placeId],
-    queryFn: async () => {
-      const response = await fetch(`/api/place/${placeId}`);
-      return response.json();
-    },
-  });
-  await queryClient.prefetchQuery({
-    queryKey: ['reviews', placeId],
-    queryFn: async () => {
-      const response = await fetch(`/api/place/${placeId}/review`);
-      return response.json();
-    },
-  });
-  await queryClient.prefetchQuery({
-    queryKey: ['diaries', placeId],
-    queryFn: async () => {
-      const response = await fetch(`/api/place/${placeId}/diary`);
-      return response.json();
-    },
-  });
+  const queryOptions = useGetPlace(placeId);
+  await queryClient.prefetchQuery(queryOptions);
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       {children}

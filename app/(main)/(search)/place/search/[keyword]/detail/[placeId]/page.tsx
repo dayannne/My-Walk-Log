@@ -2,6 +2,8 @@
 
 import PlaceDetail from '@/app/_component/place/PlaceDetail';
 import useSmallScreenCheck from '@/app/_hooks/useSmallScreenCheck';
+import { useGetPlace } from '@/app/store/server/place';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 
 import { useEffect, useState } from 'react';
@@ -9,6 +11,8 @@ import { useEffect, useState } from 'react';
 const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   const { placeId } = params;
   const { screenSize } = useSmallScreenCheck();
+  const queryOptions = useGetPlace(placeId);
+  const { data: place } = useSuspenseQuery(queryOptions);
   const [initialX, setInitialX] = useState<number>(
     screenSize <= 1023 ? 120 : -120,
   );
@@ -27,7 +31,7 @@ const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
         transition={{ ease: 'easeOut', duration: 0.5 }}
       >
         <div className='h-full w-full rounded-xl border-l border-solid border-gray-200 lg:overflow-hidden lg:shadow-2xl'>
-          <PlaceDetail placeId={placeId} />
+          <PlaceDetail place={place} placeId={placeId} />
         </div>
       </motion.div>
     </>

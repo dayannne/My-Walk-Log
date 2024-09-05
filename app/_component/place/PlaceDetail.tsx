@@ -16,17 +16,10 @@ import PlaceFindWayInfo from './PlaceFindWayInfo';
 import PleceReviewSummary from './PleceReviewSummary';
 import Image from 'next/image';
 
-const PlaceDetail = ({ placeId }: { placeId: string }) => {
+const PlaceDetail = ({ place, placeId }: { place: any; placeId: string }) => {
   const router = useRouter();
   const keyword = decodeURIComponent(useParams()?.keyword as string);
   const { placeMenu } = usePlaceMenuStore();
-  const { data: place } = useSuspenseQuery({
-    queryKey: ['place', placeId],
-    queryFn: async () => {
-      const response = await fetch(`/api/place/${placeId}`);
-      return response.json();
-    },
-  });
 
   const handleCloseButton = () => {
     router.push(`/place/search/${keyword}`);

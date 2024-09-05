@@ -11,6 +11,8 @@ import AreaSearch from '@/app/_component/common/AreaSearch/AreaSearch';
 import { useEditProfile } from '@/app/store/server/profile';
 import { useEffect, useState } from 'react';
 import Header from '@/app/_component/common/Header';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUserStore } from '@/app/store/client/user';
 
 const EditProfilePage = () => {
   const router = useRouter();
@@ -22,8 +24,10 @@ const EditProfilePage = () => {
     uploadImage,
     removeImage,
   } = useImageUpload();
+  const { user } = useUserStore();
   const { profile } = useProfileStore();
-  const { mutate: editProfile } = useEditProfile();
+  const queryClient = useQueryClient();
+  const { mutate: editProfile } = useEditProfile(user?.id as number);
   const [address, setAddress] = useState<IAddress | null>(null);
 
   const methods = useForm<IProfileReq>({
@@ -40,7 +44,6 @@ const EditProfilePage = () => {
   const {
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors, isValid },
   } = methods;
 
@@ -62,13 +65,19 @@ const EditProfilePage = () => {
 
     const data: IProfileReq = {
       ...formData,
-      profileImage: profileImage.isArray()
+      profileImage: Array.isArray(profileImage)
         ? profileImage[0]
         : profile.profileImage,
       ...(address && { address }),
     };
 
-    editProfile(data);
+    editProfile(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+        alert('프로필이 수정되었습니다.');
+        router.push(`/profile/my`);
+      },
+    });
   };
 
   useEffect(() => {

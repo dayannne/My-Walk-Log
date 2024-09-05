@@ -7,17 +7,7 @@ import {
   useInfiniteQuery,
 } from '@tanstack/react-query';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-
-export const useGetDiary = (placeId: string) =>
-  queryOptions({
-    queryKey: ['diary', placeId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/place/${placeId}/diary`);
-      return response.data;
-    },
-    staleTime: 0,
-  });
+// import { useRouter } from 'next/navigation';
 
 export const useGetDiaryDetail = (diaryId: number) =>
   queryOptions({
@@ -26,7 +16,6 @@ export const useGetDiaryDetail = (diaryId: number) =>
       const response = await axios.get(`/api/diary/${diaryId}`);
       return response.data;
     },
-    staleTime: 0,
   });
 
 export const useGetAllDiary = () =>
@@ -41,21 +30,15 @@ export const useGetAllDiary = () =>
       return page < totalPages ? page + 1 : undefined;
     },
     initialPageParam: 1,
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });
 
 export const useCreateDiary = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: async (data: IDiaryReq) => {
       return await axios.post(`/api/diary/write`, data);
     },
-    onSuccess: () => {
-      alert('일기가 기록되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-      router.back();
-    },
+    onSuccess: () => {},
     onError: (error) => {
       console.log(error);
     },
