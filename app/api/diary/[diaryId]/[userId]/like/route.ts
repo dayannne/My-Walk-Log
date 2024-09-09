@@ -19,7 +19,6 @@ export async function POST(
       },
     );
   }
-
   try {
     // 사용자의 likedDiaries와 일기의 likedBy를 동시에 조회
     const [diary, user] = await Promise.all([

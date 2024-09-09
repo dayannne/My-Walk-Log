@@ -56,7 +56,7 @@ export const useDiaryLike = () => {
       diaryId: number;
       userId: number;
     }) => {
-      return axios.post(`/api/diary/like/${diaryId}/${userId}`);
+      return axios.post(`/api/diary/${diaryId}/${userId}/like`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['place'] });
@@ -80,7 +80,7 @@ export const useDeleteDiary = () => {
       diaryId: number;
       userId: number;
     }) => {
-      return await axios.delete(`/api/diary/delete/${diaryId}/${userId}`);
+      return await axios.delete(`/api/diary/${diaryId}/${userId}/delete`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });

@@ -20,7 +20,7 @@ export const useCreateReview = () => {
       userId: number;
       data: IReviewReq;
     }) => {
-      return await axios.post(`/api/place/${placeId}/review/${userId}`, data);
+      return await axios.post(`/api/place/${placeId}/${userId}/review`, data);
     },
     onSuccess: () => {
       alert('리뷰가 등록되었습니다.');
