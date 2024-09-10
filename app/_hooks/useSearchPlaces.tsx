@@ -105,13 +105,17 @@ const useSearchPlaces = () => {
   };
 
   const clearMarkersAndInfo = () => {
+    if (mapContext?.markerClusterer) {
+      mapContext?.markerClusterer.setMap(null);
+      mapContext?.setMarkerClusterer(null);
+    }
     if (mapContext?.overlays) {
       mapContext?.overlays.forEach((overlay) => overlay.setMap(null));
       mapContext?.setOverlays([]);
     }
   };
 
-  return { searchPlaces, displayMarkers };
+  return { searchPlaces, displayMarkers, clearMarkersAndInfo };
 };
 
 export default useSearchPlaces;

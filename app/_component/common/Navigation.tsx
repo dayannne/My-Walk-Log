@@ -2,14 +2,16 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useUserStore } from '@/app/store/client/user';
 import { useState } from 'react';
+import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
 const Navigation = () => {
   const pathname = usePathname();
   const { user } = useUserStore();
   const [isHovered, setIsHovered] = useState('');
+  const { clearMarkersAndInfo } = useSearchPlaces();
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const { id } = e.currentTarget;
@@ -47,6 +49,7 @@ const Navigation = () => {
           href={'/feed'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          onClick={clearMarkersAndInfo}
         >
           <Image
             src={
@@ -113,6 +116,7 @@ const Navigation = () => {
             width={30}
             height={30}
             alt='산책로 아이콘'
+            onClick={clearMarkersAndInfo}
           />
           산책로
         </Link>
@@ -141,7 +145,8 @@ const Navigation = () => {
         ) : (
           <Link
             href='/login'
-            className={`flex basis-full flex-col items-center justify-center gap-1 border-t border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto`}
+            className={`-solid flex basis-full flex-col items-center justify-center gap-1 border border-t border-gray-300 p-2 lg:h-20 lg:basis-auto`}
+            onClick={clearMarkersAndInfo}
           >
             <Image
               className='rounded-full'
