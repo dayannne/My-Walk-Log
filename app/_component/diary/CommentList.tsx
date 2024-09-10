@@ -4,8 +4,8 @@ import { Fragment } from 'react';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
 import { useUserStore } from '@/app/store/client/user';
-import useModal from '@/app/_hooks/useModal';
 import { useDeleteComment } from '@/app/store/server/comment';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface CommentListProps {
   diaryId: number;
@@ -21,7 +21,7 @@ const CommentList = ({
   setEditId,
 }: CommentListProps) => {
   const { user } = useUserStore();
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
   const { mutate: deleteComment } = useDeleteComment();
 
   const handleConfirm = (commentId: number) => {
@@ -66,14 +66,14 @@ const CommentList = ({
                     setContent(comment.content);
                   }}
                   secondMenu='댓글 삭제하기'
-                  secondMenuClose={handleOpen}
+                  secondMenuClose={() => setOpen(true)}
                 />
               )}
               <ConfirmModal
                 description='정말로 삭제하시겠습니까?'
                 onConfirm={() => handleConfirm(comment.id)}
                 open={open}
-                handleClose={handleClose}
+                handleClose={() => setOpen(false)}
               />
             </div>
             <p className='text-sm'>

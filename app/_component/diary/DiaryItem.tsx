@@ -6,7 +6,7 @@ import Link from 'next/link';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
 import { useUserStore } from '@/app/store/client/user';
-import useModal from '@/app/_hooks/useModal';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface DiaryItemProps {
   diary: any;
@@ -16,7 +16,7 @@ export interface DiaryItemProps {
 
 const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
   const { user } = useUserStore();
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
 
   return (
     <li
@@ -43,13 +43,16 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           </div>
         </div>
         {user?.id && user?.id === diary.authorId && (
-          <MenuModal firstMenu='일기 삭제하기' firstMenuClose={handleOpen} />
+          <MenuModal
+            firstMenu='일기 삭제하기'
+            firstMenuClose={() => setOpen(true)}
+          />
         )}
         <ConfirmModal
           description='정말로 삭제하시겠습니까?'
           onConfirm={() => onConfirm(diary.id)}
           open={open}
-          handleClose={handleClose}
+          handleClose={() => setOpen(false)}
         />
       </div>
       <Link className='flex flex-col gap-2' href={`/diary/detail/${diary.id}`}>
