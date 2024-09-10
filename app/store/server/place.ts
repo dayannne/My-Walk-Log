@@ -20,7 +20,7 @@ export const useGetPlace = (placeId: string) =>
 export const useCreatePlace = () => {
   return useMutation({
     mutationFn: async (data: IPlaceInfo[]) => {
-      const result = await axios.post('/api/search/result', data);
+      const result = await axios.post('/api/place/search/result', data);
       return result;
     },
     onSuccess: async () => {},
