@@ -5,38 +5,13 @@ import React from 'react';
 import { useMap } from '@/app/shared/contexts/Map';
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 import { useParams } from 'next/navigation';
-import { useUserStore } from '@/app/store/client/user';
+import HighlightText from '../../common/HighlightText';
 
 const SearchResult = () => {
   const mapContext = useMap();
   const keyword = decodeURIComponent(useParams().keyword as string);
-
-  const HighlightText = ({
-    text,
-    highlight,
-  }: {
-    text: string;
-    highlight: string;
-  }) => {
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-
-    return (
-      <>
-        {parts.map((part, index) =>
-          part.toLowerCase() === highlight.toLowerCase() ? (
-            <strong className='font-bold' key={`text-${index}`}>
-              {part}
-            </strong>
-          ) : (
-            part
-          ),
-        )}
-      </>
-    );
-  };
 
   const CategoryFilter = ({ category }: { category: string }) => {
     const categories = category.split(' > ');

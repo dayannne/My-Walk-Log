@@ -42,7 +42,7 @@ const SearchForm = () => {
           onChange={handleInputChange}
           size={15}
           className='basis-full rounded-full pl-1 outline-none'
-          placeholder='장소 검색하기'
+          placeholder='산책 장소 검색하기'
         />
         <button
           type='submit'

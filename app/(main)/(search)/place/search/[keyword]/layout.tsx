@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 import { useParams, usePathname } from 'next/navigation';
 import { useMap } from '@/app/shared/contexts/Map';
-import SearchResult from '@/app/_component/search/SearchResult';
+import SearchResult from '@/app/_component/place/search/SearchResult';
 
 export interface layoutProps {
   children: React.ReactNode;
