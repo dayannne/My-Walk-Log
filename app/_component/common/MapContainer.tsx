@@ -3,9 +3,13 @@
 import React, { useEffect } from 'react';
 import { useMap } from '@/app/shared/contexts/Map';
 import useGeolocation from '@/app/_hooks/useGeolocation';
+import SearchCategory from '../place/search/SearchCategory';
+import SearchAgainButton from '../place/search/SearchAgainButton';
+import { usePathname } from 'next/navigation';
 
 const MapContainer: React.FC = () => {
   const { location } = useGeolocation();
+  const pathname = usePathname();
 
   const { mapEl, setMapData, setCurrLocation, setPrevLocation } = useMap()!;
 
@@ -44,7 +48,17 @@ const MapContainer: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location?.latitude, location?.longitude]);
 
-  return <div id='map' ref={mapEl} className='relative h-full w-full'></div>;
+  return (
+    <>
+      {pathname.includes('place') && (
+        <>
+          <SearchCategory />
+          <SearchAgainButton />
+        </>
+      )}
+      <div id='map' ref={mapEl} className='relative h-full w-full'></div>
+    </>
+  );
 };
 
 export default MapContainer;

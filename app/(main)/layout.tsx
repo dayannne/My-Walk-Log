@@ -18,11 +18,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <div
             className={`relative z-0 flex basis-full overflow-y-auto lg:flex lg:overflow-hidden`}
           >
-            <div className={`basis-full`}>
-              <SearchCategory />
-              <SearchAgainButton />
-              <MapContainer />
-            </div>
+            <MapContainer />
           </div>
         </main>
       </div>
