@@ -1,29 +1,21 @@
 import { useMap } from '../shared/contexts/Map';
 import { useEffect, useState } from 'react';
+import { ITrailInfo } from '../shared/types/trail';
+import { useModalStore } from '../store/client/modal';
 
 const useSearchTrail = () => {
   const mapContext = useMap();
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const { handleOpenInfo } = useModalStore();
 
-  useEffect(() => {
-    // Kakao Maps API 로드 여부 확인
-    if (typeof kakao !== 'undefined' && kakao.maps) {
-      setIsMapLoaded(true); // Kakao Maps API가 로드되었음을 표시
-    }
-  }, []);
-
-  const displayTrailMarkers = (trails: any[]) => {
-    if (!isMapLoaded) return; // Kakao Maps가 로드되지 않으면 아무 작업도 하지 않음
-
+  const displayTrailMarkers = (trails: ITrailInfo[]) => {
     const { mapData } = mapContext!;
     const newBounds = new kakao.maps.LatLngBounds();
 
-    trails.forEach((trail) => {
+    trails?.forEach((trail) => {
       const position = new kakao.maps.LatLng(
-        parseFloat(trail.COURS_SPOT_LA),
-        parseFloat(trail.COURS_SPOT_LO),
+        parseFloat(trail.COURS_SPOT_LA as string),
+        parseFloat(trail.COURS_SPOT_LO as string),
       );
-
       const imageSrc = '/icons/icon-marker.svg',
         imageSize = new kakao.maps.Size(56, 56),
         imageOption = { offset: new kakao.maps.Point(27, 54) };
@@ -34,9 +26,15 @@ const useSearchTrail = () => {
       );
 
       const marker = new kakao.maps.Marker({
+        map: mapData as kakao.maps.Map,
         position: position,
         image: markerImage,
       });
+      kakao.maps.event.addListener(marker, 'click', () => {
+        mapData?.panTo(position);
+        handleOpenInfo(trail);
+      });
+
       marker.setMap(mapData);
       newBounds?.extend(position);
     });

@@ -4,27 +4,30 @@ import useSearchTrail from '@/app/_hooks/useSearchTrail';
 import { useGetTrail } from '@/app/store/server/trail';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import HighlightText from '../../common/HighlightText';
 import { useModalStore } from '@/app/store/client/modal';
 import TrailModal from '../TrailModal';
+import { useMap } from '@/app/shared/contexts/Map';
 
 export interface SearchResultProps {}
 
 const SearchResult = ({}: SearchResultProps) => {
+  const mapContext = useMap();
   const keyword = decodeURIComponent(useParams().keyword as string);
   const queryOptions = useGetTrail(keyword);
   const { data: trails } = useSuspenseQuery(queryOptions);
   const { displayTrailMarkers } = useSearchTrail();
-  const { openInfo, handleOpenInfo, handleCloseInfo } = useModalStore();
+  const { openInfo, handleOpenInfo } = useModalStore();
 
+  // 산책로 마커
   useEffect(() => {
-    if (trails && keyword) {
-      console.log(trails, keyword);
+    const hasMapData = mapContext?.mapData;
+    if (hasMapData && trails && keyword) {
       displayTrailMarkers(trails);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trails, keyword]);
+  }, [mapContext?.mapData, trails, keyword]);
 
   return (
     <>
@@ -36,7 +39,14 @@ const SearchResult = ({}: SearchResultProps) => {
           >
             <button
               className='flex basis-full flex-col'
-              onClick={() => handleOpenInfo(trail)}
+              onClick={() => {
+                const position = new kakao.maps.LatLng(
+                  parseFloat(trail.COURS_SPOT_LA as string),
+                  parseFloat(trail.COURS_SPOT_LO as string),
+                );
+                mapContext?.mapData?.panTo(position);
+                handleOpenInfo(trail);
+              }}
             >
               <div className='items-center gap-1'>
                 <span className='mr-1 lg:text-base'>

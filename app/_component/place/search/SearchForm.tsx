@@ -3,20 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-
 import { useParams, useRouter } from 'next/navigation';
 
 const SearchForm = () => {
   const router = useRouter();
   const prevKeyword = useParams().keyword as string;
-  const { searchPlaces } = useSearchPlaces();
-
   const [keyword, setKeyword] = useState('');
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    searchPlaces(keyword, 'SEARCH');
     router.push(`/place/search/${keyword}`);
   };
 

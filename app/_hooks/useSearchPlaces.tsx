@@ -1,16 +1,15 @@
 import ReactDOMServer from 'react-dom/server';
-
+import { useState } from 'react';
 import { useMap } from '../shared/contexts/Map';
 import useMarkerClusterer from './useMarkerClusterer';
-
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
-
 import MarkerInfo from '../_component/common/MarkerInfo';
 import { useParams, useRouter } from 'next/navigation';
 import { useCreatePlace } from '../store/server/place';
 import { SearchType } from '../shared/types/map';
 
 const useSearchPlaces = () => {
+  const [places, setPlaces] = useState<any[]>([]); // places 상태 추가
   const router = useRouter();
   const mapContext = useMap();
   const { mutate: createPlace } = useCreatePlace();
@@ -22,10 +21,10 @@ const useSearchPlaces = () => {
     if (keyword !== '') {
       const { mapData, setPrevKeyword, setPrevLocation } = mapContext!;
 
-      const places = new kakao.maps.services.Places();
+      const placesService = new kakao.maps.services.Places();
       const bounds = mapData?.getBounds();
 
-      places.keywordSearch(keyword, searchPlacesCB, {
+      placesService.keywordSearch(keyword, searchPlacesCB, {
         location: type === 'SEARCH_AGAIN' ? location : undefined,
         bounds:
           type === 'SEARCH_AGAIN' || type === 'SEARCH_CATEGORY'
@@ -55,7 +54,7 @@ const useSearchPlaces = () => {
         return alert('검색 결과가 존재하지 않습니다.');
       }
 
-      mapContext?.setPlaces(filteredPlaces);
+      setPlaces(filteredPlaces);
       displayMarkers(filteredPlaces);
       createPlace(filteredPlaces);
     } else {
@@ -115,7 +114,7 @@ const useSearchPlaces = () => {
     }
   };
 
-  return { searchPlaces, displayMarkers, clearMarkersAndInfo };
+  return { searchPlaces, displayMarkers, clearMarkersAndInfo, places }; // places 반환
 };
 
 export default useSearchPlaces;
