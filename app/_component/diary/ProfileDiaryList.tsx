@@ -1,11 +1,7 @@
 import { WEATHERS } from '@/app/shared/constant';
 import { formatDate } from '@/app/shared/function/format';
 import { useUserStore } from '@/app/store/client/user';
-import {
-  useCreateDiaryLike,
-  useDeleteDiary,
-  useDeleteDiaryLike,
-} from '@/app/store/server/diary';
+import { useDiaryLike, useDeleteDiary } from '@/app/store/server/diary';
 import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import MenuModal from '../common/Modal/MenuModal';
@@ -20,8 +16,8 @@ export interface ProfileDiaryListProps {
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { user } = useUserStore();
-  const { mutate: createLike } = useCreateDiaryLike();
-  const { mutate: deleteLike } = useDeleteDiaryLike();
+  const { mutate: toggleLike } = useDiaryLike();
+
   const { mutate: deleteDiary } = useDeleteDiary();
   const { open, handleOpen, handleClose } = useModal();
   const pathname = usePathname().split('/');
@@ -140,10 +136,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                       {diary.placeDetail.placeName}
                     </span>
                     <span className='text-xs text-gray-600'>
-                      {
-                        diary.placeDetail.placeDetail.basicInfo.address.region
-                          .fullname
-                      }
+                      {diary.placeDetail.basicInfo.address.region.fullname}
                     </span>
                   </div>
                 </div>
@@ -162,16 +155,10 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                 <div className='flex items-center gap-1'>
                   <button
                     onClick={() =>
-                      diary.likedBy.some((id: number) => id === user?.id) ===
-                      true
-                        ? deleteLike({
-                            diaryId: diary.id,
-                            userId: user?.id as number,
-                          })
-                        : createLike({
-                            diaryId: diary.id,
-                            userId: user?.id as number,
-                          })
+                      toggleLike({
+                        diaryId: diary.id,
+                        userId: user?.id as number,
+                      })
                     }
                   >
                     <Image

@@ -6,14 +6,11 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const likedPlaces = url.searchParams.getAll('likedPlaces[]');
 
-    const places = await prisma.place.findMany({
+    const places = await prisma.placeDetail.findMany({
       where: {
         id: {
           in: likedPlaces,
         },
-      },
-      include: {
-        placeDetail: true,
       },
     });
 

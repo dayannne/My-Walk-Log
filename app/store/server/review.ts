@@ -7,16 +7,6 @@ import {
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-export const useGetReviews = (placeId: string) =>
-  queryOptions({
-    queryKey: ['review', placeId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/place/${placeId}/review`);
-      return response.data;
-    },
-    staleTime: 0,
-  });
-
 export const useCreateReview = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -30,7 +20,7 @@ export const useCreateReview = () => {
       userId: number;
       data: IReviewReq;
     }) => {
-      return await axios.post(`/api/place/${placeId}/review/${userId}`, data);
+      return await axios.post(`/api/place/${placeId}/${userId}/review`, data);
     },
     onSuccess: () => {
       alert('리뷰가 등록되었습니다.');
@@ -44,7 +34,7 @@ export const useCreateReview = () => {
   });
 };
 
-export const useCreateReviewLike = () => {
+export const useReviewLike = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -58,28 +48,7 @@ export const useCreateReviewLike = () => {
       return axios.post(`/api/review/${reviewId}/${userId}/like`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['review'] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-};
-
-export const useDeleteReviewLike = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      reviewId,
-      userId,
-    }: {
-      reviewId: number;
-      userId: number;
-    }) => {
-      return await axios.delete(`/api/review/${reviewId}/${userId}/unlike`);
-    },
-    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['place'] });
       queryClient.invalidateQueries({ queryKey: ['review'] });
     },
     onError: (error) => {

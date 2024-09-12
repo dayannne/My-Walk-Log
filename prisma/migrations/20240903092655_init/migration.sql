@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "PlaceDetail" ALTER COLUMN "basicInfo" DROP NOT NULL,
+ALTER COLUMN "findway" DROP NOT NULL,
+ALTER COLUMN "photo" DROP NOT NULL;

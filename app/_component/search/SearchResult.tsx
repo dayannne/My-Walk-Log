@@ -12,32 +12,29 @@ import { useUserStore } from '@/app/store/client/user';
 
 const SearchResult = () => {
   const mapContext = useMap();
-  const { user } = useUserStore();
   const keyword = decodeURIComponent(useParams().keyword as string);
 
   const HighlightText = ({
-    placeId,
     text,
     highlight,
   }: {
-    placeId: string;
     text: string;
     highlight: string;
   }) => {
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
 
     return (
-      <span className='mr-1 lg:text-base'>
+      <>
         {parts.map((part, index) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
-            <strong className='font-bold' key={`${placeId}-${index}`}>
+            <strong className='font-bold' key={`text-${index}`}>
               {part}
             </strong>
           ) : (
             part
           ),
         )}
-      </span>
+      </>
     );
   };
 
@@ -62,44 +59,25 @@ const SearchResult = () => {
               className='flex basis-full flex-col'
               href={`/place/search/${keyword}/detail/${place.id}`}
             >
-              <div className='max-w-60 items-center gap-1'>
-                <HighlightText
-                  placeId={place.id}
-                  text={place.placeName}
-                  highlight={keyword}
-                />
-                <CategoryFilter category={place.categoryName} />
+              <div className='items-center gap-1'>
+                <span className='mr-1 lg:text-base'>
+                  <HighlightText text={place.place_name} highlight={keyword} />
+                </span>
+                <CategoryFilter category={place.category_name} />
               </div>
-              <span className='mb-2 mt-1 flex items-center gap-2 text-xs font-light text-gray-800 lg:text-sm'>
-                <span>찜 {place.placeDetail.likedBy.length}</span>
-                <span className='mb-[2px] text-gray-400'>|</span>
-                <span>리뷰 수 {place.reviews.length}</span>
-                <span className='mb-[2px] text-gray-400'>|</span>
-                <span>일기 수 {place.diaries.length}</span>
+
+              <span className='mt-2 text-xs lg:text-sm'>
+                <HighlightText text={place.address_name} highlight={keyword} />
               </span>
-              <span className='text-xs lg:text-sm'>{place.address}</span>
-              {place.roadAdress && (
-                <span className='text-sm text-gray-500'>
-                  ({place.roadAdress})
+              {place.road_address_name !== '' && (
+                <span className='text-xs text-gray-500'>
+                  <HighlightText
+                    text={place.road_address_name}
+                    highlight={keyword}
+                  />
                 </span>
               )}
-              <span className='tel'>{place.phone}</span>
             </Link>
-            {user?.id && (
-              <div className='w-5'>
-                <Image
-                  className='w-full'
-                  src={
-                    place.placeDetail.likedBy.includes(user?.id)
-                      ? '/icons/icon-star-fill.svg'
-                      : '/icons/icon-star.svg'
-                  }
-                  width={32}
-                  height={32}
-                  alt='별모양 버튼'
-                />
-              </div>
-            )}
           </li>
         ))}
     </ul>
