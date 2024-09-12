@@ -89,6 +89,7 @@ video {
   font-size: 14px;
   font: inherit;
   vertical-align: baseline;
+  color: #333333;
 }
 /* HTML5 display-role reset for older browsers */
 article,

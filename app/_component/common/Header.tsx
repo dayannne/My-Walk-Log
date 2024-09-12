@@ -10,7 +10,7 @@ export interface HeaderProps {
 
 const Header = ({ title, children, enableBackButton }: HeaderProps) => {
   return (
-    <header className='text-olive-green sticky top-0 flex items-center justify-between bg-white p-4 text-base shadow-sm'>
+    <header className='sticky top-0 flex items-center justify-between bg-white p-4 text-base shadow-sm'>
       <div className='flex items-center gap-2'>
         {enableBackButton && <BackButton />}
         <Link
@@ -24,7 +24,7 @@ const Header = ({ title, children, enableBackButton }: HeaderProps) => {
             height={20}
           />
         </Link>
-        <span>{title}</span>
+        <span className='text-olive-green'>{title}</span>
       </div>
       {children}
     </header>
