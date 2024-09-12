@@ -2,7 +2,8 @@ export interface IMapContextValue {
   mapEl: React.RefObject<HTMLDivElement> | null;
   mapData: kakao.maps.Map | null;
   setMapData: React.Dispatch<React.SetStateAction<kakao.maps.Map | null>>;
-
+  markers: kakao.maps.Marker[];
+  setMarkers: (overlays: kakao.maps.Marker[]) => void;
   markerClusterer: kakao.maps.MarkerClusterer | null;
   setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];

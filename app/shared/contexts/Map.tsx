@@ -21,6 +21,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
   const { location } = useGeolocation();
   const mapEl = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
+  const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
   const [markerClusterer, setMarkerClusterer] =
     useState<kakao.maps.MarkerClusterer | null>(null);
   const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
@@ -65,6 +66,8 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
       mapEl,
       mapData: map,
       setMapData: setMap,
+      markers,
+      setMarkers,
       markerClusterer,
       setMarkerClusterer,
       overlays,
@@ -80,6 +83,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
     }),
     [
       map,
+      markers,
       markerClusterer,
       overlays,
       places,

@@ -6,12 +6,14 @@ import { usePathname } from 'next/navigation';
 import { useUserStore } from '@/app/store/client/user';
 import { useState } from 'react';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
+import useSearchTrail from '@/app/_hooks/useSearchTrail';
 
 const Navigation = () => {
   const pathname = usePathname();
   const { user } = useUserStore();
   const [isHovered, setIsHovered] = useState('');
   const { clearMarkersAndInfo } = useSearchPlaces();
+  const { clearMarkers } = useSearchTrail();
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const { id } = e.currentTarget;
@@ -29,6 +31,10 @@ const Navigation = () => {
         <Link
           className='h-20 w-full items-center justify-center border-b border-solid border-gray-200 p-1 lg:flex'
           href='/'
+          onClick={() => {
+            clearMarkers();
+            clearMarkersAndInfo();
+          }}
         >
           <Image
             src='/icons/icon-logo-mini(default).svg'
@@ -49,7 +55,10 @@ const Navigation = () => {
           href={'/feed'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          onClick={clearMarkersAndInfo}
+          onClick={() => {
+            clearMarkers();
+            clearMarkersAndInfo();
+          }}
         >
           <Image
             src={
@@ -77,6 +86,10 @@ const Navigation = () => {
           href={'/place'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          onClick={() => {
+            clearMarkers();
+            clearMarkersAndInfo();
+          }}
         >
           <Image
             src={
@@ -104,6 +117,10 @@ const Navigation = () => {
           href={'/trail'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          onClick={() => {
+            clearMarkers();
+            clearMarkersAndInfo();
+          }}
         >
           <Image
             src={
@@ -130,6 +147,10 @@ const Navigation = () => {
                 ? 'bg-olive-green text-white'
                 : 'hover:text-olive-green text-black'
             } `}
+            onClick={() => {
+              clearMarkers();
+              clearMarkersAndInfo();
+            }}
           >
             <Image
               className='aspect-square rounded-full object-cover'
@@ -146,7 +167,10 @@ const Navigation = () => {
           <Link
             href='/login'
             className={`-solid flex basis-full flex-col items-center justify-center gap-1 border border-t border-gray-300 p-2 lg:h-20 lg:basis-auto`}
-            onClick={clearMarkersAndInfo}
+            onClick={() => {
+              clearMarkers();
+              clearMarkersAndInfo();
+            }}
           >
             <Image
               className='rounded-full'

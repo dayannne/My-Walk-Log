@@ -22,6 +22,8 @@ const SearchForm = () => {
   useEffect(() => {
     if (prevKeyword) {
       setKeyword(decodeURIComponent(prevKeyword));
+    } else {
+      setKeyword('');
     }
   }, [prevKeyword]);
 

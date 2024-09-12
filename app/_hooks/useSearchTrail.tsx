@@ -1,5 +1,5 @@
 import { useMap } from '../shared/contexts/Map';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ITrailInfo } from '../shared/types/trail';
 import { useModalStore } from '../store/client/modal';
 
@@ -10,6 +10,11 @@ const useSearchTrail = () => {
   const displayTrailMarkers = (trails: ITrailInfo[]) => {
     const { mapData } = mapContext!;
     const newBounds = new kakao.maps.LatLngBounds();
+
+    // Clear existing markers
+    clearMarkers();
+
+    const newMarkers: kakao.maps.Marker[] = [];
 
     trails?.forEach((trail) => {
       const position = new kakao.maps.LatLng(
@@ -37,12 +42,19 @@ const useSearchTrail = () => {
 
       marker.setMap(mapData);
       newBounds?.extend(position);
+      newMarkers.push(marker); // Add marker to array
     });
 
     mapData?.setBounds(newBounds);
+    mapContext?.setMarkers(newMarkers); // Update markers in context
   };
 
-  return { displayTrailMarkers };
+  const clearMarkers = () => {
+    mapContext?.markers.forEach((marker) => marker.setMap(null));
+    mapContext?.setMarkers([]);
+  };
+
+  return { displayTrailMarkers, clearMarkers };
 };
 
 export default useSearchTrail;
