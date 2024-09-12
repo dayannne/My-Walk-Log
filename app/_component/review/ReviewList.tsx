@@ -110,17 +110,17 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
               )}
 
               <div className='flex flex-col gap-2 text-sm'>
-                <div className='flex items-center gap-1 text-xs text-gray-600'>
-                  <span className='flex gap-1'>
+                <div className='flex items-center gap-1 text-xs'>
+                  <span className='flex gap-1 text-gray-600'>
                     입장료
-                    <span className='font-medium'>
+                    <span className='font-medium text-gray-600'>
                       {filterEntryFee(review.entryFee)}
                     </span>
                   </span>
                   <span className='mt-[2px] h-3 w-[1px] bg-gray-400'></span>
-                  <span className='flex gap-1'>
+                  <span className='flex gap-1 text-gray-600'>
                     산책 시간
-                    <span className='font-medium'>
+                    <span className='font-medium text-gray-600'>
                       {WALK_DURATIONS[review.walkDuration as number]}
                     </span>
                   </span>

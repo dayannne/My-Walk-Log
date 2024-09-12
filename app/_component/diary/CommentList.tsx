@@ -49,13 +49,15 @@ const CommentList = ({
                 <span className='text-sm font-semibold'>
                   {comment.author.username}
                 </span>
-                <span className='flex gap-1 text-xs text-gray-600'>
-                  <span>
+                <span className='flex gap-1 text-xs'>
+                  <span className='text-gray-600'>
                     {JSON.parse(comment.author.address)
                       .areaName.split(' ')
                       .pop() || ''}
                   </span>
-                  <span> {formatTimeAgo(comment.createdAt)}</span>
+                  <span className='text-gray-600'>
+                    {formatTimeAgo(comment.createdAt)}
+                  </span>
                 </span>
               </div>
               {user?.id && user?.id === comment.authorId && (

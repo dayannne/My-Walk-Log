@@ -34,11 +34,17 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         />
         <div className='flex basis-full flex-col'>
           <div className='text-sm font-semibold'>{diary.author.username}</div>
-          <div className='flex gap-1 text-xs text-gray-600'>
-            <span>{formatTimeAgo(diary.createdAt)}</span>
+          <div className='flex gap-1 text-xs'>
+            <span className='text-gray-600'>
+              {formatTimeAgo(diary.createdAt)}
+            </span>
             <span>
-              <span>{WEATHERS[diary.weather].emoji}</span>
-              <span>{WEATHERS[diary.weather].name}</span>
+              <span className='text-gray-600'>
+                {WEATHERS[diary.weather].emoji}
+              </span>
+              <span className='text-gray-600'>
+                {WEATHERS[diary.weather].name}
+              </span>
             </span>
           </div>
         </div>
