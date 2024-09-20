@@ -11,13 +11,15 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import ReviewList from '@/app/_component/review/ReviewList';
 import EmptyReviews from '@/app/_component/review/EmptyReviews';
 import EmptyDiaries from '@/app/_component/diary/EmpryDiaries';
 import EmptyLikedPlaces from '@/app/_component/profile/EmptyLikedPlaces';
 import LikedPlaceList from '@/app/_component/profile/LikedPlaceList';
 import ProfileMenu from '@/app/_component/profile/ProfileMenu';
+import { useModalStore } from '@/app/store/client/modal';
+import PlaceDetail from '@/app/_component/place/PlaceDetail';
 
 export interface ProfilePageProps {}
 
@@ -25,22 +27,34 @@ const ProfilePage = ({}: ProfilePageProps) => {
   const { user } = useUserStore();
   const { setProfile } = useProfileStore();
   const { profileMenu } = useProfileMenuStore();
+  const { openInfo, setOpenInfo } = useModalStore();
 
   const queryOptions = useGetMyProfile(user?.id as number);
   const { data: profile } = useSuspenseQuery(queryOptions);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (profile) {
       setProfile(profile);
     }
-  }, [profile, setProfile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile]);
+
+  useEffect(() => {
+    if (loading) {
+      setOpenInfo(null);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   const { diaries, reviews, likedPlaces } = profile;
   const address = JSON.parse(profile?.address);
   return (
     <>
       {profile && (
-        <div className='flex flex-col gap-2 p-6'>
+        <div className='flex flex-col gap-2 bg-white p-6'>
           <div className='flex items-center gap-3'>
             <Image
               className='h-20 w-20 rounded-full object-cover object-center'
@@ -119,6 +133,7 @@ const ProfilePage = ({}: ProfilePageProps) => {
         ) : (
           <EmptyReviews url='/place' />
         ))}
+      {!loading && openInfo && <PlaceDetail placeId={openInfo} />}
     </>
   );
 };

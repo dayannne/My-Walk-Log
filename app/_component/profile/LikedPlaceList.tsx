@@ -1,8 +1,8 @@
+import { useModalStore } from '@/app/store/client/modal';
 import { useUserStore } from '@/app/store/client/user';
 import { useGetLikedPlaces, usePlaceLike } from '@/app/store/server/place';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface LikedPlaceListProps {
   likedPlaces: string[];
@@ -10,6 +10,7 @@ interface LikedPlaceListProps {
 
 const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
   const { user } = useUserStore();
+  const { setOpenInfo } = useModalStore();
   // API 요청
   const { mutate: toggleLike } = usePlaceLike();
   const queryOptions = useGetLikedPlaces(likedPlaces);
@@ -17,20 +18,21 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
 
   if (!places) return null;
   return (
-    <ul className='flex flex-col gap-2 px-4 py-2'>
+    <ul className='flex flex-col gap-2 bg-white px-4 py-2'>
       {places?.map((place: any) => (
         <li
           key={place.id}
           className='flex flex-col gap-2 rounded-xl border border-solid border-gray-300 p-2'
         >
           <div className='flex justify-between'>
-            <Link
+            <button
+              type='button'
               className='flex basis-full flex-col'
-              href={`/place/search/${place.placeName}/detail/${place.id}`}
+              onClick={() => setOpenInfo(place.id)}
             >
               <span className='text-sm font-medium'>{place.placeName}</span>
               <span className='text-xs'>{place.address}</span>
-            </Link>
+            </button>
             <button
               onClick={() =>
                 toggleLike({
@@ -52,7 +54,7 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
               />
             </button>
           </div>
-          <Link href={`/place/search/${place.placeName}/detail/${place.id}`}>
+          <button type='button' onClick={() => setOpenInfo(place.id)}>
             {place.photo && (
               <div className='flex h-[90px] gap-1 rounded-xl shadow-md'>
                 {place.photo.photoList[0].list
@@ -69,7 +71,7 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
                   ))}
               </div>
             )}
-          </Link>
+          </button>
         </li>
       ))}
     </ul>

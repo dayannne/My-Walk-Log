@@ -16,7 +16,7 @@ export interface DiaryItemProps {
 
 const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
   const { user } = useUserStore();
-  const { open, setOpen } = useModalStore();
+  const { open, setOpen, setOpenInfo } = useModalStore();
 
   return (
     <li
@@ -121,9 +121,10 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         )}
       </Link>
       {diary?.placeDetail && (
-        <Link
+        <button
+          type='button'
           className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-          href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}
+          onClick={() => setOpenInfo(diary.placeId)}
         >
           <div className='flex basis-full items-center gap-2'>
             <Image
@@ -149,7 +150,7 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
             width={24}
             height={24}
           />
-        </Link>
+        </button>
       )}
       <div className='flex items-center gap-4'>
         <div className='flex items-center gap-1'>

@@ -7,15 +7,15 @@ import MarkerInfo from '../_component/common/MarkerInfo';
 import { useParams, useRouter } from 'next/navigation';
 import { useCreatePlace } from '../store/server/place';
 import { SearchType } from '../shared/types/map';
+import { useModalStore } from '../store/client/modal';
 
 const useSearchPlaces = () => {
   const [places, setPlaces] = useState<any[]>([]); // places 상태 추가
-  const router = useRouter();
   const mapContext = useMap();
+  const { setOpenInfo } = useModalStore();
   const { mutate: createPlace } = useCreatePlace();
   const { createClusterer } = useMarkerClusterer();
   const location = mapContext?.mapData?.getCenter();
-  const keyword = decodeURIComponent(useParams()?.keyword as string);
 
   const searchPlaces = (keyword: string, type: SearchType) => {
     if (keyword !== '') {
@@ -81,7 +81,7 @@ const useSearchPlaces = () => {
       markerInfo.innerHTML = ReactDOMServer.renderToString(markerInfoContent);
       markerInfo.addEventListener('click', () => {
         mapContext?.mapData?.panTo(position);
-        router.push(`/place/search/${keyword}/detail/${place.id}`);
+        setOpenInfo(place.id);
       });
       const newMarkerInfo = new kakao.maps.CustomOverlay({
         position: position,

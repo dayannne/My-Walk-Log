@@ -16,8 +16,8 @@ export interface ProfileDiaryListProps {
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { user } = useUserStore();
+  const { setOpenInfo } = useModalStore();
   const { mutate: toggleLike } = useDiaryLike();
-
   const { mutate: deleteDiary } = useDeleteDiary();
   const { open, setOpen } = useModalStore();
   const pathname = usePathname().split('/');
@@ -27,7 +27,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   };
 
   return (
-    <ul className='flex basis-full flex-col gap-2 py-2'>
+    <ul className='flex basis-full flex-col gap-2 bg-white py-2'>
       {diaries.map((diary: any) => (
         <li
           key={diary.id}
@@ -120,9 +120,9 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               )}
             </Link>
             {pathname.includes('my') && (
-              <Link
+              <button
                 className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-                href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}
+                onClick={() => setOpenInfo(diary.placeId)}
               >
                 <div className='flex basis-full items-center gap-2'>
                   <Image
@@ -148,7 +148,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                   width={24}
                   height={24}
                 />
-              </Link>
+              </button>
             )}
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-4'>

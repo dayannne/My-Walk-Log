@@ -9,7 +9,6 @@ import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModalStore } from '@/app/store/client/modal';
 
@@ -23,7 +22,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const pathname = usePathname().split('/');
   const { mutate: toggleLike } = useReviewLike();
   const { mutate: deleteReview } = useDeleteReview();
-  const { open, setOpen } = useModalStore();
+  const { open, setOpen, setOpenInfo } = useModalStore();
 
   const handleConfirm = (reviewId: number) => {
     deleteReview({ reviewId, userId: user?.id as number });
@@ -146,9 +145,10 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                     )}
                 </div>
                 {pathname.includes('my') && (
-                  <Link
+                  <button
+                    type='button'
                     className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-                    href={`/place/search/${review.placeDetail.placeName}/detail/${review.placeId}`}
+                    onClick={() => setOpenInfo(review.placeId)}
                   >
                     <div className='flex basis-full items-center gap-2'>
                       <Image
@@ -173,7 +173,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                       width={24}
                       height={24}
                     />
-                  </Link>
+                  </button>
                 )}
               </div>
 

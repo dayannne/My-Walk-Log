@@ -11,7 +11,7 @@ const ProfileLayout = async ({ children }: layoutProps) => {
       <Header title='나의 프로필'>
         <LogoutButton />
       </Header>
-      <div className='flex basis-full flex-col overflow-y-scroll'>
+      <div className='flex basis-full flex-col overflow-y-scroll bg-white'>
         {children}
       </div>
     </div>

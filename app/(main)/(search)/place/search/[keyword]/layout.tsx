@@ -1,5 +1,3 @@
-'use client';
-
 import SearchResult from '@/app/_component/place/search/SearchResult';
 
 export interface layoutProps {
