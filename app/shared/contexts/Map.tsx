@@ -34,33 +34,6 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
     null,
   );
 
-  useEffect(() => {
-    const { kakao } = window;
-
-    kakao?.maps.load(() => {
-      const mapElement = mapEl.current;
-      if (mapElement) {
-        const options = {
-          center: new kakao.maps.LatLng(
-            location?.latitude as number,
-            location?.longitude as number,
-          ),
-          level: 3,
-          smooth: true,
-          tileAnimation: false,
-        };
-        const kakaoMap = new kakao.maps.Map(mapElement, options);
-
-        kakao.maps.event.addListener(kakaoMap, 'dragend', () => {
-          const latlng = kakaoMap.getCenter();
-          setCurrLocation(latlng);
-        });
-
-        setMap(kakaoMap);
-      }
-    });
-  }, [location?.latitude, location?.longitude]);
-
   const values: IMapContextValue = useMemo(
     () => ({
       mapEl,
