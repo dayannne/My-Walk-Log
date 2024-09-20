@@ -1,42 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useMap } from '@/app/shared/contexts/Map';
 
 import Link from 'next/link';
-import Image from 'next/image';
 
 import { useParams } from 'next/navigation';
-import { useUserStore } from '@/app/store/client/user';
+import HighlightText from '../../common/HighlightText';
+import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
 
 const SearchResult = () => {
   const mapContext = useMap();
   const keyword = decodeURIComponent(useParams().keyword as string);
+  const { searchPlaces, places } = useSearchPlaces();
 
-  const HighlightText = ({
-    text,
-    highlight,
-  }: {
-    text: string;
-    highlight: string;
-  }) => {
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+  useEffect(() => {
+    const hasMapData = mapContext?.mapData;
 
-    return (
-      <>
-        {parts.map((part, index) =>
-          part.toLowerCase() === highlight.toLowerCase() ? (
-            <strong className='font-bold' key={`text-${index}`}>
-              {part}
-            </strong>
-          ) : (
-            part
-          ),
-        )}
-      </>
-    );
-  };
+    if (hasMapData) {
+      searchPlaces(keyword, 'SEARCH');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keyword, mapContext?.mapData]);
 
   const CategoryFilter = ({ category }: { category: string }) => {
     const categories = category.split(' > ');
@@ -49,8 +35,8 @@ const SearchResult = () => {
 
   return (
     <ul className='flex max-h-60 shrink-0 flex-col overflow-y-scroll border-t border-solid border-gray-200 bg-white lg:max-h-full'>
-      {mapContext?.places &&
-        mapContext?.places.map((place: any) => (
+      {places &&
+        places.map((place: any) => (
           <li
             key={place.id}
             className='hover:bg-hover flex items-start border-b border-solid border-gray-200 px-6 py-4 lg:py-6'

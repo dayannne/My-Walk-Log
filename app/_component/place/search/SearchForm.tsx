@@ -3,20 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-
 import { useParams, useRouter } from 'next/navigation';
 
 const SearchForm = () => {
   const router = useRouter();
   const prevKeyword = useParams().keyword as string;
-  const { searchPlaces } = useSearchPlaces();
-
   const [keyword, setKeyword] = useState('');
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    searchPlaces(keyword, 'SEARCH');
     router.push(`/place/search/${keyword}`);
   };
 
@@ -27,6 +22,8 @@ const SearchForm = () => {
   useEffect(() => {
     if (prevKeyword) {
       setKeyword(decodeURIComponent(prevKeyword));
+    } else {
+      setKeyword('');
     }
   }, [prevKeyword]);
 
@@ -42,7 +39,7 @@ const SearchForm = () => {
           onChange={handleInputChange}
           size={15}
           className='basis-full rounded-full pl-1 outline-none'
-          placeholder='장소 검색하기'
+          placeholder='산책 장소 검색하기'
         />
         <button
           type='submit'

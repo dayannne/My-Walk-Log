@@ -4,8 +4,8 @@ import { Fragment } from 'react';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
 import { useUserStore } from '@/app/store/client/user';
-import useModal from '@/app/_hooks/useModal';
 import { useDeleteComment } from '@/app/store/server/comment';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface CommentListProps {
   diaryId: number;
@@ -21,7 +21,7 @@ const CommentList = ({
   setEditId,
 }: CommentListProps) => {
   const { user } = useUserStore();
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
   const { mutate: deleteComment } = useDeleteComment();
 
   const handleConfirm = (commentId: number) => {
@@ -49,13 +49,15 @@ const CommentList = ({
                 <span className='text-sm font-semibold'>
                   {comment.author.username}
                 </span>
-                <span className='flex gap-1 text-xs text-gray-600'>
-                  <span>
+                <span className='flex gap-1 text-xs'>
+                  <span className='text-gray-600'>
                     {JSON.parse(comment.author.address)
                       .areaName.split(' ')
                       .pop() || ''}
                   </span>
-                  <span> {formatTimeAgo(comment.createdAt)}</span>
+                  <span className='text-gray-600'>
+                    {formatTimeAgo(comment.createdAt)}
+                  </span>
                 </span>
               </div>
               {user?.id && user?.id === comment.authorId && (
@@ -66,14 +68,14 @@ const CommentList = ({
                     setContent(comment.content);
                   }}
                   secondMenu='댓글 삭제하기'
-                  secondMenuClose={handleOpen}
+                  secondMenuClose={() => setOpen(true)}
                 />
               )}
               <ConfirmModal
                 description='정말로 삭제하시겠습니까?'
                 onConfirm={() => handleConfirm(comment.id)}
                 open={open}
-                handleClose={handleClose}
+                handleClose={() => setOpen(false)}
               />
             </div>
             <p className='text-sm'>

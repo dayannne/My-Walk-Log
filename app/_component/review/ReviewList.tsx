@@ -9,9 +9,9 @@ import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
-import useModal from '@/app/_hooks/useModal';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface ReviewListProps {
   reviews: any;
@@ -23,7 +23,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const pathname = usePathname().split('/');
   const { mutate: toggleLike } = useReviewLike();
   const { mutate: deleteReview } = useDeleteReview();
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
 
   const handleConfirm = (reviewId: number) => {
     deleteReview({ reviewId, userId: user?.id as number });
@@ -110,17 +110,17 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
               )}
 
               <div className='flex flex-col gap-2 text-sm'>
-                <div className='flex items-center gap-1 text-xs text-gray-600'>
-                  <span className='flex gap-1'>
+                <div className='flex items-center gap-1 text-xs'>
+                  <span className='flex gap-1 text-gray-600'>
                     입장료
-                    <span className='font-medium'>
+                    <span className='font-medium text-gray-600'>
                       {filterEntryFee(review.entryFee)}
                     </span>
                   </span>
                   <span className='mt-[2px] h-3 w-[1px] bg-gray-400'></span>
-                  <span className='flex gap-1'>
+                  <span className='flex gap-1 text-gray-600'>
                     산책 시간
-                    <span className='font-medium'>
+                    <span className='font-medium text-gray-600'>
                       {WALK_DURATIONS[review.walkDuration as number]}
                     </span>
                   </span>
@@ -205,14 +205,14 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                 {user?.id && user?.id === review.authorId && (
                   <MenuModal
                     firstMenu='리뷰 삭제하기'
-                    firstMenuClose={handleOpen}
+                    firstMenuClose={() => setOpen(true)}
                   />
                 )}
                 <ConfirmModal
                   description='정말로 삭제하시겠습니까?'
                   onConfirm={() => handleConfirm(review.id)}
                   open={open}
-                  handleClose={handleClose}
+                  handleClose={() => setOpen(false)}
                 />
               </div>
             </li>

@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/prisma/context';
 import { IPlaceInfo } from '@/app/shared/types/map';
-import { kakaoInstance } from '../../_routes/axiosInstance';
-
+import { kakaoInstance } from '@/app/api/_routes/axiosInstance';
 export async function POST(request: Request) {
   try {
     const places: IPlaceInfo[] = await request.json();

@@ -1,7 +1,7 @@
-export interface pageProps {}
+export interface TrailPageProps {}
 
-const page = ({}: pageProps) => {
-  return <div></div>;
+const TrailPage = ({}: TrailPageProps) => {
+  return <></>;
 };
 
-export default page;
+export default TrailPage;

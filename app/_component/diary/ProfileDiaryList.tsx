@@ -6,9 +6,9 @@ import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import MenuModal from '../common/Modal/MenuModal';
 import ConfirmModal from '../common/Modal/ConfirmModal';
-import useModal from '@/app/_hooks/useModal';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface ProfileDiaryListProps {
   diaries: any;
@@ -19,7 +19,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { mutate: toggleLike } = useDiaryLike();
 
   const { mutate: deleteDiary } = useDeleteDiary();
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
   const pathname = usePathname().split('/');
 
   const handleConfirm = (diaryId: number) => {
@@ -193,14 +193,14 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               {user?.id && user?.id === diary.authorId && (
                 <MenuModal
                   firstMenu='일기 삭제하기'
-                  firstMenuClose={handleOpen}
+                  firstMenuClose={() => setOpen(true)}
                 />
               )}
               <ConfirmModal
                 description='정말로 삭제하시겠습니까?'
                 onConfirm={() => handleConfirm(diary.id)}
                 open={open}
-                handleClose={handleClose}
+                handleClose={() => setOpen(false)}
               />
             </div>
           </div>

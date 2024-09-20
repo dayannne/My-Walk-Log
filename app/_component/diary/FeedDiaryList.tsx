@@ -62,7 +62,9 @@ const FeedDiaryList = () => {
                   />
                   <div className='flex basis-full items-center justify-between'>
                     <span className='flex flex-col gap-[2px]'>
-                      <span className='text-xs'>{diary.author.username}</span>
+                      <span className='text-xs text-gray-200'>
+                        {diary.author.username}
+                      </span>
                       <span className='text-[10px] leading-none text-gray-400'>
                         {formatTimeAgo(diary.createdAt)}
                       </span>
@@ -73,7 +75,7 @@ const FeedDiaryList = () => {
                   </div>
                 </div>
                 <div className='basis-full after:text-xs after:content-["..."]'>
-                  <p className='relative max-h-44 overflow-y-hidden text-xs'>
+                  <p className='relative max-h-44 overflow-y-hidden text-xs text-gray-200'>
                     {diary.content
                       .split('\n')
                       .map((str: string, idx: number) => (
@@ -110,7 +112,7 @@ const FeedDiaryList = () => {
                   </button>
                 </div>
                 <div className='flex items-center gap-1'>
-                  <span className='text-overflow-s text-xs'>
+                  <span className='text-overflow-s text-xs text-gray-200'>
                     {diary.placeDetail.placeName}
                   </span>
                   <Image

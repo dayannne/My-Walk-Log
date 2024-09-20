@@ -1,7 +1,7 @@
 import MapContainer from '../_component/common/MapContainer';
 import Navigation from '../_component/common/Navigation';
-import SearchAgainButton from '../_component/search/SearchAgainButton';
-import SearchCategory from '../_component/search/SearchCategory';
+import SearchAgainButton from '../_component/place/search/SearchAgainButton';
+import SearchCategory from '../_component/place/search/SearchCategory';
 import MapProvider from '../shared/contexts/Map';
 
 export interface MainLayoutProps {
@@ -18,11 +18,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <div
             className={`relative z-0 flex basis-full overflow-y-auto lg:flex lg:overflow-hidden`}
           >
-            <div className={`basis-full`}>
-              <SearchCategory />
-              <SearchAgainButton />
-              <MapContainer />
-            </div>
+            <MapContainer />
           </div>
         </main>
       </div>
