@@ -9,6 +9,18 @@ import {
 import axios from 'axios';
 // import { useRouter } from 'next/navigation';
 
+export const getDiaryDetail = async (diaryId: number) => {
+  return await fetch(
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary/${diaryId}`,
+  ).then((res) => res.json());
+};
+
+export const getAllDiary = async (pageParam = 1) => {
+  return await fetch(
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary?page=${pageParam}&size=10`,
+  ).then((res) => res.json());
+};
+
 export const useGetDiaryDetail = (diaryId: number) =>
   queryOptions({
     queryKey: ['diaryDetail', diaryId],
@@ -16,6 +28,7 @@ export const useGetDiaryDetail = (diaryId: number) =>
       const response = await axios.get(`/api/diary/${diaryId}`);
       return response.data;
     },
+    enabled: !!diaryId,
   });
 
 export const useGetAllDiary = () =>

@@ -1,21 +1,14 @@
 import Header from '@/app/_component/common/Header';
 import FeedDiary from '@/app/_component/diary/FeedDiaryList';
 import getQueryClient from '@/app/shared/utils/getQueryCLient';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
-import axios from 'axios';
+import { getAllDiary } from '@/app/store/server/diary';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 const FeedPage = async () => {
   const queryClient = getQueryClient();
   await queryClient.prefetchInfiniteQuery({
     queryKey: ['allDiary'],
-    queryFn: async ({ pageParam = 1 }) => {
-      const response = await axios.get(`/api/diary?page=${pageParam}&size=10`);
-      return response.data;
-    },
+    queryFn: () => getAllDiary(1),
     getNextPageParam: (lastPage: any) => {
       const { page, totalPages } = lastPage;
       return page < totalPages ? page + 1 : undefined;
