@@ -1,10 +1,17 @@
 'use client';
 
+import { useModalStore } from '@/app/store/client/modal';
 import { Backdrop } from '@mui/material';
+import { useEffect } from 'react';
 
-export interface LoadingSpinnerProps {}
+const Loading = () => {
+  const { setOpenInfo } = useModalStore();
 
-const LoadingSpinner = ({}: LoadingSpinnerProps) => {
+  useEffect(() => {
+    setOpenInfo(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Backdrop className='absolute' open={true} invisible={true}>
       <div role='status'>
@@ -30,4 +37,4 @@ const LoadingSpinner = ({}: LoadingSpinnerProps) => {
   );
 };
 
-export default LoadingSpinner;
+export default Loading;
