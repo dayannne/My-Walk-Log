@@ -1,5 +1,4 @@
 import Header from '@/app/_component/common/Header';
-import Loading from '@/app/_component/common/Loading';
 import getQueryClient from '@/app/shared/utils/getQueryCLient';
 import { getDiaryDetail, useGetDiaryDetail } from '@/app/store/server/diary';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
