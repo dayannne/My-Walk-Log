@@ -1,20 +1,20 @@
 'use client';
 
-import Container from '@/app/_component/common/Container';
-import SearchForm from '@/app/_component/search/SearchForm';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface layoutProps {
   children: React.ReactNode;
 }
 
 const SearchResultLayout = ({ children }: layoutProps) => {
+  const { openInfo } = useModalStore();
   return (
     <>
-      <div className='text-olive-green flex items-center gap-2 bg-white p-4 shadow-sm'>
-        산책 장소 찾기
+      <div
+        className={`sm-md:overflow-y-hidden relative z-20 flex w-full shrink-0 flex-col ${openInfo && 'basis-full'} bg-white lg:flex lg:w-96 lg:min-w-96 lg:basis-auto`}
+      >
+        {children}
       </div>
-      <SearchForm />
-      {children}
     </>
   );
 };

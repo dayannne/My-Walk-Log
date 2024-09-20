@@ -1,11 +1,13 @@
 import { IDiary } from './diary';
-import { Latlng } from './map';
+
 import { IReview } from './review';
 
 export interface IProfile {
   id: number;
   username: string;
   email: string;
+  address: string;
+  introduction: string;
   profileImage: string;
   hashedPassword: string;
   createdAt: string;

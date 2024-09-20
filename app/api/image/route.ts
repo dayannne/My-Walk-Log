@@ -37,7 +37,9 @@ export async function POST(req: Request, res: Response) {
         }),
       );
 
-      return `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`;
+      return [
+        `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`,
+      ];
     });
 
     const imgUrls = await Promise.all(uploadPromises);

@@ -11,6 +11,8 @@ import { useUserStore } from '@/app/store/client/user';
 import { IDiaryReq } from '@/app/shared/types/diary';
 import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
 import { useCreateDiary } from '@/app/store/server/diary';
+import Header from '@/app/_component/common/Header';
+import { useQueryClient } from '@tanstack/react-query';
 
 const DiaryFormPage = () => {
   const {
@@ -24,10 +26,12 @@ const DiaryFormPage = () => {
   const router = useRouter();
   const { user } = useUserStore();
 
+  const queryClient = useQueryClient();
+  const { mutate: createDiary } = useCreateDiary();
+
   const weathers = Object.entries(WEATHERS);
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
-
   const {
     register,
     handleSubmit,
@@ -44,7 +48,7 @@ const DiaryFormPage = () => {
       tags: [],
     },
   });
-  const { mutate: createDiary } = useCreateDiary();
+
   const onSubmit = async (formData: IDiaryReq) => {
     // 이미지 업로드 받아오기
     const diaryImages = await uploadImage();
@@ -56,7 +60,13 @@ const DiaryFormPage = () => {
       diaryImages,
       tags: placeTags,
     };
-    createDiary(data);
+    createDiary(data, {
+      onSuccess: () => {
+        alert('일기가 기록되었습니다.');
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+        router.back();
+      },
+    });
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -93,18 +103,7 @@ const DiaryFormPage = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <div className='text-olive-green flex items-center justify-between border-b border-solid border-b-gray-200 bg-white p-4 shadow-sm'>
-        <div className='flex items-center gap-2'>
-          <button onClick={() => router.back()} className='mt-[2px]'>
-            <Image
-              src='/icons/icon-arrow-left(green).svg'
-              alt='프로필 이미지'
-              width={24}
-              height={24}
-            />
-          </button>
-          산책일기 쓰기
-        </div>
+      <Header title='산책일기 쓰기'>
         <div className='flex gap-[6px]'>
           <button
             className='ep-1 box-border flex h-full grow-0 items-center justify-center rounded-lg border border-solid border-gray-500 bg-white px-2 py-1 text-xs text-black shadow-md'
@@ -120,7 +119,7 @@ const DiaryFormPage = () => {
             저장하기
           </button>
         </div>
-      </div>
+      </Header>
       <form className='bg-hover flex h-full basis-full flex-col gap-5 overflow-y-scroll px-3 py-5'>
         <div className='flex flex-col gap-2 rounded-md bg-white p-3'>
           <span className='font-medium'>날씨</span>

@@ -1,18 +1,14 @@
 import { WEATHERS } from '@/app/shared/constant';
 import { formatDate } from '@/app/shared/function/format';
 import { useUserStore } from '@/app/store/client/user';
-import {
-  useCreateDiaryLike,
-  useDeleteDiary,
-  useDeleteDiaryLike,
-} from '@/app/store/server/diary';
+import { useDiaryLike, useDeleteDiary } from '@/app/store/server/diary';
 import { Carousel } from '@material-tailwind/react';
 import Image from 'next/image';
 import MenuModal from '../common/Modal/MenuModal';
 import ConfirmModal from '../common/Modal/ConfirmModal';
-import useModal from '@/app/_hooks/useModal';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useModalStore } from '@/app/store/client/modal';
 
 export interface ProfileDiaryListProps {
   diaries: any;
@@ -20,10 +16,10 @@ export interface ProfileDiaryListProps {
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { user } = useUserStore();
-  const { mutate: createLike } = useCreateDiaryLike();
-  const { mutate: deleteLike } = useDeleteDiaryLike();
+  const { setOpenInfo } = useModalStore();
+  const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
   const pathname = usePathname().split('/');
 
   const handleConfirm = (diaryId: number) => {
@@ -31,7 +27,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   };
 
   return (
-    <ul className='flex basis-full flex-col gap-2 py-2'>
+    <ul className='flex basis-full flex-col gap-2 bg-white py-2'>
       {diaries.map((diary: any) => (
         <li
           key={diary.id}
@@ -42,7 +38,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               {formatDate(diary.createdAt).day}
             </span>
           </div>
-          <div className='flex flex-col gap-2'>
+          <div className='flex basis-full flex-col gap-2'>
             <div className='flex justify-between text-xs'>
               <div className='flex flex-col'>
                 <span>{formatDate(diary.createdAt).dayOfWeek}요일</span>
@@ -56,67 +52,77 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                 <span>{WEATHERS[diary.weather].name}</span>
               </div>
             </div>
-            <div className='text-sm'>
-              {diary.content.split('\n').map((str: string, idx: number) => (
-                <p key={idx}>{str}</p>
-              ))}
-            </div>
-            <div className='flex flex-wrap gap-1'>
-              {diary.tags.length &&
-                diary.tags.map((tag: string, idx: number) => (
-                  <span
-                    className='bg-hover rounded-md px-2 py-1 text-xs'
-                    key={idx}
-                  >
-                    #{tag}
-                  </span>
-                ))}
-            </div>
-            {diary.diaryImages.length === 1 && (
-              <Image
-                className='aspect-square h-full w-full rounded-xl'
-                src={diary.diaryImages[0]}
-                alt='일기 상세 사진'
-                width={300}
-                height={300}
-              />
-            )}
-            {diary.diaryImages.length > 1 && (
-              <Carousel
-                className='aspect-square h-full w-full overflow-hidden rounded-xl'
-                placeholder={undefined}
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-                navigation={({ setActiveIndex, activeIndex, length }) => (
-                  <div className='absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2'>
-                    {new Array(length).fill('').map((_, i) => (
-                      <span
-                        key={i}
-                        className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                          activeIndex === i ? 'w-8 bg-white' : 'w-4 bg-white/50'
-                        }`}
-                        onClick={() => setActiveIndex(i)}
-                      />
-                    ))}
-                  </div>
-                )}
-              >
-                {diary.diaryImages.map((image: string, idx: number) => (
-                  <Image
-                    className='h-full w-full object-cover object-center'
-                    key={idx}
-                    src={image}
-                    alt='리뷰 이미지'
-                    width={500}
-                    height={500}
-                  />
-                ))}
-              </Carousel>
-            )}
+            <Link
+              className='flex flex-col gap-2'
+              href={`/diary/detail/${diary.id}`}
+            >
+              {diary.content.length > 0 && (
+                <div className='text-sm'>
+                  {diary.content.split('\n').map((str: string, idx: number) => (
+                    <p key={idx}>{str}</p>
+                  ))}
+                </div>
+              )}
+              {diary.tags.length > 0 && (
+                <div className='flex flex-wrap gap-1'>
+                  {diary.tags.map((tag: string, idx: number) => (
+                    <span
+                      className='bg-hover rounded-md px-2 py-1 text-xs'
+                      key={idx}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {diary.diaryImages.length === 1 && (
+                <Image
+                  className='aspect-video h-full w-full rounded-xl object-cover'
+                  src={diary.diaryImages[0]}
+                  alt='일기 상세 사진'
+                  width={300}
+                  height={300}
+                />
+              )}
+              {diary.diaryImages.length > 1 && (
+                <Carousel
+                  className='aspect-video h-full w-full rounded-xl object-cover'
+                  placeholder={undefined}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                  navigation={({ setActiveIndex, activeIndex, length }) => (
+                    <div className='z-1 absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2'>
+                      {new Array(length).fill('').map((_, i) => (
+                        <span
+                          key={i}
+                          className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                            activeIndex === i
+                              ? 'w-8 bg-white'
+                              : 'w-4 bg-white/50'
+                          }`}
+                          onClick={() => setActiveIndex(i)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                >
+                  {diary.diaryImages.map((image: string, idx: number) => (
+                    <Image
+                      className='h-full w-full object-cover object-center'
+                      key={idx}
+                      src={image}
+                      alt='리뷰 이미지'
+                      width={500}
+                      height={500}
+                    />
+                  ))}
+                </Carousel>
+              )}
+            </Link>
             {pathname.includes('my') && (
-              <Link
+              <button
                 className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-                href={`/place/search/${diary.placeDetail.placeName}/detail/${diary.placeId}`}
+                onClick={() => setOpenInfo(diary.placeId)}
               >
                 <div className='flex basis-full items-center gap-2'>
                   <Image
@@ -130,10 +136,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                       {diary.placeDetail.placeName}
                     </span>
                     <span className='text-xs text-gray-600'>
-                      {
-                        diary.placeDetail.placeDetail.basicInfo.address.region
-                          .fullname
-                      }
+                      {diary.placeDetail.basicInfo.address.region.fullname}
                     </span>
                   </div>
                 </div>
@@ -145,49 +148,59 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                   width={24}
                   height={24}
                 />
-              </Link>
+              </button>
             )}
             <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-1'>
-                <button
-                  onClick={() =>
-                    diary.likedBy.some((id: number) => id === user?.id) === true
-                      ? deleteLike({
-                          diaryId: diary.id,
-                          userId: user?.id as number,
-                        })
-                      : createLike({
-                          diaryId: diary.id,
-                          userId: user?.id as number,
-                        })
-                  }
+              <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-1'>
+                  <button
+                    onClick={() =>
+                      toggleLike({
+                        diaryId: diary.id,
+                        userId: user?.id as number,
+                      })
+                    }
+                  >
+                    <Image
+                      className='mt-[2px] w-6'
+                      src={
+                        diary.likedBy.some((id: number) => id === user?.id) ===
+                        true
+                          ? '/icons/icon-heart-fill.svg'
+                          : '/icons/icon-heart.svg'
+                      }
+                      alt='좋아요 버튼'
+                      width={32}
+                      height={32}
+                    />
+                  </button>
+                  <span className='text-sm'>{diary.likedBy.length}</span>
+                </div>
+                <Link
+                  className='flex items-center gap-1'
+                  href={`/diary/detail/${diary.id}`}
                 >
                   <Image
-                    className='w-6'
-                    src={
-                      diary.likedBy.some((id: number) => id === user?.id) ===
-                      true
-                        ? '/icons/icon-heart-fill.svg'
-                        : '/icons/icon-heart.svg'
-                    }
-                    alt='좋아요 버튼'
+                    className='mt-[2px] w-6'
+                    src='/icons/icon-comment.svg'
+                    alt='댓글'
                     width={32}
                     height={32}
                   />
-                </button>
-                <span className='text-sm'>{diary.likedBy.length}</span>
+                  {diary.comments.length}
+                </Link>
               </div>
               {user?.id && user?.id === diary.authorId && (
                 <MenuModal
                   firstMenu='일기 삭제하기'
-                  firstMenuClose={handleOpen}
+                  firstMenuClose={() => setOpen(true)}
                 />
               )}
               <ConfirmModal
                 description='정말로 삭제하시겠습니까?'
                 onConfirm={() => handleConfirm(diary.id)}
                 open={open}
-                handleClose={handleClose}
+                handleClose={() => setOpen(false)}
               />
             </div>
           </div>

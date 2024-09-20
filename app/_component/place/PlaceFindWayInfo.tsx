@@ -7,7 +7,7 @@ export interface PlaceFindWayInfoProps {
 }
 
 const PlaceFindWayInfo = ({ place }: PlaceFindWayInfoProps) => {
-  const { busstop: busStops, subway } = place?.placeDetail.findway || {};
+  const { busstop: busStops, subway } = place?.findway || {};
 
   return (
     <div className='flex flex-col gap-4 bg-white px-4 py-5 pb-7 text-sm'>

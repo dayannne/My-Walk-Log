@@ -7,16 +7,28 @@ import {
   useInfiniteQuery,
 } from '@tanstack/react-query';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
-export const useGetDiary = (placeId: string) =>
+export const getDiaryDetail = async (diaryId: number) => {
+  return await fetch(
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary/${diaryId}`,
+  ).then((res) => res.json());
+};
+
+export const getAllDiary = async (pageParam = 1) => {
+  return await fetch(
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary?page=${pageParam}&size=10`,
+  ).then((res) => res.json());
+};
+
+export const useGetDiaryDetail = (diaryId: number) =>
   queryOptions({
-    queryKey: ['diary', placeId],
+    queryKey: ['diaryDetail', diaryId],
     queryFn: async () => {
-      const response = await axios.get(`/api/place/${placeId}/diary`);
+      const response = await axios.get(`/api/diary/${diaryId}`);
       return response.data;
     },
-    staleTime: 0,
+    enabled: !!diaryId,
   });
 
 export const useGetAllDiary = () =>
@@ -31,28 +43,22 @@ export const useGetAllDiary = () =>
       return page < totalPages ? page + 1 : undefined;
     },
     initialPageParam: 1,
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });
 
 export const useCreateDiary = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation({
     mutationFn: async (data: IDiaryReq) => {
       return await axios.post(`/api/diary/write`, data);
     },
-    onSuccess: () => {
-      alert('일기가 기록되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-      router.back();
-    },
+    onSuccess: () => {},
     onError: (error) => {
       console.log(error);
     },
   });
 };
 
-export const useCreateDiaryLike = () => {
+export const useDiaryLike = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -63,34 +69,12 @@ export const useCreateDiaryLike = () => {
       diaryId: number;
       userId: number;
     }) => {
-      return axios.post(`/api/diary/like/${diaryId}/${userId}`);
+      return axios.post(`/api/diary/${diaryId}/${userId}/like`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['place'] });
       queryClient.invalidateQueries({ queryKey: ['diary'] });
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-};
-
-export const useDeleteDiaryLike = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      diaryId,
-      userId,
-    }: {
-      diaryId: number;
-      userId: number;
-    }) => {
-      return await axios.delete(`/api/diary/like/${diaryId}/${userId}`);
-    },
-    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-      queryClient.invalidateQueries({ queryKey: ['diary'] });
     },
     onError: (error) => {
       console.log(error);
@@ -109,7 +93,7 @@ export const useDeleteDiary = () => {
       diaryId: number;
       userId: number;
     }) => {
-      return await axios.delete(`/api/diary/delete/${diaryId}/${userId}`);
+      return await axios.delete(`/api/diary/${diaryId}/${userId}/delete`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });

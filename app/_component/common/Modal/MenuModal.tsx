@@ -2,8 +2,7 @@ import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
-import useModal from '@/app/_hooks/useModal';
-
+import { useModalStore } from '@/app/store/client/modal';
 interface MenuModalProps {
   firstMenu?: string;
   firstMenuClose?: () => void;
@@ -21,17 +20,17 @@ const MenuModal = ({
   thirdMenu,
   thirdMenuClose,
 }: MenuModalProps) => {
-  const { open, handleOpen, handleClose } = useModal();
+  const { open, setOpen } = useModalStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    handleOpen(); // 모달 열기
+    setOpen(true); // 모달 열기
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleClose(); // 모달 닫기
+    setOpen(false); // 모달 닫기
   };
 
   return (

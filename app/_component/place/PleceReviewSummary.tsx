@@ -5,11 +5,8 @@ import Image from 'next/image';
 import { IReview } from '@/app/shared/types/review';
 import { useUserStore } from '@/app/store/client/user';
 import { WALK_DURATIONS } from '@/app/shared/constant';
-import {
-  filterEntryFee,
-  filterPlaceKeywords,
-} from '@/app/shared/function/filter';
-import { formatDate } from '@/app/shared/function/format';
+import { filterEntryFee } from '@/app/shared/function/filter';
+import { formatDate, formatPlaceKeyword } from '@/app/shared/function/format';
 import { Carousel } from '@material-tailwind/react';
 import { type } from 'os';
 import { usePlaceMenuStore } from '@/app/store/client/place';
@@ -62,12 +59,12 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
             {index < 3 && (
               <li
                 key={review.id}
-                className={`flex items-start gap-3 border-solid border-gray-200 ${index !== reviews.length - 1 && 'border-b'}`}
+                className={`flex items-start gap-3 border-solid border-gray-200 py-3 ${index === 0 && 'pt-0'} ${index === 2 && 'pb-0'} ${index < 2 && 'border-b'}`}
               >
                 <div className='basis-full'>
                   <div className='mb-2 flex items-center gap-2'>
                     <Image
-                      className='w-8 shrink-0'
+                      className='h-8 w-8 shrink-0 rounded-full'
                       key={`user_${review.authorId}_profile_image`}
                       src={review.author.profileImage}
                       alt='프로필 이미지'
@@ -89,7 +86,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                   </div>
                   <div className='flex flex-col gap-2 text-sm'>
                     <button
-                      className={`${flipped === true && 'text-overflow'}`}
+                      className={`${flipped === true && 'text-overflow-m'}`}
                       onClick={() => {
                         setFlipped((prev) => !prev);
                       }}
@@ -109,7 +106,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                       {review.keywords.length > 0 && (
                         <>
                           <span className='bg-hover rounded-md p-1 text-xs'>
-                            {filterPlaceKeywords(reviews[0].keywords)[0].value}
+                            {formatPlaceKeyword(reviews[0].keywords)[0].value}
                           </span>
                           <span className='bg-hover rounded-md p-1 text-xs'>
                             + {review.keywords.length - 1}
@@ -121,7 +118,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                 </div>
                 {review.reviewImages.length > 0 && (
                   <Image
-                    className='object-c aspect-square h-24 w-auto rounded-xl object-cover object-center pt-2'
+                    className='aspect-square h-24 w-24 rounded-xl object-cover object-center'
                     src={review.reviewImages[0]}
                     alt='일기 상세 사진'
                     width={300}

@@ -18,7 +18,7 @@ export async function GET(
             diaries: true,
           },
         },
-
+        comments: true,
         placeDetail: true,
       },
     });

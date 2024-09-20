@@ -89,6 +89,7 @@ video {
   font-size: 14px;
   font: inherit;
   vertical-align: baseline;
+  color: #333333;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -105,6 +106,7 @@ section {
   display: block;
 }
 body {
+  min-width: 320px;
   height: 100dvh;
   line-height: 1;
 }
@@ -141,7 +143,16 @@ table {
   background: rgb(233, 236, 239);
 }
 
-.text-overflow {
+.text-overflow-s {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.text-overflow-m {
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: break-word;

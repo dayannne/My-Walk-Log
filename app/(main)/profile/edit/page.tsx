@@ -10,6 +10,8 @@ import { useForm } from 'react-hook-form';
 import AreaSearch from '@/app/_component/common/AreaSearch/AreaSearch';
 import { useEditProfile } from '@/app/store/server/profile';
 import { useEffect, useState } from 'react';
+import Header from '@/app/_component/common/Header';
+import { useQueryClient } from '@tanstack/react-query';
 
 const EditProfilePage = () => {
   const router = useRouter();
@@ -22,6 +24,7 @@ const EditProfilePage = () => {
     removeImage,
   } = useImageUpload();
   const { profile } = useProfileStore();
+  const queryClient = useQueryClient();
   const { mutate: editProfile } = useEditProfile();
   const [address, setAddress] = useState<IAddress | null>(null);
 
@@ -39,7 +42,6 @@ const EditProfilePage = () => {
   const {
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors, isValid },
   } = methods;
 
@@ -61,11 +63,19 @@ const EditProfilePage = () => {
 
     const data: IProfileReq = {
       ...formData,
-      profileImage: profileImage,
+      profileImage: Array.isArray(profileImage)
+        ? profileImage[0]
+        : profile.profileImage,
       ...(address && { address }),
     };
 
-    editProfile(data);
+    editProfile(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+        alert('프로필이 수정되었습니다.');
+        router.push(`/profile/my`);
+      },
+    });
   };
 
   useEffect(() => {
@@ -76,21 +86,10 @@ const EditProfilePage = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      <div className='text-olive-green flex items-center justify-between border-b border-solid border-b-gray-200 bg-white p-4 shadow-sm'>
-        <div className='flex items-center gap-2'>
-          <button onClick={() => router.back()} className='mt-[2px]'>
-            <Image
-              src='/icons/icon-arrow-left(green).svg'
-              alt='프로필 이미지'
-              width={24}
-              height={24}
-            />
-          </button>
-          프로필 수정하기
-        </div>
+      <Header title='프로필 수정하기'>
         <div className='flex gap-[6px]'>
           <button
-            className='ep-1 box-border flex h-full grow-0 items-center justify-center rounded-lg border border-solid border-gray-500 bg-white px-2 py-1 text-xs text-black shadow-md'
+            className='box-border flex h-full grow-0 items-center justify-center rounded-lg border border-solid border-gray-500 bg-white px-2 py-1 text-xs text-black shadow-md'
             onClick={() => router.back()}
           >
             취소
@@ -103,7 +102,7 @@ const EditProfilePage = () => {
             저장하기
           </button>
         </div>
-      </div>
+      </Header>
       {profile && (
         <form className='bg-hover flex h-full basis-full flex-col items-center gap-8 overflow-y-scroll px-3 py-8'>
           <div>

@@ -1,66 +1,32 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import Navigation from './Navigation';
-import { useUserStore } from '@/app/store/client/user';
+import BackButton from './Button/BackButton';
 
-const Header = () => {
-  const router = useRouter();
-  const { user, setUser } = useUserStore();
+export interface HeaderProps {
+  title: string;
+  children?: React.ReactNode;
+  enableBackButton?: boolean;
+}
 
-  const handleLogout = () => {
-    //TODO: 로그아웃 확인 팝업 추가
-    alert('로그아웃 되었습니다.');
-    setUser(null);
-    router.refresh();
-  };
+const Header = ({ title, children, enableBackButton }: HeaderProps) => {
   return (
-    <header className='flex flex-col border-r-[1.5px] border-solid border-gray-200'>
-      <div>
+    <header className='sticky top-0 flex items-center justify-between bg-white p-4 text-base shadow-sm'>
+      <div className='flex items-center gap-2'>
+        {enableBackButton && <BackButton />}
         <Link
-          className='flex h-20 w-full items-center justify-center border-b border-solid border-gray-200 p-1'
+          className='flex items-center justify-center border-b border-solid border-gray-200 lg:hidden'
           href='/'
         >
           <Image
             src='/icons/icon-logo-mini(default).svg'
             alt=''
-            width={32}
-            height={32}
+            width={20}
+            height={20}
           />
         </Link>
+        <span className='text-olive-green'>{title}</span>
       </div>
-      <Navigation />
-      <div className='flex h-auto w-full flex-col items-center justify-center gap-2 border-t border-solid border-gray-200 p-4'>
-        {user ? (
-          <>
-            <Link href='/profile/my'>
-              <Image
-                className='rounded-full'
-                src={
-                  user.profileImage ? user.profileImage : '/icons/icon-user.svg'
-                }
-                alt=''
-                width={32}
-                height={32}
-              />
-            </Link>
-            <button onClick={handleLogout}>
-              <Image
-                src='/icons/icon-logout.svg'
-                alt=''
-                width={32}
-                height={32}
-              />
-            </button>
-          </>
-        ) : (
-          <Link href='/login'>
-            <Image src='/icons/icon-login.svg' alt='' width={32} height={32} />
-          </Link>
-        )}
-      </div>
+      {children}
     </header>
   );
 };
