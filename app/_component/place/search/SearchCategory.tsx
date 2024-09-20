@@ -1,20 +1,27 @@
 'use client';
 
-import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
+import { useRefreshStore } from '@/app/store/client/refresh';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export interface SearchCategoryProps {}
 
 const SearchCategory = () => {
   const router = useRouter();
-  const { searchPlaces } = useSearchPlaces();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { setRefreshKey } = useRefreshStore();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    searchPlaces(value, 'SEARCH_CATEGORY');
-    router.push(`/place/search/${value}`);
+    const currUrl = `${decodeURIComponent(pathname)}?${searchParams.toString()}`;
+    const newUrl = `/place/search/${value}?type=SEARCH_CATEGORY`;
+
+    if (currUrl === newUrl) {
+      setRefreshKey();
+      router.refresh();
+    } else router.push(`/place/search/${value}?type=SEARCH_CATEGORY`);
   };
 
   return (

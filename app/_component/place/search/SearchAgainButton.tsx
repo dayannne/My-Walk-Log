@@ -3,20 +3,27 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
-
 import { useMap } from '@/app/shared/contexts/Map';
-import { useParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
+import { useRefreshStore } from '@/app/store/client/refresh';
 
 export interface SearchAgainButtonProps {}
 
 const SearchAgainButton = () => {
-  const mapContext = useMap();
-  const { searchPlaces } = useSearchPlaces();
+  const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const keyword = params?.keyword
     ? decodeURIComponent(params?.keyword as string)
     : null;
+  const mapContext = useMap();
+  const { setRefreshKey } = useRefreshStore();
   const { currLocation, prevLocation, setPrevLocation, mapData } = mapContext!;
   const [isVisible, setIsVisible] = useState(false);
 
@@ -39,8 +46,13 @@ const SearchAgainButton = () => {
   }, [currLocation]);
 
   const handleSearchAgain = () => {
-    searchPlaces(keyword as string, 'SEARCH_AGAIN');
+    const currUrl = `${decodeURIComponent(pathname)}?${searchParams.toString()}`;
+    const newUrl = `/place/search/${keyword}?type=SEARCH_AGAIN`;
     setIsVisible(false);
+    if (currUrl === newUrl) {
+      setRefreshKey();
+      router.refresh();
+    } else router.push(`/place/search/${keyword}?type=SEARCH_AGAIN`);
   };
   return (
     <>

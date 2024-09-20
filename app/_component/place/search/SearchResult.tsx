@@ -6,23 +6,28 @@ import { useMap } from '@/app/shared/contexts/Map';
 
 import Link from 'next/link';
 
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import HighlightText from '../../common/HighlightText';
 import useSearchPlaces from '@/app/_hooks/useSearchPlaces';
+import { SearchType } from '@/app/shared/types/map';
+import { useRefreshStore } from '@/app/store/client/refresh';
 
 const SearchResult = () => {
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type') || 'SEARCH';
   const mapContext = useMap();
   const keyword = decodeURIComponent(useParams().keyword as string);
+  const { refreshKey } = useRefreshStore();
   const { searchPlaces, places } = useSearchPlaces();
 
   useEffect(() => {
     const hasMapData = mapContext?.mapData;
 
     if (hasMapData) {
-      searchPlaces(keyword, 'SEARCH');
+      searchPlaces(keyword, type as SearchType);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyword, mapContext?.mapData]);
+  }, [keyword, mapContext?.mapData, type, refreshKey]);
 
   const CategoryFilter = ({ category }: { category: string }) => {
     const categories = category.split(' > ');
