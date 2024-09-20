@@ -12,7 +12,6 @@ import { useEditProfile } from '@/app/store/server/profile';
 import { useEffect, useState } from 'react';
 import Header from '@/app/_component/common/Header';
 import { useQueryClient } from '@tanstack/react-query';
-import { useUserStore } from '@/app/store/client/user';
 
 const EditProfilePage = () => {
   const router = useRouter();
@@ -24,10 +23,9 @@ const EditProfilePage = () => {
     uploadImage,
     removeImage,
   } = useImageUpload();
-  const { user } = useUserStore();
   const { profile } = useProfileStore();
   const queryClient = useQueryClient();
-  const { mutate: editProfile } = useEditProfile(user?.id as number);
+  const { mutate: editProfile } = useEditProfile();
   const [address, setAddress] = useState<IAddress | null>(null);
 
   const methods = useForm<IProfileReq>({
