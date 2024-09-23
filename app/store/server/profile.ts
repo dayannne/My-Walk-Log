@@ -16,6 +16,7 @@ export const useGetMyProfile = (userId: number) =>
       return resullt.data as IProfile;
     },
     staleTime: 0,
+    enabled: !!userId,
   });
 
 export const useEditProfile = () => {

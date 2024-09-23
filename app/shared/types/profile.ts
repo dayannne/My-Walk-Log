@@ -6,7 +6,7 @@ export interface IProfile {
   id: number;
   username: string;
   email: string;
-  address: string;
+  address: IAddress;
   introduction: string;
   profileImage: string;
   hashedPassword: string;

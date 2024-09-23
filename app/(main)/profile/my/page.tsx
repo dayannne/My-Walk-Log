@@ -49,8 +49,7 @@ const ProfilePage = ({}: ProfilePageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  const { diaries, reviews, likedPlaces } = profile;
-  const address = JSON.parse(profile?.address);
+  const { diaries, reviews, likedPlaces, address } = profile;
   return (
     <>
       {profile && (
@@ -76,9 +75,11 @@ const ProfilePage = ({}: ProfilePageProps) => {
                 </Link>
               </span>
               <div className='flex items-center gap-2'>
-                <span className='bg-hover text-olive-green border-olive-green rounded-md border border-solid px-[2px] py-[1px] text-xs'>
-                  {address?.areaName.split(' ').pop()}
-                </span>
+                {address?.areaName && (
+                  <span className='bg-hover text-olive-green border-olive-green rounded-md border border-solid px-[2px] py-[1px] text-xs'>
+                    {address?.areaName.split(' ').pop()}
+                  </span>
+                )}
                 <span className='text-xs text-gray-600'>
                   리뷰 {profile.reviews.length}
                 </span>
