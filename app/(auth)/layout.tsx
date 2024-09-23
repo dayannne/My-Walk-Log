@@ -13,10 +13,12 @@ const layout = ({ children }: layoutProps) => {
         <h1 className='my-10'>
           <Link href='/'>
             <Image
+              className='h-16 w-auto'
               src={'/icons/icon-logo(default).svg'}
-              alt={''}
-              width={224}
-              height={80}
+              alt={'로고 이미지'}
+              width={300}
+              height={300}
+              priority
             />
           </Link>
         </h1>

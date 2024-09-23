@@ -16,7 +16,7 @@ export const useLoginMutation = () => {
     onSuccess: (data) => {
       setUser(data.data);
       alert(`${data.data.username}님, 반가워요 :)`);
-      router.push('/place');
+      router.push('/feed');
     },
     onError: (error: unknown) => {
       console.error(error);
@@ -29,12 +29,7 @@ export const useSignupMutation = () => {
 
   return useMutation({
     mutationFn: async (data: ISignupForm) => {
-      const { email, password, username } = data;
-      const response = await axios.post('/api/auth/signup', {
-        email,
-        password,
-        username,
-      });
+      const response = await axios.post('/api/auth/signup', data);
       return response.data;
     },
     onSuccess: (data) => {
