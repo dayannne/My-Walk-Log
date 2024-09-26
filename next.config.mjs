@@ -54,6 +54,7 @@ const nextConfig = {
   images: {
     domains: [
       'my-walklog.s3.ap-southeast-2.amazonaws.com',
+      'my-walk-log.s3.ap-northeast-2.amazonaws.com',
       'storep-phinf.pstatic.net',
       'postfiles.pstatic.net',
       't1.daumcdn.net',
