@@ -19,5 +19,16 @@ interface PlaceMenuState {
 
 export const usePlaceMenuStore = create<PlaceMenuState>((set) => ({
   placeMenu: 0,
-  setPlaceMenu: (newPlace: number) => set({ placeMenu: newPlace }),
+  setPlaceMenu: (newMenu: number) => set({ placeMenu: newMenu }),
+}));
+
+interface PlaceDetailState {
+  placeDetailState: number;
+  setPlaceDetailState: (userData: number) => void;
+}
+
+export const usePlaceDetailStore = create<PlaceDetailState>((set) => ({
+  placeDetailState: 0,
+  setPlaceDetailState: (newState: number) =>
+    set({ placeDetailState: newState }),
 }));

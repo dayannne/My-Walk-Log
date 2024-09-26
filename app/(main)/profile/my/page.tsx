@@ -19,7 +19,7 @@ import EmptyLikedPlaces from '@/app/_component/profile/EmptyLikedPlaces';
 import LikedPlaceList from '@/app/_component/profile/LikedPlaceList';
 import ProfileMenu from '@/app/_component/profile/ProfileMenu';
 import { useModalStore } from '@/app/store/client/modal';
-import PlaceDetail from '@/app/_component/place/PlaceDetail';
+import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
 
 export interface ProfilePageProps {}
 
@@ -132,9 +132,9 @@ const ProfilePage = ({}: ProfilePageProps) => {
         (reviews.length > 0 ? (
           <ReviewList reviews={reviews} type='PROFILE' />
         ) : (
-          <EmptyReviews url='/place' />
+          <EmptyReviews url='/place/search' />
         ))}
-      {!loading && openInfo && <PlaceDetail placeId={openInfo} />}
+      {!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}
     </>
   );
 };

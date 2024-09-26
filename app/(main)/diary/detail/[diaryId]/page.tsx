@@ -1,9 +1,9 @@
 'use client';
 
+import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
 import Commentform from '@/app/_component/diary/Commentform';
 import CommentList from '@/app/_component/diary/CommentList';
 import DiaryItem from '@/app/_component/diary/DiaryItem';
-import PlaceDetail from '@/app/_component/place/PlaceDetail';
 import { useModalStore } from '@/app/store/client/modal';
 import { useUserStore } from '@/app/store/client/user';
 import {
@@ -69,7 +69,7 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
         editId={editId}
         setEditId={setEditId}
       />
-      {!loading && openInfo && <PlaceDetail placeId={openInfo} />}
+      {!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}
     </>
   );
 };

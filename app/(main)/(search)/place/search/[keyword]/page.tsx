@@ -1,8 +1,7 @@
 'use client';
 
-import PlaceDetail from '@/app/_component/place/PlaceDetail';
+import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
 import { useModalStore } from '@/app/store/client/modal';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export interface pageProps {}
@@ -21,7 +20,7 @@ const SearchResultPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  return <>{!loading && openInfo && <PlaceDetail placeId={openInfo} />}</>;
+  return <>{!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}</>;
 };
 
 export default SearchResultPage;

@@ -2,7 +2,6 @@ import PlaceKeywordsInput from '@/app/_component/review/PlaceKeywordsInput';
 import { ENTRY_FEE, WALK_DURATIONS } from '@/app/shared/constant';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useState } from 'react';
@@ -10,6 +9,7 @@ import { useUserStore } from '@/app/store/client/user';
 import { useCreateReview } from '@/app/store/server/review';
 import { IReviewReq } from '@/app/shared/types/review';
 import Header from '../common/Header';
+import { usePlaceDetailStore } from '@/app/store/client/place';
 
 const ReviewForm = ({ placeId }: { placeId: string }) => {
   const {
@@ -20,8 +20,8 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
     uploadImage,
     removeImage,
   } = useImageUpload();
-  const router = useRouter();
   const { user } = useUserStore();
+  const { setPlaceDetailState } = usePlaceDetailStore();
 
   const walkDurations = Object.entries(WALK_DURATIONS);
   const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
@@ -76,12 +76,12 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       removeImage(index);
     };
   return (
-    <div className='flex h-full w-full flex-col lg:overflow-y-scroll'>
+    <div className='sm-md:h-full flex w-full basis-full flex-col overflow-y-scroll'>
       <Header title='리뷰 쓰기'>
         <div className='flex gap-[6px]'>
           <button
             className='box-border flex h-full grow-0 items-center justify-center rounded-lg border border-solid border-gray-500 bg-white px-2 py-1 text-xs text-black shadow-md'
-            onClick={() => router.back()}
+            onClick={() => setPlaceDetailState(0)}
           >
             취소
           </button>

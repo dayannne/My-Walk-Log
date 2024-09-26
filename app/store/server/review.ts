@@ -1,15 +1,12 @@
 import { IReviewReq } from '@/app/shared/types/review';
-import {
-  queryOptions,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { usePlaceDetailStore } from '../client/place';
 
 export const useCreateReview = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const { setPlaceDetailState } = usePlaceDetailStore();
+
   return useMutation({
     mutationFn: async ({
       placeId,
@@ -26,7 +23,7 @@ export const useCreateReview = () => {
       alert('리뷰가 등록되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['place'] });
       queryClient.invalidateQueries({ queryKey: ['review'] });
-      router.back();
+      setPlaceDetailState(0);
     },
     onError: (error) => {
       console.log(error);

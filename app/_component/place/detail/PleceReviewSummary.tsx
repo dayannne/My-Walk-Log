@@ -9,17 +9,21 @@ import { filterEntryFee } from '@/app/shared/function/filter';
 import { formatDate, formatPlaceKeyword } from '@/app/shared/function/format';
 import { Carousel } from '@material-tailwind/react';
 import { type } from 'os';
-import { usePlaceMenuStore } from '@/app/store/client/place';
+import {
+  usePlaceDetailStore,
+  usePlaceMenuStore,
+} from '@/app/store/client/place';
 import { useState } from 'react';
 
 interface PlaceReviewProps {
-  placeId: string;
   place: any;
 }
 
-const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
+const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
   const { user } = useUserStore();
   const { setPlaceMenu } = usePlaceMenuStore();
+  const { setPlaceDetailState } = usePlaceDetailStore();
+
   const [flipped, setFlipped] = useState(true);
 
   const reviews = place?.reviews || [];
@@ -39,9 +43,9 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
         {user &&
           reviews?.length > 0 &&
           !reviews?.some((review: any) => review.authorId === user.id) && (
-            <Link
+            <button
               className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
-              href={`${placeId}/review/form`}
+              onClick={() => setPlaceDetailState(1)}
             >
               <Image
                 src='/icons/icon-pencil.svg'
@@ -50,7 +54,7 @@ const PleceReviewSummary = ({ placeId, place }: PlaceReviewProps) => {
                 alt='리뷰 쓰기 아이콘'
               />
               리뷰 쓰기
-            </Link>
+            </button>
           )}
       </div>
       <ul className='pb-4'>

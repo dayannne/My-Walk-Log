@@ -2,9 +2,9 @@ import { usePlaceLike } from '@/app/store/server/place';
 import { IReview } from '@/app/shared/types/review';
 import { useUserStore } from '@/app/store/client/user';
 import Image from 'next/image';
-import Link from 'next/link';
-import { filterUrl } from '@/app/shared/function/filter';
 import { Carousel } from '@material-tailwind/react';
+import { usePlaceDetailStore } from '@/app/store/client/place';
+import PlaceDetail from './PlaceDetail';
 
 export interface PlaceBasicInfoProps {
   place: any;
@@ -13,6 +13,7 @@ export interface PlaceBasicInfoProps {
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { user } = useUserStore();
   const { mainphotourl, tags } = place?.basicInfo || {};
+  const { setPlaceDetailState } = usePlaceDetailStore();
 
   // API 요청
   const { mutate: toggleLike } = usePlaceLike();
@@ -30,7 +31,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   // 공유 url 복사
 
   const handleShareClick = async () => {
-    const currentUrl = filterUrl(window.location.href);
+    const currentUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/place/detail/${placeId}`;
     try {
       await navigator.clipboard.writeText(currentUrl);
       alert('URL이 클립보드에 복사되었습니다 :)');
@@ -98,9 +99,9 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
               place?.reviews?.some(
                 (review: IReview) => review.authorId === user.id,
               ) && (
-                <Link
+                <button
                   className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
-                  href={`${placeId}/review/form`}
+                  onClick={() => setPlaceDetailState(1)}
                 >
                   <Image
                     className='w-4'
@@ -110,7 +111,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
                     alt='리뷰 쓰기 아이콘'
                   />
                   리뷰 쓰기
-                </Link>
+                </button>
               )}
           </span>
           <span className='mb-3 mt-2 flex items-center gap-2 text-sm font-light text-gray-800'>
