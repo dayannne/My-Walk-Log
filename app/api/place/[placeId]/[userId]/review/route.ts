@@ -47,7 +47,6 @@ export async function POST(
         walkDuration,
         entryFee: entryFee || null,
         placeId,
-        placeDetailId: placeId,
         authorId: userId,
       },
     });
