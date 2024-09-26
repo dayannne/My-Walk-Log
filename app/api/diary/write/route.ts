@@ -36,7 +36,6 @@ export async function POST(request: Request) {
       data: {
         authorId,
         placeId,
-        placeDetailId: placeId,
         diaryImages: diaryImages || [],
         content,
         weather,
