@@ -13,7 +13,7 @@ export interface PlaceBasicInfoProps {
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
   const { user } = useUserStore();
   const { mainphotourl, tags } = place?.basicInfo || {};
-  const { setPlaceDetailState } = usePlaceDetailStore();
+  const { setPlaceDetailState, setPlaceDetail } = usePlaceDetailStore();
 
   // API 요청
   const { mutate: toggleLike } = usePlaceLike();
@@ -101,7 +101,10 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
               ) && (
                 <button
                   className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
-                  onClick={() => setPlaceDetailState(1)}
+                  onClick={() => {
+                    setPlaceDetailState(1);
+                    setPlaceDetail(place);
+                  }}
                 >
                   <Image
                     className='w-4'

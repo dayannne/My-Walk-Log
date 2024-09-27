@@ -22,7 +22,7 @@ interface PlaceReviewProps {
 const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
   const { user } = useUserStore();
   const { setPlaceMenu } = usePlaceMenuStore();
-  const { setPlaceDetailState } = usePlaceDetailStore();
+  const { setPlaceDetail, setPlaceDetailState } = usePlaceDetailStore();
 
   const [flipped, setFlipped] = useState(true);
 
@@ -45,7 +45,10 @@ const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
           !reviews?.some((review: any) => review.authorId === user.id) && (
             <button
               className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
-              onClick={() => setPlaceDetailState(1)}
+              onClick={() => {
+                setPlaceDetail(place)
+                setPlaceDetailState(1);
+              }}
             >
               <Image
                 src='/icons/icon-pencil.svg'

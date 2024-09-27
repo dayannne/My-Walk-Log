@@ -21,8 +21,7 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
     removeImage,
   } = useImageUpload();
   const { user } = useUserStore();
-  const { setPlaceDetailState } = usePlaceDetailStore();
-
+  const { setPlaceDetailState, placeDetail } = usePlaceDetailStore();
   const walkDurations = Object.entries(WALK_DURATIONS);
   const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
 
@@ -51,6 +50,8 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       walkDuration: parseInt(formData.walkDuration as string),
       keywords: placeKeywords,
       reviewImages,
+      placeName: placeDetail.placeName,
+      placeAddress: placeDetail.basicInfo.address.region.fullname,
     };
 
     createReview({ data, placeId, userId: user?.id as number });
