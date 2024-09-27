@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         email,
         hashedPassword,
         profileImage: process.env.USER_DEFAULT_IMAGE,
-        address,
+        address: address || {},
       },
     });
 
