@@ -147,7 +147,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                 {pathname.includes('my') && (
                   <button
                     type='button'
-                    className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
+                    className='border-olive-green bg-hover flex items-center rounded-lg border border-solid p-2'
                     onClick={() => setOpenInfo(review.placeId)}
                   >
                     <div className='flex basis-full items-center gap-2'>
@@ -157,12 +157,12 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                         width={32}
                         height={32}
                       />
-                      <div className='flex flex-col'>
+                      <div className='flex flex-col items-start'>
                         <span className='text-sm font-medium'>
-                          {review.placeDetail.placeName}
+                          {review.placeName}
                         </span>
                         <span className='text-xs text-gray-600'>
-                          {review.placeDetail.basicInfo.address.region.fullname}
+                          {review.placeAddress}
                         </span>
                       </div>
                     </div>

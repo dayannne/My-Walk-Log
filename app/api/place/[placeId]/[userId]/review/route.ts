@@ -24,8 +24,15 @@ export async function POST(
   try {
     const body = await request.json();
 
-    const { reviewImages, description, keywords, walkDuration, entryFee } =
-      body;
+    const {
+      reviewImages,
+      description,
+      keywords,
+      walkDuration,
+      entryFee,
+      placeName,
+      placeAddress,
+    } = body;
 
     if (!description || !walkDuration) {
       return new Response(
@@ -48,6 +55,8 @@ export async function POST(
         entryFee: entryFee || null,
         placeId,
         authorId: userId,
+        placeName,
+        placeAddress,
       },
     });
 

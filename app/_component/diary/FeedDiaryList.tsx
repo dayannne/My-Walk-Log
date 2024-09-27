@@ -113,7 +113,7 @@ const FeedDiaryList = () => {
                 </div>
                 <div className='flex items-center gap-1'>
                   <span className='text-overflow-s text-xs text-gray-200'>
-                    {diary.placeDetail.placeName}
+                    {diary.placeName}
                   </span>
                   <Image
                     src='/icons/icon-marker.svg'
