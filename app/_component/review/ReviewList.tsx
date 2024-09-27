@@ -22,7 +22,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const pathname = usePathname().split('/');
   const { mutate: toggleLike } = useReviewLike();
   const { mutate: deleteReview } = useDeleteReview();
-  const { open, setOpen, setOpenInfo } = useModalStore();
+  const { openId, setOpenId, setOpenInfo } = useModalStore();
 
   const handleConfirm = (reviewId: number) => {
     deleteReview({ reviewId, userId: user?.id as number });
@@ -205,18 +205,18 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                 {user?.id && user?.id === review.authorId && (
                   <MenuModal
                     firstMenu='리뷰 삭제하기'
-                    firstMenuClose={() => setOpen(true)}
+                    firstMenuClose={() => setOpenId(review.id)}
                   />
                 )}
-                <ConfirmModal
-                  description='정말로 삭제하시겠습니까?'
-                  onConfirm={() => handleConfirm(review.id)}
-                  open={open}
-                  handleClose={() => setOpen(false)}
-                />
               </div>
             </li>
           ))}
+          <ConfirmModal
+            description='정말로 삭제하시겠습니까?'
+            onConfirm={() => handleConfirm(openId as number)}
+            open={Boolean(openId)}
+            handleClose={() => setOpenId(null)}
+          />
         </ul>
       )}
     </>

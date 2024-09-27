@@ -16,7 +16,7 @@ export interface DiaryItemProps {
 
 const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
   const { user } = useUserStore();
-  const { open, setOpen, setOpenInfo } = useModalStore();
+  const { setOpenInfo, openId, setOpenId } = useModalStore();
 
   return (
     <li
@@ -51,14 +51,14 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         {user?.id && user?.id === diary.authorId && (
           <MenuModal
             firstMenu='일기 삭제하기'
-            firstMenuClose={() => setOpen(true)}
+            firstMenuClose={() => setOpenId(diary.id)}
           />
         )}
         <ConfirmModal
           description='정말로 삭제하시겠습니까?'
           onConfirm={() => onConfirm(diary.id)}
-          open={open}
-          handleClose={() => setOpen(false)}
+          open={Boolean(openId)}
+          handleClose={() => setOpenId(null)}
         />
       </div>
       <Link className='flex flex-col gap-2' href={`/diary/detail/${diary.id}`}>

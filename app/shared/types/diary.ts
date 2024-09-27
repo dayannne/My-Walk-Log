@@ -16,7 +16,6 @@ export interface IDiary {
   content: string;
   likedCount: number;
   likedBy: number[];
-
   createdAt: Date;
   updatedAt: Date;
   weather: string;
