@@ -6,7 +6,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { authorId, placeId, diaryImages, content, tags, weather } = body;
+    const {
+      authorId,
+      placeId,
+      diaryImages,
+      content,
+      tags,
+      weather,
+      placeName,
+      placeAddress,
+    } = body;
 
     if (!authorId) {
       return new Response(
@@ -36,11 +45,12 @@ export async function POST(request: Request) {
       data: {
         authorId,
         placeId,
-        placeDetailId: placeId,
         diaryImages: diaryImages || [],
         content,
         weather,
         tags: tags || [],
+        placeName,
+        placeAddress,
       },
     });
 

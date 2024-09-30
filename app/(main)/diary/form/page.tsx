@@ -59,6 +59,8 @@ const DiaryFormPage = () => {
       placeId: selectedPlace.id,
       diaryImages,
       tags: placeTags,
+      placeName: selectedPlace.place_name,
+      placeAddress: selectedPlace.address_name,
     };
     createDiary(data, {
       onSuccess: () => {

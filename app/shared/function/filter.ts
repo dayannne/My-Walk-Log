@@ -14,15 +14,6 @@ export const filterEntryFee = (id: string): string | undefined => {
   return entry ? entry.label : undefined;
 };
 
-export const filterUrl = (url: string) => {
-  const urlObj = new URL(url);
-  const pathname = urlObj.pathname;
-
-  const decodedPathname = decodeURIComponent(pathname);
-
-  return `${urlObj.origin}${decodedPathname}`;
-};
-
 export const filterAreaData = (data: Area[]) => {
   const filteredData = data.filter((item) => {
     const history = item.폐지여부;

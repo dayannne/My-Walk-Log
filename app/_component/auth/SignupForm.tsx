@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { ISignupForm } from '@/app/shared/types/auth';
 import { useSignupMutation } from '@/app/store/server/auth';
+import AreaSearch from '../common/AreaSearch/AreaSearch';
+import { IAddress } from '@/app/shared/types/profile';
 
 const SignupForm = () => {
   const { mutate: signup } = useSignupMutation();
@@ -15,6 +17,7 @@ const SignupForm = () => {
     isValid: false,
     email: '',
   });
+  const [address, setAddress] = useState<IAddress | null>(null);
 
   const {
     watch,
@@ -33,13 +36,21 @@ const SignupForm = () => {
       password: '',
       passwordConfirm: '',
       username: '',
-      adress: '',
     },
   });
 
   const onSubmit = async (data: ISignupForm) => {
+    if (emailValid.isValid === false) {
+      return alert('아이디의 중복 여부를 확인해 주세요.');
+    }
     const { email, password, username } = data;
-    signup({ email, password, username });
+
+    signup({
+      email,
+      password,
+      username,
+      address: address || undefined,
+    });
   };
 
   const handleCheckBtn = async () => {
@@ -86,18 +97,20 @@ const SignupForm = () => {
                 message: '올바른 이메일 형식이 아닙니다.',
               },
             })}
+            autoComplete='username'
           />
           <button
             type='button'
-            className='bg-olive-green shrink-0 rounded-md p-3 text-sm text-white'
+            className={`bg-olive-green shrink-0 rounded-md p-3 text-sm text-white disabled:bg-gray-300`}
             onClick={handleCheckBtn}
+            disabled={emailValid.isValid === true}
           >
             중복 확인
           </button>
         </div>
       </label>
       {emailValid.isValid === false && !!getValues('email') && errors.email && (
-        <p className='text-sm text-red-400'>{errors.email?.message}</p>
+        <p className='text-sm text-red-400'>{errors?.email?.message}</p>
       )}
       {emailValid.isValid === true && (
         <p className='text-sm text-green-500'>사용 가능한 이메일입니다.</p>
@@ -111,7 +124,7 @@ const SignupForm = () => {
         </h2>
         <input
           type='password'
-          className='border- w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
+          className='w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
           placeholder='비밀번호 (8자리 이상)'
           {...register('password', {
             required: '비밀번호를 입력해주세요.',
@@ -120,10 +133,11 @@ const SignupForm = () => {
               message: '비밀번호는 최소 8자 이상이어야 합니다.',
             },
           })}
+          autoComplete='new-password' // autocomplete 속성 추가
         />
       </label>
-      {!!getValues('password') && errors.password && (
-        <p className='text-sm text-red-400'>{errors.password.message}</p>
+      {!!getValues('password') && errors?.password && (
+        <p className='text-sm text-red-400'>{errors?.password?.message}</p>
       )}
       <label>
         <h2 className='relative mb-2'>
@@ -136,19 +150,20 @@ const SignupForm = () => {
           <input
             className='border- w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
             type='password'
-            placeholder='비밀번호'
+            placeholder='비밀번호 확인'
             {...register('passwordConfirm', {
               required: true,
               validate: (value) =>
                 !!watch('password') && watch('password') === value,
             })}
+            autoComplete='new-password'
           />
           <Image
             src='/icons/icon-check.svg'
             alt='체크 아이콘'
             width={24}
             height={24}
-            className={`absolute right-2 top-1/2 -translate-y-1/2 rounded-full ${!!watch('password') && watch('password') === watch('passwordConfirm') ? 'bg-olive-green' : 'bg-gray-300'}`}
+            className={`absolute right-2 top-1/2 h-auto w-6 -translate-y-1/2 rounded-full ${!!watch('password') && watch('password') === watch('passwordConfirm') ? 'bg-olive-green' : 'bg-gray-300'}`}
           />
         </div>
       </label>
@@ -176,22 +191,13 @@ const SignupForm = () => {
       </label>
       <label>
         <h2 className='mb-2'>주소</h2>
-        <input
-          className='border- w-full rounded-md border border-gray-300 py-3 pl-2 outline-none'
-          type='text'
-          placeholder='주소 입력'
-          {...register('adress', { required: false })}
-        />
+        <AreaSearch address={address} setAddress={setAddress} type='SIGNUP' />
       </label>
       <div className='flex flex-col'>
         <button
           type='submit'
           className='bg-olive-green mt-6 w-full rounded-md p-4 text-sm text-white disabled:bg-gray-300'
-          disabled={
-            isValid === false ||
-            emailValid.isValid === false ||
-            emailValid.email !== watch('email')
-          }
+          disabled={isValid === false}
         >
           회원가입
         </button>

@@ -1,9 +1,11 @@
+import { IAddress } from './profile';
+
 export interface ISignupForm {
   email: string;
   password: string;
   passwordConfirm?: string;
   username: string;
-  adress?: string;
+  address?: IAddress;
 }
 
 export interface ILoginForm {

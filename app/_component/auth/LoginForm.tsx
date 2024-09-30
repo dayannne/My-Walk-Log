@@ -68,7 +68,7 @@ const LoginForm = () => {
       >
         로그인
       </button>
-      <span className='flex items-center gap-2 py-4'>
+      {/* <span className='flex items-center gap-2 py-4'>
         <span className='h-[1px] w-full basis-full bg-gray-100'></span>
         <span className='shrink-0 text-xs text-gray-400'>또는</span>
         <span className='h-[1px] w-full basis-full bg-gray-100'></span>
@@ -80,9 +80,9 @@ const LoginForm = () => {
         <span className='after:content=[""] after:bg-kakao after:absolute after:left-4 after:top-1/2 after:h-7 after:w-7 after:-translate-y-1/2'>
           카카오 로그인
         </span>
-      </button>
+      </button> */}
       <div className='mt-4 flex justify-end'>
-        <a href='/signup' className='text-sm text-gray-600'>
+        <a href='/signup' className='text-sm text-gray-500'>
           회원가입
         </a>
       </div>

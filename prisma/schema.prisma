@@ -12,7 +12,7 @@ model User {
   id             Int       @id @default(autoincrement())
   username       String
   email          String    @unique
-  address        Json      @default("{}")
+  address        Json?
   introduction   String    @default("")
   profileImage   String?
   hashedPassword String
@@ -56,35 +56,37 @@ model Review {
   entryFee       String?
   likedCount     Int       @default(0)
   likedBy        Int[]
+  placeName      String?
+  placeAddress   String?
 
   placeId        String
-  placeDetailId  String
   authorId       Int
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  placeDetail    PlaceDetail? @relation(fields: [placeDetailId], references: [id])
+  placeDetail    PlaceDetail? @relation(fields: [placeId], references: [id])
   author         User         @relation(fields: [authorId], references: [id])
 }
 
 model Diary {
   id             Int       @id @default(autoincrement())
-  authorId       Int
-  placeId        String
-  placeDetailId  String
   diaryImages    String[]
   content        String
-  weather        String
   tags           String[]
+  weather        String
   isPublic       Boolean   @default(false)
-
-  likedCount     Int       @default(0)
   likedBy        Int[]
+  likedCount     Int       @default(0)
+  placeName      String?
+  placeAddress   String?
+
+  placeId  String
+  authorId       Int 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  placeDetail    PlaceDetail? @relation(fields: [placeDetailId], references: [id])
   comments       Comment[]
+  placeDetail    PlaceDetail? @relation(fields: [placeId], references: [id])
   author         User        @relation("author", fields: [authorId], references: [id])
 }
 

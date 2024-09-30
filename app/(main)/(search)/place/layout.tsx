@@ -6,13 +6,7 @@ export interface PlaceLayoutProps {
 }
 
 const PlaceLayout = ({ children }: PlaceLayoutProps) => {
-  return (
-    <>
-      <Header title='산책 장소 찾기' />
-      <SearchForm />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default PlaceLayout;

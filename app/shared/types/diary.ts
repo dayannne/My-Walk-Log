@@ -5,6 +5,8 @@ export interface IDiaryReq {
   content: string;
   weather: string | null;
   tags?: string[];
+  placeName: string;
+  placeAddress: string;
 }
 
 export interface IDiary {

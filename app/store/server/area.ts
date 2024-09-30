@@ -1,13 +1,13 @@
 import { mapInstance } from '@/app/api/_routes/axiosInstance';
 import { Latlng } from '@/app/shared/types/map';
-import { queryOptions } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export interface AreaReq {
   areaCode?: number | null; // 지역 코드
-  location?: Latlng;
+  location?: Latlng | null;
 }
 export const useGetArea = ({ areaCode, location }: AreaReq) =>
-  queryOptions({
+  useQuery({
     queryKey: ['areaInfo', areaCode, location],
     queryFn: async () => {
       if (!areaCode && !location) {
@@ -51,6 +51,5 @@ export const useGetArea = ({ areaCode, location }: AreaReq) =>
       return data;
     },
     staleTime: 0,
-    enabled:
-      (!!areaCode && location !== null) || (!!location && areaCode !== null),
+    enabled: !!areaCode || !!location,
   });

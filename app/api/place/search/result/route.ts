@@ -27,14 +27,14 @@ export async function POST(request: Request) {
             distance: place.distance,
             x: place.x,
             y: place.y,
-            findway: placeDetailResponse.data.findway,
+            findway: placeDetailResponse.data.findway || {},
             basicInfo: {
               tags: placeDetailResponse.data.basicInfo.tags,
               address: placeDetailResponse.data.basicInfo.address,
               phonenum: placeDetailResponse.data.basicInfo.phonenum,
             },
-            mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl,
-            photo: placeDetailResponse.data.photo,
+            mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl || {},
+            photo: placeDetailResponse.data.photo || {},
           },
           update: {
             placeName: place.place_name,

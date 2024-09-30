@@ -23,7 +23,6 @@ export async function GET(
             author: true,
           },
         },
-        placeDetail: true,
       },
     });
 

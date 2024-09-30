@@ -21,7 +21,7 @@ const CommentList = ({
   setEditId,
 }: CommentListProps) => {
   const { user } = useUserStore();
-  const { open, setOpen } = useModalStore();
+  const { openId, setOpenId } = useModalStore();
   const { mutate: deleteComment } = useDeleteComment();
 
   const handleConfirm = (commentId: number) => {
@@ -50,11 +50,11 @@ const CommentList = ({
                   {comment.author.username}
                 </span>
                 <span className='flex gap-1 text-xs'>
-                  <span className='text-gray-600'>
-                    {JSON.parse(comment.author.address)
-                      .areaName.split(' ')
-                      .pop() || ''}
-                  </span>
+                  {comment.author.address.areaName && (
+                    <span className='text-gray-600'>
+                      {comment.author.address.areaName.split(' ').pop() || ''}
+                    </span>
+                  )}
                   <span className='text-gray-600'>
                     {formatTimeAgo(comment.createdAt)}
                   </span>
@@ -68,15 +68,9 @@ const CommentList = ({
                     setContent(comment.content);
                   }}
                   secondMenu='댓글 삭제하기'
-                  secondMenuClose={() => setOpen(true)}
+                  secondMenuClose={() => setOpenId(comment.id)}
                 />
               )}
-              <ConfirmModal
-                description='정말로 삭제하시겠습니까?'
-                onConfirm={() => handleConfirm(comment.id)}
-                open={open}
-                handleClose={() => setOpen(false)}
-              />
             </div>
             <p className='text-sm'>
               {comment.content.split('\n').map((str: string, idx: number) => (
@@ -89,6 +83,12 @@ const CommentList = ({
           </div>
         </li>
       ))}
+      <ConfirmModal
+        description='정말로 삭제하시겠습니까?'
+        onConfirm={() => handleConfirm(openId as number)}
+        open={Boolean(openId)}
+        handleClose={() => setOpenId(null)}
+      />
     </ul>
   );
 };
