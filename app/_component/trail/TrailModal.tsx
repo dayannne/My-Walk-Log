@@ -138,7 +138,7 @@ function TrailModal() {
 
         <div className='overflow-hidden rounded-xl border border-solid border-gray-300'>
           <p className='bg-hover flex h-full max-h-56 w-full flex-col gap-1 overflow-y-scroll p-4'>
-            {openInfo.ADIT_DC.split('. ').map((str: string, idx: number) => (
+            {openInfo?.ADIT_DC.split('. ').map((str: string, idx: number) => (
               <React.Fragment key={idx}>
                 {str.trim()}
                 {idx !== openInfo.ADIT_DC.split('. ').length - 1 && '.'}

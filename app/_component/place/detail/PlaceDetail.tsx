@@ -17,22 +17,19 @@ import Image from 'next/image';
 import { useGetPlace } from '@/app/store/server/place';
 import { useModalStore } from '@/app/store/client/modal';
 import { usePathname } from 'next/navigation';
+import CloseButton from '../../common/Button/CloseButton';
 
 const PlaceDetail = ({ placeId }: { placeId: string }) => {
   const pathname = usePathname();
   const { placeMenu } = usePlaceMenuStore();
   const queryOptions = useGetPlace(placeId);
   const { data: place } = useSuspenseQuery(queryOptions);
-  const { setOpenInfo } = useModalStore();
-  const handleCloseButton = () => {
-    setOpenInfo(null);
-  };
 
   // URL이 변경되거나 새로고침 시 openInfo를 null로 설정
 
   return (
     <div
-      className={`flex h-full w-full flex-col gap-2 bg-[#f0f0f3] ${pathname.includes('detail') && 'overflow-y-scroll'} lg:overflow-y-scroll`}
+      className={`z-10 flex h-full w-full flex-col gap-2 bg-[#f0f0f3] ${pathname.includes('detail') && 'overflow-y-scroll'} lg:overflow-y-scroll`}
     >
       <PlaceBasicInfo place={place} placeId={placeId} />
       <PlaceAdditionalInfo place={place} />
@@ -62,17 +59,6 @@ const PlaceDetail = ({ placeId }: { placeId: string }) => {
           )}
         </>
       )}
-      <button
-        className='hover:border-olive-green absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-r-lg lg:top-4'
-        onClick={handleCloseButton}
-      >
-        <Image
-          src='/icons/icon-cancel(white).svg'
-          alt='취소 버튼'
-          width={28}
-          height={28}
-        />
-      </button>
     </div>
   );
 };

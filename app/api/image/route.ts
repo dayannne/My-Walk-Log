@@ -37,9 +37,8 @@ export async function POST(req: Request, res: Response) {
         }),
       );
 
-      return [
-        `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`,
-      ];
+      // 배열이 아닌 문자열로 반환
+      return `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`;
     });
 
     const imgUrls = await Promise.all(uploadPromises);
@@ -51,7 +50,7 @@ export async function POST(req: Request, res: Response) {
       });
     }
 
-    return new Response(JSON.stringify({ data: [...imgUrls], message: 'OK' }), {
+    return new Response(JSON.stringify({ data: imgUrls, message: 'OK' }), {
       status: 200,
     });
   } catch (error) {

@@ -146,7 +146,7 @@ const DiaryFormPage = () => {
                 />
                 <label
                   htmlFor={key}
-                  className='hover:bg-hover box-border flex aspect-square w-auto grow-0 basis-full cursor-pointer items-center justify-center rounded-full border border-solid border-transparent bg-gray-300 p-2 shadow-sm hover:border-gray-300 peer-checked:border-gray-300 peer-checked:bg-white peer-checked:text-white'
+                  className='hover:bg-hover peer-checked:bg-olive-green box-border flex aspect-square w-auto grow-0 basis-full cursor-pointer items-center justify-center rounded-full border border-solid border-transparent bg-gray-300 p-2 shadow-sm hover:border-gray-300 peer-checked:border-gray-300 peer-checked:text-white'
                 >
                   {emoji}
                 </label>
