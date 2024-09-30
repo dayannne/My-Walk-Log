@@ -5,6 +5,12 @@ interface FileInputProps {
   multiple: boolean;
 }
 
+const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+  }
+};
+
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
   ({ onChange, multiple }, ref) => {
     return (
@@ -15,6 +21,8 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
         accept='.png, .jpg, .jpeg'
         className='hidden'
         onChange={onChange}
+        onKeyDown={handleKeyDown}
+        tabIndex={-1} // 포커스 방지
       />
     );
   },

@@ -35,6 +35,12 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
     setPlaces([]);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     if (selectedPlace && mapRef.current) {
       const position = new kakao.maps.LatLng(selectedPlace.y, selectedPlace.x);
@@ -72,6 +78,7 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
           type='text'
           value={placeName}
           onChange={handleSearch}
+          onKeyDown={handleKeyDown}
           placeholder='검색어를 입력하세요'
         />
         {places.length > 0 && (

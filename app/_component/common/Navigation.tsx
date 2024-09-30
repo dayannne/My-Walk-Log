@@ -161,7 +161,13 @@ const Navigation = () => {
               width={32}
               height={32}
             />
-            <span className='lg:hidden'>프로필</span>
+            <span
+              className={`lg:hidden ${
+                pathname.includes('profile') ? 'text-white' : 'text-black'
+              }`}
+            >
+              프로필
+            </span>
           </Link>
         ) : (
           <Link
