@@ -2,7 +2,7 @@ import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
-import { useModalStore } from '@/app/store/client/modal';
+
 interface MenuModalProps {
   firstMenu?: string;
   firstMenuClose?: () => void;
@@ -20,26 +20,24 @@ const MenuModal = ({
   thirdMenu,
   thirdMenuClose,
 }: MenuModalProps) => {
-  const { open, setOpen } = useModalStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const isOpen = Boolean(anchorEl);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    setOpen(true); // 모달 열기
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setOpen(false); // 모달 닫기
   };
 
   return (
     <>
       <button
         id='basic-button'
-        aria-controls={open ? 'basic-menu' : undefined}
+        aria-controls={isOpen ? 'basic-menu' : undefined}
         aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
+        aria-expanded={isOpen ? 'true' : undefined}
         onClick={handleMenuOpen}
       >
         <Image src='/icons/icon-more.svg' alt='더보기' width={24} height={24} />
@@ -47,7 +45,7 @@ const MenuModal = ({
       <Menu
         id='basic-menu'
         anchorEl={anchorEl}
-        open={open}
+        open={isOpen}
         onClose={handleMenuClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
@@ -57,7 +55,7 @@ const MenuModal = ({
           <MenuItem
             onClick={() => {
               if (firstMenuClose) firstMenuClose();
-              handleMenuClose();
+              handleMenuClose(); // Close the menu
             }}
             className='text-sm'
           >

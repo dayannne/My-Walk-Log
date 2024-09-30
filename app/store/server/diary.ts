@@ -1,3 +1,5 @@
+'use client';
+
 import { IDiaryReq } from '@/app/shared/types/diary';
 
 import {
@@ -7,7 +9,8 @@ import {
   useInfiniteQuery,
 } from '@tanstack/react-query';
 import axios from 'axios';
-// import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useModalStore } from '../client/modal';
 
 export const getDiaryDetail = async (diaryId: number) => {
   return await fetch(
@@ -47,11 +50,15 @@ export const useGetAllDiary = () =>
   });
 
 export const useCreateDiary = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data: IDiaryReq) => {
       return await axios.post(`/api/diary/write`, data);
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+    },
     onError: (error) => {
       console.log(error);
     },
@@ -73,7 +80,7 @@ export const useDiaryLike = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['place'] });
-      queryClient.invalidateQueries({ queryKey: ['diary'] });
+      queryClient.invalidateQueries({ queryKey: ['diaryDetail'] });
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
     },
     onError: (error) => {
@@ -84,6 +91,9 @@ export const useDiaryLike = () => {
 
 export const useDeleteDiary = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { openInfo } = useModalStore();
 
   return useMutation({
     mutationFn: async ({
@@ -96,9 +106,18 @@ export const useDeleteDiary = () => {
       return await axios.delete(`/api/diary/${diaryId}/${userId}/delete`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-      queryClient.invalidateQueries({ queryKey: ['diary'] });
       alert('일기가 삭제되었습니다.');
+      // 장소 상세 모달에서 삭제
+      if (openInfo) queryClient.invalidateQueries({ queryKey: ['place'] });
+      // 마이 프로필 페이지에서 삭제
+      if (pathname.includes('profile'))
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      // 일기 상세에서 삭제
+      if (pathname.includes('diary')) {
+        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+        queryClient.invalidateQueries({ queryKey: ['allDiary'] });
+        router.back();
+      }
     },
     onError: (error) => {
       console.log(error);

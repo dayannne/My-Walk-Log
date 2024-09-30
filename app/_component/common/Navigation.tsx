@@ -83,7 +83,7 @@ const Navigation = () => {
               ? 'bg-olive-green text-white'
               : 'hover:text-olive-green text-black'
           }`}
-          href={'/place'}
+          href={'/place/search'}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={() => {

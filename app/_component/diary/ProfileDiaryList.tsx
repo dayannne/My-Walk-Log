@@ -16,10 +16,9 @@ export interface ProfileDiaryListProps {
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { user } = useUserStore();
-  const { setOpenInfo } = useModalStore();
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
-  const { open, setOpen } = useModalStore();
+  const { setOpenInfo, openId, setOpenId } = useModalStore();
   const pathname = usePathname().split('/');
 
   const handleConfirm = (diaryId: number) => {
@@ -121,7 +120,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
             </Link>
             {pathname.includes('my') && (
               <button
-                className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
+                className='border-olive-green bg-hover flex items-center rounded-lg border border-solid p-2'
                 onClick={() => setOpenInfo(diary.placeId)}
               >
                 <div className='flex basis-full items-center gap-2'>
@@ -131,12 +130,12 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                     width={32}
                     height={32}
                   />
-                  <div className='flex flex-col'>
+                  <div className='flex flex-col items-start'>
                     <span className='text-sm font-medium'>
-                      {diary.placeDetail.placeName}
+                      {diary.placeName}
                     </span>
                     <span className='text-xs text-gray-600'>
-                      {diary.placeDetail.basicInfo.address.region.fullname}
+                      {diary.placeAddress}
                     </span>
                   </div>
                 </div>
@@ -193,19 +192,21 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               {user?.id && user?.id === diary.authorId && (
                 <MenuModal
                   firstMenu='일기 삭제하기'
-                  firstMenuClose={() => setOpen(true)}
+                  firstMenuClose={() => setOpenId(diary.id)}
                 />
               )}
-              <ConfirmModal
-                description='정말로 삭제하시겠습니까?'
-                onConfirm={() => handleConfirm(diary.id)}
-                open={open}
-                handleClose={() => setOpen(false)}
-              />
             </div>
           </div>
         </li>
       ))}
+      {openId && (
+        <ConfirmModal
+          description='정말로 삭제하시겠습니까?'
+          onConfirm={() => handleConfirm(openId)}
+          open={Boolean(openId)}
+          handleClose={() => setOpenId(null)}
+        />
+      )}
     </ul>
   );
 };

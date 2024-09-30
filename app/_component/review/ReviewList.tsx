@@ -22,7 +22,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const pathname = usePathname().split('/');
   const { mutate: toggleLike } = useReviewLike();
   const { mutate: deleteReview } = useDeleteReview();
-  const { open, setOpen, setOpenInfo } = useModalStore();
+  const { openId, setOpenId, setOpenInfo } = useModalStore();
 
   const handleConfirm = (reviewId: number) => {
     deleteReview({ reviewId, userId: user?.id as number });
@@ -147,7 +147,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                 {pathname.includes('my') && (
                   <button
                     type='button'
-                    className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
+                    className='border-olive-green bg-hover flex items-center rounded-lg border border-solid p-2'
                     onClick={() => setOpenInfo(review.placeId)}
                   >
                     <div className='flex basis-full items-center gap-2'>
@@ -157,12 +157,12 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                         width={32}
                         height={32}
                       />
-                      <div className='flex flex-col'>
+                      <div className='flex flex-col items-start'>
                         <span className='text-sm font-medium'>
-                          {review.placeDetail.placeName}
+                          {review.placeName}
                         </span>
                         <span className='text-xs text-gray-600'>
-                          {review.placeDetail.basicInfo.address.region.fullname}
+                          {review.placeAddress}
                         </span>
                       </div>
                     </div>
@@ -205,18 +205,18 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
                 {user?.id && user?.id === review.authorId && (
                   <MenuModal
                     firstMenu='리뷰 삭제하기'
-                    firstMenuClose={() => setOpen(true)}
+                    firstMenuClose={() => setOpenId(review.id)}
                   />
                 )}
-                <ConfirmModal
-                  description='정말로 삭제하시겠습니까?'
-                  onConfirm={() => handleConfirm(review.id)}
-                  open={open}
-                  handleClose={() => setOpen(false)}
-                />
               </div>
             </li>
           ))}
+          <ConfirmModal
+            description='정말로 삭제하시겠습니까?'
+            onConfirm={() => handleConfirm(openId as number)}
+            open={Boolean(openId)}
+            handleClose={() => setOpenId(null)}
+          />
         </ul>
       )}
     </>

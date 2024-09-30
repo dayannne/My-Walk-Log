@@ -14,7 +14,7 @@ const EmptyLikedPlaces = () => {
       아직 즐겨찾기한 장소가 없어요
       <Link
         className='text-olive-green border-olive-green flex w-full max-w-44 items-center gap-1 rounded-lg border border-solid px-2 py-1 text-sm shadow-md'
-        href='/place'
+        href='/place/search'
       >
         <Image
           className=''

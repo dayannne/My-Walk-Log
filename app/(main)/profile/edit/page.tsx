@@ -80,7 +80,7 @@ const EditProfilePage = () => {
 
   useEffect(() => {
     if (profile) {
-      setAddress(JSON.parse(profile.address));
+      setAddress(profile.address);
     }
   }, [profile]);
 
@@ -169,7 +169,11 @@ const EditProfilePage = () => {
             <div className='flex flex-col gap-1'>
               <span className='text-sm font-medium'>주소</span>
 
-              <AreaSearch address={address} setAddress={setAddress} />
+              <AreaSearch
+                address={address}
+                setAddress={setAddress}
+                type='EDIT'
+              />
             </div>
           </div>
         </form>

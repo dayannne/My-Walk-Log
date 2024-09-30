@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { hash } from 'bcrypt';
 import prisma from '@/prisma/context';
 export async function POST(request: Request) {
-  const { username, email, password } = await request.json();
+  const { username, email, password, address } = await request.json();
 
   try {
     // 중복 이메일 체크
@@ -23,15 +23,17 @@ export async function POST(request: Request) {
         email,
         hashedPassword,
         profileImage: process.env.USER_DEFAULT_IMAGE,
+        address: address || {},
       },
     });
 
     // 비밀번호 제외한 사용자 정보 반환
     return NextResponse.json({
+      statue: 200,
       data: {
         username: newUser.username,
         email: newUser.email,
-        password: newUser.hashedPassword,
+        address: newUser.address,
       },
       message: '회원가입에 성공했습니다.\n로그인 페이지로 이동합니다.',
     });

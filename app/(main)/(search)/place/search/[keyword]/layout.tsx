@@ -1,10 +1,10 @@
 import SearchResult from '@/app/_component/place/search/SearchResult';
 
-export interface layoutProps {
+export interface SearchResultLayoutProps {
   children: React.ReactNode;
 }
 
-const SearchResultLayout = ({ children }: layoutProps) => {
+const SearchResultLayout = ({ children }: SearchResultLayoutProps) => {
   return (
     <>
       <SearchResult />
