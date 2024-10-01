@@ -7,6 +7,7 @@ export interface IDiaryReq {
   tags?: string[];
   placeName: string;
   placeAddress: string;
+  isPublic: boolean | string;
 }
 
 export interface IDiary {

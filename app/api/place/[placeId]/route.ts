@@ -16,6 +16,9 @@ export async function GET(
           include: { author: true },
         },
         diaries: {
+          where: {
+            isPublic: true,
+          },
           include: { author: true, comments: true },
         },
       },

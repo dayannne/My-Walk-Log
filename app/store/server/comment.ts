@@ -25,12 +25,6 @@ export const useCreateComment = () => {
       queryClient.invalidateQueries({
         queryKey: ['diaryDetail'],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['diary'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['allDiary'],
-      });
     },
     onError: (error) => {
       console.log(error);
@@ -60,12 +54,6 @@ export const useEditComment = () => {
       queryClient.invalidateQueries({
         queryKey: ['diaryDetail'],
       });
-      queryClient.invalidateQueries({
-        queryKey: ['diary'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['allDiary'],
-      });
     },
     onError: (error) => {
       console.log(error);
@@ -91,12 +79,6 @@ export const useDeleteComment = () => {
       alert('댓글이 삭제되었습니다.');
       queryClient.invalidateQueries({
         queryKey: ['diaryDetail'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['diary'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['allDiary'],
       });
     },
     onError: (error) => {

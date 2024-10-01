@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { useGetAllDiary } from '@/app/store/server/diary';
 import { useDiaryLike } from '@/app/store/server/diary';
 import { WEATHERS } from '@/app/shared/constant';
 import { formatTimeAgo } from '@/app/shared/function/format';
@@ -9,6 +8,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useUserStore } from '@/app/store/client/user';
 import useInfiniteScroll from '@/app/_hooks/useInfiniteScroll';
+import { useGetFeed } from '@/app/store/server/feed';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export interface FeedDiaryProps {
   diaries: any;
@@ -16,9 +17,14 @@ export interface FeedDiaryProps {
 
 const FeedDiaryList = () => {
   const { user } = useUserStore();
+  const queryOptions = useGetFeed();
   const { mutate: toggleLike } = useDiaryLike();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useGetAllDiary();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useInfiniteQuery(queryOptions);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const fetchMorePortfolio = () => {
     if (!isFetchingNextPage && hasNextPage) {

@@ -80,7 +80,7 @@ model Diary {
   placeName      String?
   placeAddress   String?
 
-  placeId  String
+  placeId        String?
   authorId       Int 
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt

@@ -15,6 +15,7 @@ export async function POST(request: Request) {
       weather,
       placeName,
       placeAddress,
+      isPublic,
     } = body;
 
     if (!authorId) {
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!content || !weather || !placeId) {
+    if (!content || !weather) {
       return new Response(
         JSON.stringify({
           message: '필수 필드를 모두 입력해 주세요.',
@@ -45,12 +46,18 @@ export async function POST(request: Request) {
       data: {
         authorId,
         placeId,
-        diaryImages: diaryImages || [],
+        diaryImages:
+          typeof diaryImages === 'string'
+            ? [diaryImages]
+            : Array.isArray(diaryImages)
+              ? diaryImages
+              : [],
         content,
         weather,
         tags: tags || [],
         placeName,
         placeAddress,
+        isPublic,
       },
     });
 

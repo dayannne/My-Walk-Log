@@ -98,7 +98,7 @@ export const WEATHERS: weathers = {
     name: '비',
   },
   snowy: {
-    emoji: '❄️',
+    emoji: '⛄',
     name: '눈',
   },
 };

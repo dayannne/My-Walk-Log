@@ -167,7 +167,7 @@ const EditProfilePage = () => {
               />
             </div>
             <div className='flex flex-col gap-1'>
-              <span className='text-sm font-medium'>주소</span>
+              <span className='text-sm font-medium'>동네</span>
 
               <AreaSearch
                 address={address}

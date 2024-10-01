@@ -34,7 +34,7 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         />
         <div className='flex basis-full flex-col'>
           <div className='text-sm font-semibold'>{diary.author.username}</div>
-          <div className='flex gap-1 text-xs'>
+          <div className='flex items-center gap-1 text-xs'>
             <span className='text-gray-600'>
               {formatTimeAgo(diary.createdAt)}
             </span>
@@ -120,39 +120,42 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           </Carousel>
         )}
       </Link>
-
-      <button
-        type='button'
-        className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-        onClick={() => setOpenInfo(diary.placeId)}
-      >
-        <div className='flex basis-full items-center gap-2'>
-          <Image
-            src='/icons/icon-marker.svg'
-            alt='마커 이미지'
-            width={32}
-            height={32}
-          />
-          <div className='flex flex-col'>
-            <span className='text-sm font-medium'>{diary.placeName}</span>
-            <span className='text-xs text-gray-600'>{diary.placeAddress}</span>
+      {diary.placeId && (
+        <button
+          type='button'
+          className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
+          onClick={() => setOpenInfo(diary.placeId)}
+        >
+          <div className='flex basis-full items-center gap-2'>
+            <Image
+              src='/icons/icon-marker.svg'
+              alt='마커 이미지'
+              width={32}
+              height={32}
+            />
+            <div className='flex flex-col'>
+              <span className='text-sm font-medium'>{diary.placeName}</span>
+              <span className='text-xs text-gray-600'>
+                {diary.placeAddress}
+              </span>
+            </div>
           </div>
-        </div>
 
-        <Image
-          className='rotate-180'
-          src='/icons/icon-arrow-left(green).svg'
-          alt='바로가기'
-          width={24}
-          height={24}
-        />
-      </button>
+          <Image
+            className='rotate-180'
+            src='/icons/icon-arrow-left(green).svg'
+            alt='바로가기'
+            width={24}
+            height={24}
+          />
+        </button>
+      )}
 
-      <div className='flex items-center gap-4'>
+      <div className='flex items-center gap-3'>
         <div className='flex items-center gap-1'>
           <button onClick={onClick}>
             <Image
-              className='mt-[2px] w-6'
+              className='w-6'
               src={
                 diary.likedBy.some((id: number) => id === user?.id) === true
                   ? '/icons/icon-heart-fill.svg'
@@ -170,7 +173,7 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           href={`/diary/detail/${diary.id}`}
         >
           <Image
-            className='mt-[2px] w-6'
+            className='w-6'
             src='/icons/icon-comment.svg'
             alt='댓글'
             width={32}
@@ -178,6 +181,11 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           />
           {diary.comments.length}
         </Link>
+        {user?.id && user?.id === diary.authorId && (
+          <span className='bg-hover text-olive-green shrink-0 rounded-lg px-2 py-1 text-xs font-medium'>
+            {diary.isPublic === true ? '공개' : '비공개'}
+          </span>
+        )}
       </div>
     </li>
   );

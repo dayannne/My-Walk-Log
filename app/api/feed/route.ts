@@ -13,6 +13,9 @@ export async function GET(req: Request) {
     const take = pageSize;
 
     const diaries = await prisma.diary.findMany({
+      where: {
+        isPublic: true,
+      },
       skip,
       take,
       include: {

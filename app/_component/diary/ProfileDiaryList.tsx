@@ -118,7 +118,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                 </Carousel>
               )}
             </Link>
-            {pathname.includes('my') && (
+            {diary.placeId && (
               <button
                 className='border-olive-green bg-hover flex items-center rounded-lg border border-solid p-2'
                 onClick={() => setOpenInfo(diary.placeId)}
@@ -150,7 +150,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               </button>
             )}
             <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-4'>
+              <div className='flex items-center gap-3'>
                 <div className='flex items-center gap-1'>
                   <button
                     onClick={() =>
@@ -161,7 +161,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                     }
                   >
                     <Image
-                      className='mt-[2px] w-6'
+                      className='w-6'
                       src={
                         diary.likedBy.some((id: number) => id === user?.id) ===
                         true
@@ -180,7 +180,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                   href={`/diary/detail/${diary.id}`}
                 >
                   <Image
-                    className='mt-[2px] w-6'
+                    className='w-6'
                     src='/icons/icon-comment.svg'
                     alt='댓글'
                     width={32}
@@ -188,6 +188,11 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                   />
                   {diary.comments.length}
                 </Link>
+                {user?.id && user?.id === diary.authorId && (
+                  <span className='bg-hover text-olive-green shrink-0 rounded-lg px-2 py-1 text-xs font-medium'>
+                    {diary.isPublic === true ? '공개' : '비공개'}
+                  </span>
+                )}
               </div>
               {user?.id && user?.id === diary.authorId && (
                 <MenuModal

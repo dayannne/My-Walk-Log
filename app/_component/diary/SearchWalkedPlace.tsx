@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
-
+import Image from 'next/image';
 interface Props {
   selectedPlace: any;
   setSelectedPlace: (place: any) => void;
@@ -72,14 +72,21 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
 
   return (
     <div className='flex flex-col gap-3'>
-      <div className='flex max-h-56 w-full flex-col rounded-lg border border-solid border-gray-500 text-sm shadow-sm'>
+      <div className='relative flex max-h-56 w-full flex-col rounded-lg border border-solid border-gray-500 text-sm shadow-sm'>
+        <Image
+          className='absolute left-2 top-1/2 w-5 -translate-y-1/2'
+          src='/icons/icon-search.svg'
+          alt=''
+          width={20}
+          height={20}
+        />
         <input
-          className={`w-full rounded-lg px-2 py-3 focus:outline-none ${places.length > 0 && 'border-b border-solid border-gray-400'}`}
+          className={`w-full rounded-lg px-2 py-3 pl-8 text-xs focus:outline-none ${places.length > 0 && 'border-b border-solid border-gray-400'}`}
           type='text'
           value={placeName}
           onChange={handleSearch}
           onKeyDown={handleKeyDown}
-          placeholder='검색어를 입력하세요'
+          placeholder='장소명으로 검색 (ex.서울숲)'
         />
         {places.length > 0 && (
           <ul className='flex-col overflow-y-scroll rounded-b-lg'>

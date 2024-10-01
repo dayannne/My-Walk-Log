@@ -18,12 +18,6 @@ export const getDiaryDetail = async (diaryId: number) => {
   ).then((res) => res.json());
 };
 
-export const getAllDiary = async (pageParam = 1) => {
-  return await fetch(
-    `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary?page=${pageParam}&size=10`,
-  ).then((res) => res.json());
-};
-
 export const useGetDiaryDetail = (diaryId: number) =>
   queryOptions({
     queryKey: ['diaryDetail', diaryId],
@@ -32,21 +26,6 @@ export const useGetDiaryDetail = (diaryId: number) =>
       return response.data;
     },
     enabled: !!diaryId,
-  });
-
-export const useGetAllDiary = () =>
-  useInfiniteQuery({
-    queryKey: ['allDiary'],
-    queryFn: async ({ pageParam = 1 }) => {
-      const response = await axios.get(`/api/diary?page=${pageParam}&size=10`);
-      return response.data;
-    },
-    getNextPageParam: (lastPage) => {
-      const { page, totalPages } = lastPage;
-      return page < totalPages ? page + 1 : undefined;
-    },
-    initialPageParam: 1,
-    staleTime: 60 * 1000,
   });
 
 export const useCreateDiary = () => {
@@ -58,6 +37,7 @@ export const useCreateDiary = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['feed'] });
     },
     onError: (error) => {
       console.log(error);
