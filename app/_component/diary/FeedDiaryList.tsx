@@ -95,14 +95,7 @@ const FeedDiaryList = () => {
               </div>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-1'>
-                  <button
-                    onClick={() =>
-                      toggleLike({
-                        diaryId: diary.id,
-                        userId: user?.id as number,
-                      })
-                    }
-                  >
+                  <button onClick={() => toggleLike(diary.id)}>
                     <Image
                       className='w-6'
                       src={

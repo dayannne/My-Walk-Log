@@ -8,14 +8,13 @@ export async function POST(
   const userId = parseInt(params.userId);
   const placeId = params.placeId;
 
-  if (isNaN(userId) || !placeId) {
+  if (!placeId) {
     return new Response(
       JSON.stringify({
-        message: '잘못된 요청 : 로그인 상태 / 장소 정보 확인',
+        message: '잘못된 placeId 입니다.',
       }),
       {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }
@@ -32,13 +31,19 @@ export async function POST(
         select: { likedBy: true },
       }),
     ]);
-
-    if (!user || !place) {
+    if (!user) {
       return new Response(
-        JSON.stringify({ message: '장소 또는 사용자를 찾을 수 없습니다.' }),
+        JSON.stringify({ message: '존재하지 않는 사용자입니다.' }),
         {
           status: 404,
-          headers: { 'Content-Type': 'application/json' },
+        },
+      );
+    }
+    if (!place) {
+      return new Response(
+        JSON.stringify({ message: '존재하지 않는 장소입니다.' }),
+        {
+          status: 404,
         },
       );
     }
@@ -68,14 +73,6 @@ export async function POST(
 
     return NextResponse.json({ message }, { status: 200 });
   } catch (error) {
-    return new Response(
-      JSON.stringify({
-        message: '서버 내부 오류',
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

@@ -14,7 +14,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
   const { mutate: deleteDiary } = useDeleteDiary();
 
   const handleConfirm = (diaryId: number) => {
-    deleteDiary({ diaryId, userId: user?.id as number });
+    deleteDiary(diaryId);
   };
 
   return (
@@ -24,12 +24,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
           key={diary.id}
           diary={diary}
           onConfirm={handleConfirm}
-          onClick={() =>
-            toggleLike({
-              diaryId: diary.id,
-              userId: user?.id as number,
-            })
-          }
+          onClick={() => toggleLike(diary.id)}
         />
       ))}
     </ul>

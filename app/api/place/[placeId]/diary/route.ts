@@ -23,11 +23,15 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(diaries);
+    if (diaries.length === 0) {
+      return NextResponse.json(
+        { message: '해당 장소에 대한 일기 존재하지 않습니다.', data: [] },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ message: 'OK', data: diaries }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: '일기를 불러오는 중 에러가 발생했습니다.' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

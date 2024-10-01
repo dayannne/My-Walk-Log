@@ -8,6 +8,5 @@ export interface Comment {
 }
 
 export interface ICommentReq {
-  authorId?: number;
   content: string;
 }

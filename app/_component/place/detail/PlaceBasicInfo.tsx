@@ -141,7 +141,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
         <div className='border-gray-240 flex border-t border-solid border-gray-200 py-2'>
           <button
             className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'
-            onClick={() => toggleLike({ placeId, userId: user?.id as number })}
+            onClick={() => toggleLike(placeId)}
           >
             <Image
               className='w-5'

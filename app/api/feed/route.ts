@@ -16,8 +16,8 @@ export async function GET(req: Request) {
       where: {
         isPublic: true,
       },
-      skip,
-      take,
+      skip, // 건너뛸 항목 수
+      take, // 가져올 항목 수
       include: {
         author: {
           include: {
@@ -29,23 +29,28 @@ export async function GET(req: Request) {
       },
     });
 
+    // 다이어리가 없을 경우
     if (!diaries) {
-      return NextResponse.json({ message: '잘못된 request' }, { status: 400 });
+      return NextResponse.json(
+        { message: '피드(일기)가 존재하지 않습니다.' },
+        { status: 404 },
+      );
     }
 
     const totalDiaries = await prisma.diary.count();
 
-    return NextResponse.json({
-      data: diaries,
-      page,
-      pageSize,
-      totalPages: Math.ceil(totalDiaries / pageSize),
-      totalDiaries,
-    });
-  } catch (error) {
     return NextResponse.json(
-      { message: '일기 피드를 불러오는 중 에러가 발생했습니다.' },
-      { status: 500 },
+      {
+        message: 'OK',
+        data: diaries,
+        page,
+        pageSize,
+        totalPages: Math.ceil(totalDiaries / pageSize),
+        totalDiaries,
+      },
+      { status: 200 },
     );
+  } catch (error) {
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

@@ -28,13 +28,13 @@ export async function GET(
 
     if (!user) {
       return NextResponse.json(
-        { message: 'User를 찾을 수 없습니다' },
-        { status: 404 },
+        { message: '로그인 후 이용 가능합니다.' },
+        { status: 401 },
       );
     }
 
-    return NextResponse.json(user, { status: 200 });
+    return NextResponse.json({ message: 'OK', user }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

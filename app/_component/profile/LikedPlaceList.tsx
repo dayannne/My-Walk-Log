@@ -33,14 +33,7 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
               <span className='text-sm font-medium'>{place.placeName}</span>
               <span className='text-xs'>{place.address}</span>
             </button>
-            <button
-              onClick={() =>
-                toggleLike({
-                  placeId: place.id,
-                  userId: user?.id as number,
-                })
-              }
-            >
+            <button onClick={() => toggleLike(place.id)}>
               <Image
                 className='w-5'
                 src={

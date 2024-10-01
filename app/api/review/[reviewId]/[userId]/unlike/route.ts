@@ -53,10 +53,6 @@ export async function DELETE(
       );
     }
   } catch (error) {
-    console.error('삭제 중 오류 발생:', error);
-    return new Response(JSON.stringify({ message: '서버 내부 오류' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

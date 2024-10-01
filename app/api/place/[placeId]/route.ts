@@ -26,13 +26,13 @@ export async function GET(
 
     if (!placeDetail) {
       return NextResponse.json(
-        { message: 'placeId에 해당하는 데이터를 찾을 수 없습니다' },
+        { message: '존재하지 않는 장소입니다.' },
         { status: 404 },
       );
     }
 
     return NextResponse.json(placeDetail, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

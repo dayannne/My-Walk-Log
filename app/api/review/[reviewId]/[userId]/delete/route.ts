@@ -15,7 +15,6 @@ export async function DELETE(
       }),
       {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }
@@ -26,18 +25,17 @@ export async function DELETE(
     });
     if (!review) {
       return new Response(
-        JSON.stringify({ message: '일기를 찾을 수 없습니다.' }),
+        JSON.stringify({ message: '존재하지 않는 리뷰입니다.' }),
         {
           status: 404,
-          headers: { 'Content-Type': 'application/json' },
         },
       );
     }
     if (review.authorId !== userId) {
-      return new Response(JSON.stringify({ message: '권한이 없습니다.' }), {
-        status: 403,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return NextResponse.json(
+        { message: '권한이 없습니다.' },
+        { status: 403 },
+      );
     }
 
     await prisma.review.delete({
@@ -49,10 +47,6 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    console.error('Error:', error);
-    return new Response(JSON.stringify({ message: '서버 내부 오류' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

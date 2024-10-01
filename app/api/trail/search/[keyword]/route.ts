@@ -22,8 +22,8 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(trails, { status: 200 });
+    return NextResponse.json({ message: 'OK', data: trails }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

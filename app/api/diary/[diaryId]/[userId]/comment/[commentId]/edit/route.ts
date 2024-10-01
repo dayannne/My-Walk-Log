@@ -22,10 +22,6 @@ export async function PUT(
     });
     return NextResponse.json(updatedComment, { status: 200 });
   } catch (error) {
-    console.error('댓글 업데이트 오류:', error);
-    return NextResponse.json(
-      { error: '댓글 업데이트에 실패했습니다.' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

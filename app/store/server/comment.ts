@@ -1,14 +1,10 @@
 import { ICommentReq } from '@/app/shared/types/comment';
-import {
-  useQueryClient,
-  useMutation,
-  queryOptions,
-  useInfiniteQuery,
-} from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useUserStore } from '../client/user';
 
 export const useCreateComment = () => {
+  const { user } = useUserStore();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
@@ -18,7 +14,10 @@ export const useCreateComment = () => {
       diaryId: number;
       data: ICommentReq;
     }) => {
-      return await axios.post(`/api/diary/${diaryId}/comment`, data);
+      return await axios.post(
+        `/api/diary/${diaryId}/${user?.id}/comment`,
+        data,
+      );
     },
     onSuccess: () => {
       alert('댓글이 기록되었습니다.');
@@ -33,6 +32,8 @@ export const useCreateComment = () => {
 };
 
 export const useEditComment = () => {
+  const { user } = useUserStore();
+
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
@@ -45,7 +46,7 @@ export const useEditComment = () => {
       data: ICommentReq;
     }) => {
       return await axios.put(
-        `/api/diary/${diaryId}/comment/${commentId}/edit`,
+        `/api/diary/${diaryId}/${user?.id}/comment/${commentId}/edit`,
         data,
       );
     },
@@ -62,6 +63,8 @@ export const useEditComment = () => {
 };
 
 export const useDeleteComment = () => {
+  const { user } = useUserStore();
+
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
@@ -72,7 +75,7 @@ export const useDeleteComment = () => {
       commentId: number;
     }) => {
       return await axios.delete(
-        `/api/diary/${diaryId}/comment/${commentId}/delete`,
+        `/api/diary/${diaryId}/${user?.id}/comment/${commentId}/delete`,
       );
     },
     onSuccess: () => {

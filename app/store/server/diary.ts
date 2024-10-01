@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from '../client/modal';
+import { useUserStore } from '../client/user';
 
 export const getDiaryDetail = async (diaryId: number) => {
   return await fetch(
@@ -29,11 +30,13 @@ export const useGetDiaryDetail = (diaryId: number) =>
   });
 
 export const useCreateDiary = () => {
+  const { user } = useUserStore();
+
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: IDiaryReq) => {
-      return await axios.post(`/api/diary/write`, data);
+      return await axios.post(`/api/diary/${user?.id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
@@ -46,17 +49,13 @@ export const useCreateDiary = () => {
 };
 
 export const useDiaryLike = () => {
+  const { user } = useUserStore();
+
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      diaryId,
-      userId,
-    }: {
-      diaryId: number;
-      userId: number;
-    }) => {
-      return axios.post(`/api/diary/${diaryId}/${userId}/like`);
+    mutationFn: async (diaryId: number) => {
+      return axios.post(`/api/diary/${diaryId}/${user?.id}/like`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['place'] });
@@ -70,20 +69,16 @@ export const useDiaryLike = () => {
 };
 
 export const useDeleteDiary = () => {
+  const { user } = useUserStore();
+
   const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();
   const { openInfo } = useModalStore();
 
   return useMutation({
-    mutationFn: async ({
-      diaryId,
-      userId,
-    }: {
-      diaryId: number;
-      userId: number;
-    }) => {
-      return await axios.delete(`/api/diary/${diaryId}/${userId}/delete`);
+    mutationFn: async (diaryId: number) => {
+      return await axios.delete(`/api/diary/${diaryId}/${user?.id}/delete`);
     },
     onSuccess: () => {
       alert('일기가 삭제되었습니다.');

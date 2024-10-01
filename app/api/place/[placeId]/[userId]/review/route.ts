@@ -9,14 +9,13 @@ export async function POST(
   const userId = parseInt(params.userId);
   const placeId = params.placeId;
 
-  if (!userId || !placeId) {
+  if (!placeId) {
     return new Response(
       JSON.stringify({
-        message: '잘못된 요청 : 로그인 상태 / 장소 정보 확인',
+        message: '잘못된 placeId 입니다.',
       }),
       {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }
@@ -41,7 +40,6 @@ export async function POST(
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
         },
       );
     }
@@ -75,20 +73,11 @@ export async function POST(
           }),
           {
             status: 409,
-            headers: { 'Content-Type': 'application/json' },
           },
         );
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        message: '서버 내부 오류',
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

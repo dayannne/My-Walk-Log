@@ -25,7 +25,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const { openId, setOpenId, setOpenInfo } = useModalStore();
 
   const handleConfirm = (reviewId: number) => {
-    deleteReview({ reviewId, userId: user?.id as number });
+    deleteReview(reviewId);
   };
 
   return (
@@ -179,14 +179,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
 
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-1'>
-                  <button
-                    onClick={() =>
-                      toggleLike({
-                        reviewId: review.id,
-                        userId: user?.id as number,
-                      })
-                    }
-                  >
+                  <button onClick={() => toggleLike(review.id)}>
                     <Image
                       src={
                         review.likedBy.some((id: number) => id === user?.id) ===

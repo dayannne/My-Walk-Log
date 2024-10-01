@@ -34,7 +34,6 @@ const Commentform = ({
       editComment({ diaryId, commentId: editId, data });
     } else {
       const data: ICommentReq = {
-        authorId: user?.id as number,
         content,
       };
       createComment({ diaryId, data });

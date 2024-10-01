@@ -1,6 +1,6 @@
-import * as bcrypt from 'bcrypt';
-import prisma from '@/prisma/context';
 import { NextResponse } from 'next/server';
+import prisma from '@/prisma/context';
+import * as bcrypt from 'bcrypt';
 
 interface RequestBody {
   email: string;
@@ -8,32 +8,49 @@ interface RequestBody {
 }
 
 export async function POST(request: Request) {
-  const { email, password }: RequestBody = await request.json();
+  try {
+    const { email, password }: RequestBody = await request.json();
 
-  // 이메일이 존재하는지 확인
-  const user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
+    // 이메일과 비밀번호 필수 항목 확인
+    if (!email || !password) {
+      return NextResponse.json(
+        { message: '이메일과 비밀번호를 입력해 주세요.' },
+        { status: 400 },
+      );
+    }
 
-  if (!user) {
-    return NextResponse.json(
-      { message: '아이디 및 비밀번호가 일치하지 않습니다.' },
-      { status: 404 },
-    );
-  }
-
-  // 패스워드도 동일한지 확인
-  if (user && (await bcrypt.compare(password, user.hashedPassword))) {
-    const { hashedPassword, ...userWithoutPass } = user;
-    return NextResponse.json({
-      data: { ...userWithoutPass },
-      message: '로그인 성공',
+    // 이메일이 존재하는지 확인
+    const user = await prisma.user.findFirst({
+      where: { email },
     });
-  } else
-    return NextResponse.json(
-      { message: '아이디 및 비밀번호가 일치하지 않습니다.' },
-      { status: 404 },
-    );
+
+    // 사용자 확인
+    if (!user) {
+      return NextResponse.json(
+        { message: '아이디 및 비밀번호가 일치하지 않습니다.' },
+        { status: 401 },
+      );
+    }
+
+    // 패스워드 비교
+    const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+
+    if (isPasswordValid) {
+      const { hashedPassword, ...userWithoutPass } = user;
+      return NextResponse.json(
+        {
+          message: 'OK',
+          data: { ...userWithoutPass },
+        },
+        { status: 200 },
+      );
+    } else {
+      return NextResponse.json(
+        { message: '아이디 및 비밀번호가 일치하지 않습니다.' },
+        { status: 401 },
+      );
+    }
+  } catch (error) {
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
+  }
 }

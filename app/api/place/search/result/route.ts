@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/prisma/context';
 import { IPlaceInfo } from '@/app/shared/types/map';
 import { kakaoInstance } from '@/app/api/_routes/axiosInstance';
+
 export async function POST(request: Request) {
   try {
     const places: IPlaceInfo[] = await request.json();
@@ -59,12 +60,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
+        message: 'OK',
         data: upsertedPlaces,
       },
       { status: 200 },
     );
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

@@ -9,7 +9,7 @@ export async function DELETE(
 
   if (isNaN(id)) {
     return NextResponse.json(
-      { error: '유효하지 않은 comment ID' },
+      { message: '잘못된 commentId 입니다.' },
       { status: 400 },
     );
   }
@@ -23,6 +23,6 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    return NextResponse.json({ error: '서버 내부 오류' }, { status: 500 });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

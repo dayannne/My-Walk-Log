@@ -8,38 +8,36 @@ export async function DELETE(
   const diaryId = parseInt(params.diaryId);
   const userId = parseInt(params.userId);
 
-  if (isNaN(diaryId) || isNaN(userId)) {
-    return new Response(
-      JSON.stringify({
-        message: '잘못된 요청',
-      }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
+  // diaryId와 userId 유효성 검증
+  if (isNaN(diaryId)) {
+    return NextResponse.json(
+      { message: '잘못된 diaryId 입니다.' },
+      { status: 400 },
     );
   }
 
   try {
+    // diary 존재 여부 확인
     const diary = await prisma.diary.findUnique({
       where: { id: diaryId },
     });
+
     if (!diary) {
-      return new Response(
-        JSON.stringify({ message: '일기를 찾을 수 없습니다.' }),
-        {
-          status: 404,
-          headers: { 'Content-Type': 'application/json' },
-        },
+      return NextResponse.json(
+        { message: '존재하지 않는 일기입니다.' },
+        { status: 404 },
       );
     }
+
+    // 권한 확인
     if (diary.authorId !== userId) {
-      return new Response(JSON.stringify({ message: '권한이 없습니다.' }), {
-        status: 403,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return NextResponse.json(
+        { message: '권한이 없습니다.' },
+        { status: 403 },
+      );
     }
 
+    // diary 삭제
     await prisma.diary.delete({
       where: { id: diaryId },
     });
@@ -49,10 +47,6 @@ export async function DELETE(
       { status: 200 },
     );
   } catch (error) {
-    console.error('Error:', error);
-    return new Response(JSON.stringify({ message: '서버 내부 오류' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json({ message: 'SERVER ERROR' }, { status: 500 });
   }
 }

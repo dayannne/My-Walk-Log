@@ -18,7 +18,6 @@ export interface DiaryPageProps {}
 
 const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { diaryId } = params;
-  const { user } = useUserStore();
   const { openInfo, setOpenInfo } = useModalStore();
   const queryOptions = useGetDiaryDetail(params.diaryId);
   const { data: diary, isLoading } = useSuspenseQuery(queryOptions);
@@ -28,9 +27,8 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState<number | null>(null);
   const handleConfirm = (diaryId: number) => {
-    deleteDiary({ diaryId, userId: user?.id as number });
+    deleteDiary(diaryId);
   };
-  console.log(isLoading);
 
   useEffect(() => {
     if (loading) {
@@ -46,12 +44,7 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
         <DiaryItem
           diary={diary}
           onConfirm={handleConfirm}
-          onClick={() =>
-            toggleLike({
-              diaryId: diary.id,
-              userId: user?.id as number,
-            })
-          }
+          onClick={() => toggleLike(diary.id)}
         />
         <div className='flex-grow'>
           <CommentList
