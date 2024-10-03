@@ -16,8 +16,8 @@ export async function GET(req: Request) {
       where: {
         isPublic: true,
       },
-      skip,
-      take,
+      skip, // 건너뛸 항목 수
+      take, // 가져올 항목 수
       include: {
         author: {
           include: {

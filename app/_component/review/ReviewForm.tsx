@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useState } from 'react';
-import { useUserStore } from '@/app/store/client/user';
 import { useCreateReview } from '@/app/store/server/review';
 import { IReviewReq } from '@/app/shared/types/review';
 import Header from '../common/Header';
@@ -20,7 +19,7 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
     uploadImage,
     removeImage,
   } = useImageUpload();
-  const { user } = useUserStore();
+
   const { setPlaceDetailState, placeDetail } = usePlaceDetailStore();
   const walkDurations = Object.entries(WALK_DURATIONS);
   const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);

@@ -6,7 +6,6 @@ import {
   useQueryClient,
   useMutation,
   queryOptions,
-  useInfiniteQuery,
 } from '@tanstack/react-query';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';

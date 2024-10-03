@@ -36,7 +36,7 @@ const PlaceDetail = ({ placeId }: { placeId: string }) => {
       <PlaceDetailMenu />
       {placeMenu === 0 && (
         <>
-          <PlaceDiaryAlbum placeId={placeId} place={placeDetail} />
+          <PlaceDiaryAlbum place={placeDetail} />
           <PleceReviewSummary place={placeDetail} />
           <PlaceFindWayInfo place={placeDetail} />
         </>

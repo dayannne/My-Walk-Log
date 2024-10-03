@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { truncate } from 'fs/promises';
 
 const prisma = new PrismaClient();
 
@@ -21,11 +22,7 @@ export async function GET(
     const diary = await prisma.diary.findUnique({
       where: { id },
       include: {
-        author: {
-          include: {
-            diaries: true,
-          },
-        },
+        author: true,
         comments: {
           include: {
             author: true,

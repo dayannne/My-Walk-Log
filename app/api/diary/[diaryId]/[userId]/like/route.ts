@@ -40,16 +40,26 @@ export async function POST(
       );
     }
 
+    // 일기 존재 여부 확인
+    if (!diary) {
+      return NextResponse.json(
+        { message: '존재하지 않는 일기입니다.' },
+        { status: 404 },
+      );
+    }
+
+    // 사용자가 이미 좋아요를 눌렀는지 확인
     const userHasLiked = diary.likedBy.includes(userId);
 
+    // 데이터베이스 업데이트
     await prisma.$transaction([
       prisma.diary.update({
         where: { id: diaryId },
         data: {
           likedBy: {
             set: userHasLiked
-              ? diary.likedBy.filter((id) => id !== userId)
-              : [...diary.likedBy, userId],
+              ? diary.likedBy.filter((id) => id !== userId) // 좋아요 취소
+              : [...diary.likedBy, userId], // 좋아요 추가
           },
         },
       }),
@@ -58,8 +68,8 @@ export async function POST(
         data: {
           likedDiaries: {
             set: userHasLiked
-              ? user.likedDiaries.filter((id) => id !== diaryId)
-              : [...user.likedDiaries, diaryId],
+              ? user.likedDiaries.filter((id) => id !== diaryId) // 좋아요 취소
+              : [...user.likedDiaries, diaryId], // 좋아요 추가
           },
         },
       }),

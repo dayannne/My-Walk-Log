@@ -51,12 +51,12 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         {user?.id && user?.id === diary?.authorId && (
           <MenuModal
             firstMenu='일기 삭제하기'
-            firstMenuClose={() => setOpenId(diary.id)}
+            firstMenuClose={() => setOpenId(diary?.id)}
           />
         )}
         <ConfirmModal
           description='정말로 삭제하시겠습니까?'
-          onConfirm={() => onConfirm(diary.id)}
+          onConfirm={() => onConfirm(diary?.id)}
           open={Boolean(openId)}
           handleClose={() => setOpenId(null)}
         />
@@ -71,7 +71,7 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         )}
         {diary?.tags?.length > 0 && (
           <div className='flex flex-wrap gap-1'>
-            {diary.tags.map((tag: string, idx: number) => (
+            {diary?.tags.map((tag: string, idx: number) => (
               <span className='bg-hover rounded-md px-2 py-1 text-xs' key={idx}>
                 #{tag}
               </span>
