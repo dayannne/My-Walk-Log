@@ -29,22 +29,22 @@ export async function GET(req: Request) {
       },
     });
 
-    if (!diaries) {
-      return NextResponse.json({ message: '잘못된 request' }, { status: 400 });
-    }
-
     const totalDiaries = await prisma.diary.count();
 
-    return NextResponse.json({
-      data: diaries,
-      page,
-      pageSize,
-      totalPages: Math.ceil(totalDiaries / pageSize),
-      totalDiaries,
-    });
+    return NextResponse.json(
+      {
+        status: 'success',
+        data: diaries.length ? diaries : [],
+        page,
+        pageSize,
+        totalPages: Math.ceil(totalDiaries / pageSize),
+        totalDiaries,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
-      { message: '일기 피드를 불러오는 중 에러가 발생했습니다.' },
+      { status: 'error', message: '서버 에러가 발생했습니다.' },
       { status: 500 },
     );
   }

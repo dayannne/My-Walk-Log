@@ -18,27 +18,24 @@ export async function POST(request: Request) {
       isPublic,
     } = body;
 
+    // 요청 검증
     if (!authorId) {
-      return new Response(
-        JSON.stringify({
-          message: '잘못된 요청 : 로그인 상태 / 장소 정보 확인',
-        }),
+      return NextResponse.json(
         {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          status: 'error',
+          message: '잘못된 요청: 로그인 상태 / 장소 정보 확인',
         },
+        { status: 400 },
       );
     }
 
     if (!content || !weather) {
-      return new Response(
-        JSON.stringify({
-          message: '필수 필드를 모두 입력해 주세요.',
-        }),
+      return NextResponse.json(
         {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          status: 'error',
+          message: '필수 필드를 모두 입력해 주세요.',
         },
+        { status: 400 },
       );
     }
 
@@ -62,34 +59,32 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      { data: diary, message: '일기가 기록되었습니다.' },
+      {
+        status: 'success',
+        message: '일기가 기록되었습니다.',
+        data: { ...diary },
+      },
       { status: 200 },
     );
   } catch (error) {
-    console.error('일기 작성 오류:', error);
-
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        return new Response(
-          JSON.stringify({
-            message: '중복된 값이 존재합니다.',
-          }),
+        return NextResponse.json(
           {
-            status: 409,
-            headers: { 'Content-Type': 'application/json' },
+            status: 'error',
+            message: '중복된 값이 존재합니다.',
           },
+          { status: 409 },
         );
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        message: '서버 내부 오류',
-      }),
+    return NextResponse.json(
       {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
       },
+      { status: 500 },
     );
   }
 }

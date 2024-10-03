@@ -2,38 +2,69 @@ import * as bcrypt from 'bcrypt';
 import prisma from '@/prisma/context';
 import { NextResponse } from 'next/server';
 
-interface RequestBody {
-  email: string;
-  password: string;
-}
-
 export async function POST(request: Request) {
-  const { email, password }: RequestBody = await request.json();
+  try {
+    const { email, password } = await request.json();
 
-  // 이메일이 존재하는지 확인
-  const user = await prisma.user.findFirst({
-    where: {
-      email,
-    },
-  });
+    // 이메일 및 비밀번호 입력 검증
+    if (
+      !email ||
+      typeof email !== 'string' ||
+      !password ||
+      typeof password !== 'string'
+    ) {
+      return NextResponse.json(
+        {
+          status: 'error',
+          message: '유효한 이메일과 비밀번호를 입력하세요.',
+        },
+        { status: 400 },
+      );
+    }
 
-  if (!user) {
+    // 이메일로 기존 사용자 확인
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          status: 'error',
+          message: '아이디 및 비밀번호가 일치하지 않습니다.',
+        },
+        { status: 401 },
+      );
+    }
+
+    // 패스워드 확인
+    const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+    if (isPasswordValid) {
+      const { hashedPassword, ...userWithoutPass } = user;
+      return NextResponse.json(
+        {
+          status: 'success',
+          data: userWithoutPass,
+          message: '로그인 성공',
+        },
+        { status: 200 },
+      );
+    } else {
+      return NextResponse.json(
+        {
+          status: 'error',
+          message: '아이디 및 비밀번호가 일치하지 않습니다.',
+        },
+        { status: 401 },
+      );
+    }
+  } catch (error) {
     return NextResponse.json(
-      { message: '아이디 및 비밀번호가 일치하지 않습니다.' },
-      { status: 404 },
+      {
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
+      },
+      { status: 500 },
     );
   }
-
-  // 패스워드도 동일한지 확인
-  if (user && (await bcrypt.compare(password, user.hashedPassword))) {
-    const { hashedPassword, ...userWithoutPass } = user;
-    return NextResponse.json({
-      data: { ...userWithoutPass },
-      message: '로그인 성공',
-    });
-  } else
-    return NextResponse.json(
-      { message: '아이디 및 비밀번호가 일치하지 않습니다.' },
-      { status: 404 },
-    );
 }

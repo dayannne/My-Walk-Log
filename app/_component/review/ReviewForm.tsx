@@ -24,7 +24,6 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
   const { setPlaceDetailState, placeDetail } = usePlaceDetailStore();
   const walkDurations = Object.entries(WALK_DURATIONS);
   const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
-
   const {
     register,
     handleSubmit,
@@ -50,8 +49,8 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       walkDuration: parseInt(formData.walkDuration as string),
       keywords: placeKeywords,
       reviewImages,
-      placeName: placeDetail.placeName,
-      placeAddress: placeDetail.basicInfo.address.region.fullname,
+      placeName: placeDetail?.placeName,
+      placeAddress: placeDetail?.basicInfo?.address?.region?.fullname,
     };
 
     createReview({ data, placeId, userId: user?.id as number });

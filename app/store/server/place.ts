@@ -12,7 +12,7 @@ export const useGetPlace = (placeId: string) =>
     queryKey: ['place', placeId],
     queryFn: async () => {
       const response = await axios.get(`/api/place/${placeId}`);
-      return response.data;
+      return response.data.data;
     },
     staleTime: 0,
   });
@@ -60,7 +60,7 @@ export const useGetLikedPlaces = (likedPlaces: string[]) =>
       const response = await axios.get(`/api/likedPlaces`, {
         params: { likedPlaces },
       });
-      return response.data;
+      return response.data.data;
     },
     staleTime: 0,
   });

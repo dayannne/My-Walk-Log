@@ -13,9 +13,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from '../client/modal';
 
 export const getDiaryDetail = async (diaryId: number) => {
-  return await fetch(
+  const response = await fetch(
     `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary/${diaryId}`,
-  ).then((res) => res.json());
+  );
+  const data = await response.json();
+  return data.data;
 };
 
 export const useGetDiaryDetail = (diaryId: number) =>
@@ -23,7 +25,7 @@ export const useGetDiaryDetail = (diaryId: number) =>
     queryKey: ['diaryDetail', diaryId],
     queryFn: async () => {
       const response = await axios.get(`/api/diary/${diaryId}`);
-      return response.data;
+      return response.data.data;
     },
     enabled: !!diaryId,
   });

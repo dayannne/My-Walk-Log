@@ -4,6 +4,8 @@ export interface IReviewReq {
   entryFee?: string | null;
   placeKeywords?: number[];
   reviewImages: string[];
+  placeName: string;
+  placeAddress: string;
 }
 
 export interface IReview {

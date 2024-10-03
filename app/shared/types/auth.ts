@@ -5,7 +5,7 @@ export interface ISignupForm {
   password: string;
   passwordConfirm?: string;
   username: string;
-  address?: IAddress;
+  address: IAddress | null;
 }
 
 export interface ILoginForm {

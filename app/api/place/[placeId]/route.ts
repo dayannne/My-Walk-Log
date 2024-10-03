@@ -26,13 +26,22 @@ export async function GET(
 
     if (!placeDetail) {
       return NextResponse.json(
-        { message: 'placeId에 해당하는 데이터를 찾을 수 없습니다' },
+        {
+          status: 'error',
+          message: '해당 ID의 장소를 찾을 수 없습니다.',
+        },
         { status: 404 },
       );
     }
 
-    return NextResponse.json(placeDetail, { status: 200 });
+    return NextResponse.json(
+      { status: 'success', data: { ...placeDetail } },
+      { status: 200 },
+    );
   } catch (error) {
-    return NextResponse.json({ message: '서버 내부 오류' }, { status: 500 });
+    return NextResponse.json(
+      { status: 'error', message: '서버 에러가 발생했습니다.' },
+      { status: 500 },
+    );
   }
 }

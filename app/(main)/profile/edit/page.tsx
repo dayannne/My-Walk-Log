@@ -69,13 +69,7 @@ const EditProfilePage = () => {
       ...(address && { address }),
     };
 
-    editProfile(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-        alert('프로필이 수정되었습니다.');
-        router.push(`/profile/my`);
-      },
-    });
+    editProfile(data);
   };
 
   useEffect(() => {

@@ -19,7 +19,10 @@ export async function PUT(
 
     if (!userExists) {
       return NextResponse.json(
-        { message: 'User를 찾을 수 없습니다' },
+        {
+          status: 'error',
+          message: '사용자를 찾을 수 없습니다.',
+        },
         { status: 404 },
       );
     }
@@ -35,10 +38,20 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(updatedUser, { status: 200 });
+    return NextResponse.json(
+      {
+        status: 'success',
+        data: { ...updatedUser },
+        message: '프로필이 수정되었습니다.',
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
-      { message: '프로필 업데이트에 실패했습니다: 서버 내부 오류' },
+      {
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
+      },
       { status: 500 },
     );
   }

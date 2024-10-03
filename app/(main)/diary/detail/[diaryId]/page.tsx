@@ -21,7 +21,7 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { user } = useUserStore();
   const { openInfo, setOpenInfo } = useModalStore();
   const queryOptions = useGetDiaryDetail(params.diaryId);
-  const { data: diary, isLoading } = useSuspenseQuery(queryOptions);
+  const { data: diary, isLoading, error } = useSuspenseQuery(queryOptions);
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const [content, setContent] = useState('');
@@ -30,7 +30,6 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const handleConfirm = (diaryId: number) => {
     deleteDiary({ diaryId, userId: user?.id as number });
   };
-  console.log(isLoading);
 
   useEffect(() => {
     if (loading) {
@@ -48,18 +47,20 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
           onConfirm={handleConfirm}
           onClick={() =>
             toggleLike({
-              diaryId: diary.id,
+              diaryId: diary?.id,
               userId: user?.id as number,
             })
           }
         />
         <div className='flex-grow'>
-          <CommentList
-            diaryId={diaryId}
-            comments={diary.comments}
-            setContent={setContent}
-            setEditId={setEditId}
-          />
+          {diary?.comments?.length > 0 && (
+            <CommentList
+              diaryId={diaryId}
+              comments={diary?.comments}
+              setContent={setContent}
+              setEditId={setEditId}
+            />
+          )}
         </div>
       </div>
       <Commentform

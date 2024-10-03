@@ -20,35 +20,35 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
 
   return (
     <li
-      key={diary.id}
+      key={diary?.id}
       className='flex flex-col gap-2 border-b border-solid border-gray-200 p-4'
     >
       <div className='flex items-center gap-2'>
         <Image
           className='h-9 w-9 shrink-0 rounded-full object-cover'
-          key={`user_${diary.authorId}_profile_image`}
-          src={diary.author.profileImage}
+          key={`user_${diary?.authorId}_profile_image`}
+          src={diary?.author?.profileImage}
           alt='프로필 이미지'
           width={500}
           height={500}
         />
         <div className='flex basis-full flex-col'>
-          <div className='text-sm font-semibold'>{diary.author.username}</div>
+          <div className='text-sm font-semibold'>{diary?.author?.username}</div>
           <div className='flex items-center gap-1 text-xs'>
             <span className='text-gray-600'>
-              {formatTimeAgo(diary.createdAt)}
+              {formatTimeAgo(diary?.createdAt)}
             </span>
             <span>
               <span className='text-gray-600'>
-                {WEATHERS[diary.weather].emoji}
+                {WEATHERS[diary?.weather]?.emoji}
               </span>
               <span className='text-gray-600'>
-                {WEATHERS[diary.weather].name}
+                {WEATHERS[diary?.weather]?.name}
               </span>
             </span>
           </div>
         </div>
-        {user?.id && user?.id === diary.authorId && (
+        {user?.id && user?.id === diary?.authorId && (
           <MenuModal
             firstMenu='일기 삭제하기'
             firstMenuClose={() => setOpenId(diary.id)}
@@ -62,14 +62,14 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
         />
       </div>
       <Link className='flex flex-col gap-2' href={`/diary/detail/${diary.id}`}>
-        {diary.content.length > 0 && (
+        {diary?.content?.length > 0 && (
           <div className='text-sm'>
-            {diary.content.split('\n').map((str: string, idx: number) => (
-              <p key={idx}>{str}</p>
-            ))}
+            {diary?.content
+              ?.split('\n')
+              .map((str: string, idx: number) => <p key={idx}>{str}</p>)}
           </div>
         )}
-        {diary.tags.length > 0 && (
+        {diary?.tags?.length > 0 && (
           <div className='flex flex-wrap gap-1'>
             {diary.tags.map((tag: string, idx: number) => (
               <span className='bg-hover rounded-md px-2 py-1 text-xs' key={idx}>
@@ -78,16 +78,16 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
             ))}
           </div>
         )}
-        {diary.diaryImages.length === 1 && (
+        {diary?.diaryImages?.length === 1 && (
           <Image
             className='aspect-video h-auto w-full rounded-xl object-cover object-center'
-            src={diary.diaryImages[0]}
+            src={diary?.diaryImages[0]}
             alt='일기 상세 사진'
             width={300}
             height={300}
           />
         )}
-        {diary.diaryImages.length > 1 && (
+        {diary?.diaryImages?.length > 1 && (
           <Carousel
             className='aspect-video w-full overflow-hidden rounded-xl object-cover object-center'
             placeholder={undefined}
@@ -107,7 +107,7 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
               </div>
             )}
           >
-            {diary.diaryImages.map((image: string, idx: number) => (
+            {diary?.diaryImages?.map((image: string, idx: number) => (
               <Image
                 className='h-full w-full object-cover object-center'
                 key={idx}
@@ -120,11 +120,11 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
           </Carousel>
         )}
       </Link>
-      {diary.placeId && (
+      {diary?.placeId && (
         <button
           type='button'
           className='border-olive-green bg-hover flex rounded-lg border border-solid p-2'
-          onClick={() => setOpenInfo(diary.placeId)}
+          onClick={() => setOpenInfo(diary?.placeId)}
         >
           <div className='flex basis-full items-center gap-2'>
             <Image
@@ -133,12 +133,14 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
               width={32}
               height={32}
             />
-            <div className='flex flex-col'>
-              <span className='text-sm font-medium'>{diary.placeName}</span>
-              <span className='text-xs text-gray-600'>
-                {diary.placeAddress}
-              </span>
-            </div>
+            {diary?.placeName && (
+              <div className='flex flex-col'>
+                <span className='text-sm font-medium'>{diary?.placeName}</span>
+                <span className='text-xs text-gray-600'>
+                  {diary?.placeAddress}
+                </span>
+              </div>
+            )}
           </div>
 
           <Image
@@ -157,7 +159,7 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
             <Image
               className='w-6'
               src={
-                diary.likedBy.some((id: number) => id === user?.id) === true
+                diary?.likedBy?.some((id: number) => id === user?.id) === true
                   ? '/icons/icon-heart-fill.svg'
                   : '/icons/icon-heart.svg'
               }
@@ -166,11 +168,11 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
               height={32}
             />
           </button>
-          <span className='text-sm'>{diary.likedBy.length}</span>
+          <span className='text-sm'>{diary?.likedBy?.length}</span>
         </div>
         <Link
           className='flex items-center gap-1'
-          href={`/diary/detail/${diary.id}`}
+          href={`/diary/detail/${diary?.id}`}
         >
           <Image
             className='w-6'
@@ -179,11 +181,11 @@ const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
             width={32}
             height={32}
           />
-          {diary.comments.length}
+          {diary?.comments?.length}
         </Link>
-        {user?.id && user?.id === diary.authorId && (
+        {user?.id && user?.id === diary?.authorId && (
           <span className='bg-hover text-olive-green shrink-0 rounded-lg px-2 py-1 text-xs font-medium'>
-            {diary.isPublic === true ? '공개' : '비공개'}
+            {diary?.isPublic === true ? '공개' : '비공개'}
           </span>
         )}
       </div>

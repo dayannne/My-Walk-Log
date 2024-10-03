@@ -12,8 +12,8 @@ export const useGetMyProfile = (userId: number) =>
   queryOptions({
     queryKey: ['myProfile', userId],
     queryFn: async () => {
-      const resullt = await axios.get(`/api/profile/${userId}/my`);
-      return resullt.data as IProfile;
+      const response = await axios.get(`/api/profile/${userId}/my`);
+      return response.data.data as IProfile;
     },
     staleTime: 0,
     enabled: !!userId,

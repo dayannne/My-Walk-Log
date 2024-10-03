@@ -32,7 +32,6 @@ const DiaryFormPage = () => {
   const weathers = Object.entries(WEATHERS);
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
-  const [isPublic, setIsPublic] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
