@@ -1,17 +1,13 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { useUserStore } from '@/app/store/client/user';
 import { usePlaceMenuStore } from '@/app/store/client/place';
 
 interface PlaceDiaryAlbumProps {
-  placeId: string;
   place: any;
 }
 
-const PlaceDiaryAlbum = ({ placeId, place }: PlaceDiaryAlbumProps) => {
-  const { user } = useUserStore();
+const PlaceDiaryAlbum = ({ place }: PlaceDiaryAlbumProps) => {
   const { setPlaceMenu } = usePlaceMenuStore();
 
   const diaries = place?.diaries || [];

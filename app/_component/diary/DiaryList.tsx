@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDiaryLike, useDeleteDiary } from '@/app/store/server/diary';
 
-import { useUserStore } from '@/app/store/client/user';
 import DiaryItem from './DiaryItem';
 
 export interface DiaryListProps {
@@ -9,12 +8,11 @@ export interface DiaryListProps {
 }
 
 const DiaryList = ({ diaries }: DiaryListProps) => {
-  const { user } = useUserStore();
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
 
   const handleConfirm = (diaryId: number) => {
-    deleteDiary({ diaryId, userId: user?.id as number });
+    deleteDiary(diaryId);
   };
 
   return (
@@ -24,12 +22,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
           key={diary.id}
           diary={diary}
           onConfirm={handleConfirm}
-          onClick={() =>
-            toggleLike({
-              diaryId: diary.id,
-              userId: user?.id as number,
-            })
-          }
+          onClick={() => toggleLike(diary?.id)}
         />
       ))}
     </ul>

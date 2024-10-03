@@ -7,7 +7,6 @@ import Image from 'next/image';
 import MenuModal from '../common/Modal/MenuModal';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useModalStore } from '@/app/store/client/modal';
 
 export interface ProfileDiaryListProps {
@@ -19,10 +18,9 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const { setOpenInfo, openId, setOpenId } = useModalStore();
-  const pathname = usePathname().split('/');
 
   const handleConfirm = (diaryId: number) => {
-    deleteDiary({ diaryId, userId: user?.id as number });
+    deleteDiary(diaryId);
   };
 
   return (
@@ -152,14 +150,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
                 <div className='flex items-center gap-1'>
-                  <button
-                    onClick={() =>
-                      toggleLike({
-                        diaryId: diary.id,
-                        userId: user?.id as number,
-                      })
-                    }
-                  >
+                  <button onClick={() => toggleLike(diary?.id)}>
                     <Image
                       className='w-6'
                       src={

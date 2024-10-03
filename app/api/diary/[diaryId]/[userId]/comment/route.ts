@@ -3,27 +3,39 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
   req: Request,
-  { params }: { params: { diaryId: string } },
+  { params }: { params: { diaryId: string; userId: string } },
 ) {
   const diaryId = parseInt(params.diaryId);
-  const { content, authorId } = await req.json();
+  const userId = parseInt(params.userId);
+  const { content } = await req.json();
 
-  if (isNaN(diaryId) || !content || typeof content !== 'string' || !authorId) {
+  if (isNaN(diaryId) || isNaN(userId)) {
     return NextResponse.json(
       {
         status: 'error',
-        message: '유효한 입력 데이터를 제공하세요.',
+        message: '유효하지 않은 장소 ID 또는 사용자 ID입니다.',
+      },
+      { status: 400 },
+    );
+  }
+
+  if (!content || typeof content !== 'string') {
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: '유효한 댓글 내용을 입력하세요.',
       },
       { status: 400 },
     );
   }
 
   try {
+    // 댓글 생성
     const newComment = await prisma.comment.create({
       data: {
         diaryId,
         content,
-        authorId,
+        authorId: userId,
       },
     });
 

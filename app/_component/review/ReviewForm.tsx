@@ -53,7 +53,7 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       placeAddress: placeDetail?.basicInfo?.address?.region?.fullname,
     };
 
-    createReview({ data, placeId, userId: user?.id as number });
+    createReview({ data, placeId });
   };
 
   const handledescriptionChange = (

@@ -1,5 +1,4 @@
 export interface IDiaryReq {
-  authorId: number;
   placeId: string;
   diaryImages: string[];
   content: string;

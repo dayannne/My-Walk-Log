@@ -2,12 +2,16 @@ import prisma from '@/prisma/context';
 import { NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: { userId: string } },
+) {
+  const userId = parseInt(params.userId);
+
   try {
     const body = await request.json();
 
     const {
-      authorId,
       placeId,
       diaryImages,
       content,
@@ -19,7 +23,7 @@ export async function POST(request: Request) {
     } = body;
 
     // 요청 검증
-    if (!authorId) {
+    if (isNaN(userId)) {
       return NextResponse.json(
         {
           status: 'error',
@@ -41,7 +45,7 @@ export async function POST(request: Request) {
 
     const diary = await prisma.diary.create({
       data: {
-        authorId,
+        authorId: userId,
         placeId,
         diaryImages:
           typeof diaryImages === 'string'

@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useState } from 'react';
-import { useUserStore } from '@/app/store/client/user';
 import { IDiaryReq } from '@/app/shared/types/diary';
 import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
 import { useCreateDiary } from '@/app/store/server/diary';
@@ -24,7 +23,6 @@ const DiaryFormPage = () => {
     removeImage,
   } = useImageUpload();
   const router = useRouter();
-  const { user } = useUserStore();
 
   const queryClient = useQueryClient();
   const { mutate: createDiary } = useCreateDiary();
@@ -56,7 +54,6 @@ const DiaryFormPage = () => {
     const data: IDiaryReq = {
       // TODO 여기 장소검색 input에서 placeId 받아와야 함
       ...formData,
-      authorId: user?.id as number,
       diaryImages,
       isPublic: formData.isPublic === 'true' ? true : false,
       tags: placeTags,
