@@ -23,7 +23,7 @@ const FeedLayout = async ({ children }: FeedLayoutProps) => {
     },
     initialPageParam: 1,
     retry: 1,
-    staleTime: 30 * 1000,
+    staleTime: 60 * 1000,
   });
 
   queryClient.setQueryData(['feed'], {

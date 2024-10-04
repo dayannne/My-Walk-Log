@@ -14,7 +14,7 @@ export const useGetPlace = (placeId: string) =>
       const response = await axios.get(`/api/place/${placeId}`);
       return response.data.data;
     },
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });
 
 export const useCreatePlace = () => {
@@ -62,5 +62,5 @@ export const useGetLikedPlaces = (likedPlaces: string[]) =>
       });
       return response.data.data;
     },
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });

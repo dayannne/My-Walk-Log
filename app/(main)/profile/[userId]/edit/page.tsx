@@ -3,17 +3,20 @@
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import { IAddress, IProfileReq } from '@/app/shared/types/profile';
-import { useProfileStore } from '@/app/store/client/profile';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AreaSearch from '@/app/_component/common/AreaSearch/AreaSearch';
-import { useEditProfile } from '@/app/store/server/profile';
+import { useEditProfile, useGetMyProfile } from '@/app/store/server/profile';
 import { useEffect, useState } from 'react';
 import Header from '@/app/_component/common/Header';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-const EditProfilePage = () => {
+export interface pageProps {
+  params: { userId: string };
+}
+
+const EditProfilePage = ({ params }: pageProps) => {
   const router = useRouter();
   const {
     previewImgs,
@@ -21,10 +24,10 @@ const EditProfilePage = () => {
     handleButtonClick,
     fileHandler,
     uploadImage,
-    removeImage,
   } = useImageUpload();
-  const { profile } = useProfileStore();
-  const queryClient = useQueryClient();
+  const queryOptions = useGetMyProfile(parseInt(params?.userId));
+  const { data: profile } = useSuspenseQuery(queryOptions);
+
   const { mutate: editProfile } = useEditProfile();
   const [address, setAddress] = useState<IAddress | null>(null);
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { IProfile, IProfileReq } from '@/app/shared/types/profile';
 import {
   queryOptions,
@@ -8,15 +10,20 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '../client/user';
 
+export const getMyProfile = async (userId: number) => {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/profile/${userId}/my`,
+  );
+
+  return response.data.data;
+};
+
 export const useGetMyProfile = (userId: number) =>
   queryOptions({
-    queryKey: ['myProfile', userId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/profile/${userId}/my`);
-      return response.data.data as IProfile;
-    },
-    staleTime: 0,
+    queryKey: ['myProfile'],
+    queryFn: () => getMyProfile(userId),
     enabled: !!userId,
+    staleTime: 60 * 1000,
   });
 
 export const useEditProfile = () => {

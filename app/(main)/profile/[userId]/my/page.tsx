@@ -2,10 +2,7 @@
 
 import ProfileDiaryList from '@/app/_component/diary/ProfileDiaryList';
 import { useUserStore } from '@/app/store/client/user';
-import {
-  useProfileMenuStore,
-  useProfileStore,
-} from '@/app/store/client/profile';
+import { useProfileMenuStore } from '@/app/store/client/profile';
 import { useGetMyProfile } from '@/app/store/server/profile';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -21,25 +18,18 @@ import ProfileMenu from '@/app/_component/profile/ProfileMenu';
 import { useModalStore } from '@/app/store/client/modal';
 import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
 
-export interface ProfilePageProps {}
+export interface ProfilePageProps {
+  params: { userId: string };
+}
 
-const ProfilePage = ({}: ProfilePageProps) => {
-  const { user } = useUserStore();
-  const { setProfile } = useProfileStore();
+const ProfilePage = ({ params }: ProfilePageProps) => {
   const { profileMenu } = useProfileMenuStore();
   const { openInfo, setOpenInfo } = useModalStore();
 
-  const queryOptions = useGetMyProfile(user?.id as number);
+  const queryOptions = useGetMyProfile(parseInt(params?.userId));
   const { data: profile } = useSuspenseQuery(queryOptions);
 
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (profile) {
-      setProfile(profile);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile]);
 
   useEffect(() => {
     if (loading) {
@@ -65,7 +55,10 @@ const ProfilePage = ({}: ProfilePageProps) => {
             <div className='flex basis-full flex-col gap-2'>
               <span className='flex items-center gap-1 font-semibold'>
                 <span> {profile?.username}</span>
-                <Link className='mt-[2px]' href={`/profile/edit`}>
+                <Link
+                  className='mt-[2px]'
+                  href={`/profile/${parseInt(params?.userId)}/edit`}
+                >
                   <Image
                     src='/icons/icon-pencil.svg'
                     width={16}
