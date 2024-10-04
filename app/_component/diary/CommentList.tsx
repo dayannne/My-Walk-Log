@@ -25,7 +25,10 @@ const CommentList = ({
   const { mutate: deleteComment } = useDeleteComment();
 
   const handleConfirm = (commentId: number) => {
-    deleteComment({ diaryId, commentId });
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    deleteComment({ userId: user.id, diaryId, commentId });
   };
 
   return (

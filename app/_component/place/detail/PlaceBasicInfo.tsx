@@ -39,6 +39,16 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
     }
   };
 
+  const handleClick = (placeId: string) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      placeId,
+      userId: user?.id,
+    });
+  };
+
   return (
     <div>
       {photos && photos[0] && (
@@ -139,7 +149,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
         <div className='border-gray-240 flex border-t border-solid border-gray-200 py-2'>
           <button
             className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'
-            onClick={() => toggleLike(placeId)}
+            onClick={() => handleClick(placeId)}
           >
             <Image
               className='w-5'

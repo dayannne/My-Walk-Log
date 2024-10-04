@@ -2,17 +2,35 @@ import React from 'react';
 import { useDiaryLike, useDeleteDiary } from '@/app/store/server/diary';
 
 import DiaryItem from './DiaryItem';
+import { useUserStore } from '@/app/store/client/user';
 
 export interface DiaryListProps {
   diaries: any;
 }
 
 const DiaryList = ({ diaries }: DiaryListProps) => {
+  const { user } = useUserStore();
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
 
   const handleConfirm = (diaryId: number) => {
-    deleteDiary(diaryId);
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    deleteDiary({
+      diaryId,
+      userId: user?.id,
+    });
+  };
+
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      diaryId,
+      userId: user?.id,
+    });
   };
 
   return (
@@ -22,7 +40,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
           key={diary.id}
           diary={diary}
           onConfirm={handleConfirm}
-          onClick={() => toggleLike(diary?.id)}
+          onClick={() => handleClick(diary?.id)}
         />
       ))}
     </ul>

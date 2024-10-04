@@ -20,7 +20,17 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { setOpenInfo, openId, setOpenId } = useModalStore();
 
   const handleConfirm = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
     deleteDiary(diaryId);
+  };
+
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike(diaryId);
   };
 
   return (
@@ -150,7 +160,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
             <div className='flex items-center justify-between'>
               <div className='flex items-center gap-3'>
                 <div className='flex items-center gap-1'>
-                  <button onClick={() => toggleLike(diary?.id)}>
+                  <button onClick={() => handleClick(diary?.id)}>
                     <Image
                       className='w-6'
                       src={

@@ -12,6 +12,7 @@ import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
 import { useCreateDiary } from '@/app/store/server/diary';
 import Header from '@/app/_component/common/Header';
 import { useQueryClient } from '@tanstack/react-query';
+import { useUserStore } from '@/app/store/client/user';
 
 const DiaryFormPage = () => {
   const {
@@ -23,11 +24,10 @@ const DiaryFormPage = () => {
     removeImage,
   } = useImageUpload();
   const router = useRouter();
-
   const queryClient = useQueryClient();
-  const { mutate: createDiary } = useCreateDiary();
-
   const weathers = Object.entries(WEATHERS);
+  const { user } = useUserStore();
+  const { mutate: createDiary } = useCreateDiary();
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const {
@@ -49,6 +49,9 @@ const DiaryFormPage = () => {
   });
 
   const onSubmit = async (formData: IDiaryReq) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
     // 이미지 업로드 받아오기
     const diaryImages = await uploadImage();
     const data: IDiaryReq = {
@@ -61,13 +64,16 @@ const DiaryFormPage = () => {
       placeName: selectedPlace?.place_name || null,
       placeAddress: selectedPlace?.address_name || null,
     };
-    createDiary(data, {
-      onSuccess: () => {
-        alert('일기가 기록되었습니다.');
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-        router.back();
+    createDiary(
+      { data, userId: user?.id },
+      {
+        onSuccess: () => {
+          alert('일기가 기록되었습니다.');
+          queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+          router.back();
+        },
       },
-    });
+    );
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -117,6 +123,7 @@ const DiaryFormPage = () => {
             취소
           </button>
           <button
+            type='submit'
             className={`box-border h-full grow-0 rounded-lg border border-solid px-2 py-1 text-xs shadow-md ${isValid ? 'bg-olive-green border-olive-green text-white' : 'border-gray-400 bg-gray-100 text-gray-400'}`}
             onClick={handleSubmit(onSubmit)}
             disabled={!isValid}

@@ -5,6 +5,7 @@ import Commentform from '@/app/_component/diary/Commentform';
 import CommentList from '@/app/_component/diary/CommentList';
 import DiaryItem from '@/app/_component/diary/DiaryItem';
 import { useModalStore } from '@/app/store/client/modal';
+import { useUserStore } from '@/app/store/client/user';
 import {
   useDiaryLike,
   useDeleteDiary,
@@ -17,6 +18,7 @@ export interface DiaryPageProps {}
 
 const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { diaryId } = params;
+  const { user } = useUserStore();
   const { openInfo, setOpenInfo } = useModalStore();
   const queryOptions = useGetDiaryDetail(params.diaryId);
   const { data: diary, isLoading, error } = useSuspenseQuery(queryOptions);
@@ -26,7 +28,23 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState<number | null>(null);
   const handleConfirm = (diaryId: number) => {
-    deleteDiary(diaryId);
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    deleteDiary({
+      diaryId,
+      userId: user?.id,
+    });
+  };
+
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      diaryId,
+      userId: user?.id,
+    });
   };
 
   useEffect(() => {
@@ -43,7 +61,7 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
         <DiaryItem
           diary={diary}
           onConfirm={handleConfirm}
-          onClick={() => toggleLike(diary?.id)}
+          onClick={() => handleClick(diary?.id)}
         />
         <div className='flex-grow'>
           {diary?.comments?.length > 0 && (

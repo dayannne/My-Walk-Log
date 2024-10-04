@@ -39,6 +39,16 @@ const FeedDiaryList = () => {
   const flattenedDiaries = data?.pages.flatMap((page) => page)[0] || [];
   const { data: diaries } = flattenedDiaries;
 
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      diaryId,
+      userId: user?.id,
+    });
+  };
+
   return (
     <>
       <ul className='grid grid-cols-2 gap-2 bg-white p-4'>
@@ -95,7 +105,7 @@ const FeedDiaryList = () => {
               </div>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-1'>
-                  <button onClick={() => toggleLike(diary?.id)}>
+                  <button onClick={() => handleClick(diary?.id)}>
                     <Image
                       className='w-6'
                       src={

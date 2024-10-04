@@ -1,4 +1,5 @@
 import { ICommentReq } from '@/app/shared/types/comment';
+import { useUserStore } from '@/app/store/client/user';
 import { useCreateComment, useEditComment } from '@/app/store/server/comment';
 import Image from 'next/image';
 
@@ -17,22 +18,27 @@ const Commentform = ({
   editId,
   setEditId,
 }: CommentformProps) => {
+  const { user } = useUserStore();
+
   const { mutate: editComment } = useEditComment();
   const { mutate: createComment } = useCreateComment();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
 
     if (editId) {
       const data: ICommentReq = {
         content,
       };
-      editComment({ diaryId, commentId: editId, data });
+      editComment({ data, userId: user?.id, diaryId, commentId: editId });
     } else {
       const data: ICommentReq = {
         content,
       };
-      createComment({ diaryId, data });
+      createComment({ data, userId: user?.id, diaryId });
     }
     setContent('');
   };

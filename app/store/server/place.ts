@@ -6,7 +6,6 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import axios from 'axios';
-import { useUserStore } from '../client/user';
 
 export const useGetPlace = (placeId: string) =>
   queryOptions({
@@ -33,11 +32,16 @@ export const useCreatePlace = () => {
 
 export const usePlaceLike = () => {
   const queryClient = useQueryClient();
-  const { user } = useUserStore();
 
   return useMutation({
-    mutationFn: async (placeId: string) => {
-      return await axios.post(`/api/place/${placeId}/${user?.id}/like`);
+    mutationFn: async ({
+      placeId,
+      userId,
+    }: {
+      placeId: string;
+      userId: number;
+    }) => {
+      return await axios.post(`/api/place/${placeId}/${userId}/like`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['place'] });

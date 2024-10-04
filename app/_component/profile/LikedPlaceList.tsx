@@ -16,7 +16,16 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
   const queryOptions = useGetLikedPlaces(likedPlaces);
   const { data: places } = useSuspenseQuery(queryOptions);
 
-  if (!places) return null;
+  const handleClick = (placeId: string) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      placeId,
+      userId: user?.id,
+    });
+  };
+
   return (
     <ul className='flex flex-col gap-2 bg-white px-4 py-2'>
       {places?.map((place: any) => (
@@ -33,7 +42,7 @@ const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
               <span className='text-sm font-medium'>{place.placeName}</span>
               <span className='text-xs'>{place.address}</span>
             </button>
-            <button onClick={() => toggleLike(place.id)}>
+            <button onClick={() => handleClick(place.id)}>
               <Image
                 className='w-5'
                 src={

@@ -10,7 +10,6 @@ import {
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from '../client/modal';
-import { useUserStore } from '../client/user';
 
 export const getDiaryDetail = async (diaryId: number) => {
   const response = await axios.get(
@@ -29,11 +28,16 @@ export const useGetDiaryDetail = (diaryId: number) =>
 
 export const useCreateDiary = () => {
   const queryClient = useQueryClient();
-  const { user } = useUserStore();
 
   return useMutation({
-    mutationFn: async (data: IDiaryReq) => {
-      return await axios.post(`/api/diary/write/${user?.id}`, data);
+    mutationFn: async ({
+      data,
+      userId,
+    }: {
+      data: IDiaryReq;
+      userId: number;
+    }) => {
+      return await axios.post(`/api/diary/write/${userId}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
@@ -47,11 +51,16 @@ export const useCreateDiary = () => {
 
 export const useDiaryLike = () => {
   const queryClient = useQueryClient();
-  const { user } = useUserStore();
 
   return useMutation({
-    mutationFn: async (diaryId: number) => {
-      return axios.post(`/api/diary/${diaryId}/${user?.id}/like`);
+    mutationFn: async ({
+      diaryId,
+      userId,
+    }: {
+      diaryId: number;
+      userId: number;
+    }) => {
+      return axios.post(`/api/diary/${diaryId}/${userId}/like`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['place'] });
@@ -68,12 +77,17 @@ export const useDeleteDiary = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();
-  const { user } = useUserStore();
   const { openInfo } = useModalStore();
 
   return useMutation({
-    mutationFn: async (diaryId: number) => {
-      return await axios.delete(`/api/diary/${diaryId}/${user?.id}/delete`);
+    mutationFn: async ({
+      diaryId,
+      userId,
+    }: {
+      diaryId: number;
+      userId: number;
+    }) => {
+      return await axios.delete(`/api/diary/${diaryId}/${userId}/delete`);
     },
     onSuccess: () => {
       alert('일기가 삭제되었습니다.');
