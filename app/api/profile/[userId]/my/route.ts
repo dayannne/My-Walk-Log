@@ -13,14 +13,17 @@ export async function GET(
       },
       include: {
         reviews: {
-          include: {
-            placeDetail: true,
+          include: {},
+          orderBy: {
+            createdAt: 'desc', // 최신 순으로 정렬
           },
         },
         diaries: {
           include: {
             comments: true,
-            placeDetail: true,
+          },
+          orderBy: {
+            createdAt: 'desc', // 최신 순으로 정렬
           },
         },
       },

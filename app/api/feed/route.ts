@@ -18,6 +18,9 @@ export async function GET(req: Request) {
       },
       skip, // 건너뛸 항목 수
       take, // 가져올 항목 수
+      orderBy: {
+        createdAt: 'desc', // 최신 순으로 정렬
+      },
       include: {
         author: {
           include: {
@@ -25,7 +28,6 @@ export async function GET(req: Request) {
           },
         },
         comments: true,
-        placeDetail: true,
       },
     });
 

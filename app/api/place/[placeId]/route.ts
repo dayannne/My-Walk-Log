@@ -13,11 +13,17 @@ export async function GET(
       },
       include: {
         reviews: {
+          orderBy: {
+            createdAt: 'desc',
+          },
           include: { author: true },
         },
         diaries: {
           where: {
             isPublic: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
           },
           include: { author: true, comments: true },
         },

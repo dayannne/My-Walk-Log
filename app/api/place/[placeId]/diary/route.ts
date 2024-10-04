@@ -12,6 +12,9 @@ export async function GET(
   try {
     const diaries = await prisma.diary.findMany({
       where: { placeId },
+      orderBy: {
+        createdAt: 'desc', // 최신 순으로 정렬
+      },
       include: {
         author: {
           include: {
