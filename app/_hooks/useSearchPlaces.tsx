@@ -4,13 +4,12 @@ import { useMap } from '../shared/contexts/Map';
 import useMarkerClusterer from './useMarkerClusterer';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 import MarkerInfo from '../_component/common/MarkerInfo';
-import { useParams, useRouter } from 'next/navigation';
 import { useCreatePlace } from '../store/server/place';
 import { SearchType } from '../shared/types/map';
 import { useModalStore } from '../store/client/modal';
 
 const useSearchPlaces = () => {
-  const [places, setPlaces] = useState<any[]>([]); // places 상태 추가
+  const [places, setPlaces] = useState<any[]>([]);
   const mapContext = useMap();
   const { setOpenInfo } = useModalStore();
   const { mutate: createPlace } = useCreatePlace();
@@ -24,13 +23,21 @@ const useSearchPlaces = () => {
       const placesService = new kakao.maps.services.Places();
       const bounds = mapData?.getBounds();
 
-      placesService.keywordSearch(keyword, searchPlacesCB, {
-        location: type === 'SEARCH_AGAIN' ? location : undefined,
-        bounds:
-          type === 'SEARCH_AGAIN' || type === 'SEARCH_CATEGORY'
-            ? bounds
-            : undefined,
-      });
+      placesService.keywordSearch(
+        keyword,
+        (data, status, pagination) =>
+          searchPlacesCB(data, status, pagination, type),
+        {
+          location:
+            type === 'SEARCH_AGAIN' || type === 'SEARCH_CATEGORY'
+              ? location
+              : undefined,
+          bounds:
+            type === 'SEARCH_AGAIN' || type === 'SEARCH_CATEGORY'
+              ? bounds
+              : undefined,
+        },
+      );
 
       setPrevKeyword((prev) => [...prev, keyword]);
       setPrevLocation(mapData?.getCenter() as kakao.maps.LatLng);
@@ -39,11 +46,11 @@ const useSearchPlaces = () => {
     }
   };
 
-  // keywordSearch 콜백 함수
   const searchPlacesCB = async (
     data: any,
     status: kakao.maps.services.Status,
     pagination: any,
+    type: SearchType, // 추가된 type 인수
   ) => {
     if (status === kakao.maps.services.Status.OK) {
       clearMarkersAndInfo();
@@ -55,7 +62,7 @@ const useSearchPlaces = () => {
       }
 
       setPlaces(filteredPlaces);
-      displayMarkers(filteredPlaces);
+      displayMarkers(filteredPlaces, type);
       createPlace(filteredPlaces);
     } else {
       if (status === kakao.maps.services.Status.ZERO_RESULT) {
@@ -66,7 +73,7 @@ const useSearchPlaces = () => {
     }
   };
 
-  const displayMarkers = (places: any[]) => {
+  const displayMarkers = (places: any[], type: SearchType) => {
     let overlays: kakao.maps.CustomOverlay[] = [];
     let bounds = new kakao.maps.LatLngBounds();
 
@@ -99,8 +106,11 @@ const useSearchPlaces = () => {
 
     mapContext?.setOverlays(overlays);
     mapContext?.setMarkerClusterer(newClusterer);
-    // 검색된 장소 위치를 기준으로 지도 범위를 재설정
-    mapContext?.mapData?.setBounds(bounds);
+
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정 (type에 따라 설정)
+    if (type !== 'SEARCH_AGAIN' && type !== 'SEARCH_CATEGORY') {
+      mapContext?.mapData?.setBounds(bounds);
+    }
   };
 
   const clearMarkersAndInfo = () => {
