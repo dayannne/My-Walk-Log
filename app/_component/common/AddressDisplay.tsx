@@ -49,7 +49,7 @@ const AddressDisplay: React.FC = () => {
       {address && (
         <div
           id='centerAddr'
-          className='bg-hover text-olive-green border-olive-green absolute left-4 top-4 z-10 rounded-xl border border-solid px-2 py-1 text-sm'
+          className='bg-hover text-olive-green border-olive-green absolute left-4 top-4 z-10 rounded-lg border border-solid px-2 py-1 text-xs lg:text-sm'
         >
           {address}
         </div>

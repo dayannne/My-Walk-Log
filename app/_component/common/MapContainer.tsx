@@ -56,10 +56,10 @@ const MapContainer: React.FC = () => {
         <>
           <SearchAgainButton />
           <SearchCategory />
-          <AddressDisplay />
-          <CurrLocationButton />
         </>
       )}
+      <AddressDisplay />
+      <CurrLocationButton />
       <div id='map' ref={mapEl} className='relative h-full w-full'></div>
     </>
   );
