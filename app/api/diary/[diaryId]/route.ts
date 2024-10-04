@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { truncate } from 'fs/promises';
 
 const prisma = new PrismaClient();
 

@@ -13,20 +13,17 @@ import { useModalStore } from '../client/modal';
 import { useUserStore } from '../client/user';
 
 export const getDiaryDetail = async (diaryId: number) => {
-  const response = await fetch(
+  const response = await axios.get(
     `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary/${diaryId}`,
   );
-  const data = await response.json();
-  return data.data;
+
+  return response.data.data;
 };
 
 export const useGetDiaryDetail = (diaryId: number) =>
   queryOptions({
     queryKey: ['diaryDetail', diaryId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/diary/${diaryId}`);
-      return response.data.data;
-    },
+    queryFn: () => getDiaryDetail(diaryId),
     enabled: !!diaryId,
   });
 

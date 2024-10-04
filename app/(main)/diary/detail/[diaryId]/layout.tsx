@@ -12,17 +12,17 @@ export interface DiaryLayoutProps {
 const DiaryLayout = async ({ children, params }: DiaryLayoutProps) => {
   const queryClient = getQueryClient();
 
-  // 데이터 프리패치
   await queryClient.prefetchQuery({
-    queryKey: ['diaryDetail'],
+    queryKey: ['diaryDetail', Number(params?.diaryId)],
     queryFn: () => getDiaryDetail(Number(params?.diaryId)),
   });
 
-  const dehydratedState = dehydrate(queryClient);
   return (
     <div className='flex basis-full flex-col overflow-y-auto'>
       <Header title='일기 상세' enableBackButton />
-      <HydrationBoundary state={dehydratedState}>{children}</HydrationBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        {children}
+      </HydrationBoundary>
     </div>
   );
 };
