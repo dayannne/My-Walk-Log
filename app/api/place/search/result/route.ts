@@ -6,18 +6,19 @@ import { kakaoInstance } from '@/app/api/_routes/axiosInstance';
 export async function POST(request: Request) {
   try {
     const places: IPlaceInfo[] = await request.json();
+    const upsertedPlaces = []; // 결과를 저장할 배열
 
-    // upsert된 결과를 저장할 배열
-    const upsertedPlaces = await Promise.all(
-      places.map(async (place: IPlaceInfo) => {
+    for (const place of places) {
+      try {
         // 장소 상세 데이터 받아오기
         const placeDetailResponse = await kakaoInstance.get(
           `/main/v/${place.id}`,
         );
+
         const category = place.category_name.split(' > ').pop();
 
-        // upsert 작업 수행 및 결과 반환
-        return prisma.placeDetail.upsert({
+        // upsert 작업 수행
+        const upsertedPlace = await prisma.placeDetail.upsert({
           where: { id: place.id },
           create: {
             id: place.id,
@@ -30,9 +31,9 @@ export async function POST(request: Request) {
             y: place.y,
             findway: placeDetailResponse.data.findway || {},
             basicInfo: {
-              tags: placeDetailResponse.data.basicInfo.tags,
-              address: placeDetailResponse.data.basicInfo.address,
-              phonenum: placeDetailResponse.data.basicInfo.phonenum,
+              tags: placeDetailResponse.data.basicInfo.tags || null,
+              address: placeDetailResponse.data.basicInfo.address || null,
+              phonenum: placeDetailResponse.data.basicInfo.phonenum || null,
             },
             mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl || {},
             photo: placeDetailResponse.data.photo || {},
@@ -45,21 +46,25 @@ export async function POST(request: Request) {
             distance: place.distance,
             x: place.x,
             y: place.y,
-            findway: placeDetailResponse.data.findway,
+            findway: placeDetailResponse.data.findway || {},
             basicInfo: {
-              tags: placeDetailResponse.data.basicInfo.tags,
-              address: placeDetailResponse.data.basicInfo.address,
-              phonenum: placeDetailResponse.data.basicInfo.phonenum,
+              tags: placeDetailResponse.data.basicInfo.tags || null,
+              address: placeDetailResponse.data.basicInfo.address || null,
+              phonenum: placeDetailResponse.data.basicInfo.phonenum || null,
             },
-            mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl,
-            photo: placeDetailResponse.data.photo,
+            mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl || {},
+            photo: placeDetailResponse.data.photo || {},
           },
         });
-      }),
-    );
+
+        upsertedPlaces.push(upsertedPlace); // 결과를 배열에 추가
+      } catch (error) {
+        continue;
+      }
+    }
 
     return NextResponse.json(
-      { status: 'success', data: upsertedPlaces },
+      { status: 'success', message: '장소 데이터 생성/업데이트 성공' },
       { status: 200 },
     );
   } catch (error) {
