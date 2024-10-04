@@ -3,25 +3,39 @@ import { Latlng } from '../shared/types/map';
 
 const useGeolocation = () => {
   const [location, setLocation] = useState<Latlng | null>(null);
-  useEffect(() => {
-    const successHandler = (response: {
+
+  // 위치 요청 함수
+  const requestLocation = (onError?: () => void) => {
+    navigator.geolocation.getCurrentPosition(successHandler, (error) => {
+      console.log(error);
+      if (onError) onError();
+    });
+
+    function successHandler(response: {
       coords: { latitude: number; longitude: number };
-    }) => {
+    }) {
+      const { latitude, longitude } = response.coords;
+      const newLocation = { latitude, longitude };
+      setLocation(newLocation); // 위치 업데이트
+    }
+  };
+
+  // 초기 위치 요청 (컴포넌트가 처음 렌더링될 때만 수행)
+  useEffect(() => {
+    const defaultLocation = { latitude: 37.5665, longitude: 126.978 }; // 서울 기본 위치
+    navigator.geolocation.getCurrentPosition(successHandler, () => {
+      setLocation(defaultLocation); // 오류 발생 시 기본 위치로 설정
+    });
+
+    function successHandler(response: {
+      coords: { latitude: number; longitude: number };
+    }) {
       const { latitude, longitude } = response.coords;
       setLocation({ latitude, longitude });
-    };
-
-    const errorHandler = (error: GeolocationPositionError) => {
-      console.log(error);
-      // 기본값 설정 (서울)
-      setLocation({ latitude: 37.5665, longitude: 126.978 });
-    };
-
-    // 위치 정보 요청
-    navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+    }
   }, []);
 
-  return { location };
+  return { location, requestLocation };
 };
 
 export default useGeolocation;
