@@ -33,7 +33,7 @@ export async function PUT(
       data: {
         username: profileData.username,
         introduction: profileData.introduction,
-        address: JSON.stringify(profileData.address) || {},
+        address: JSON.parse(JSON.stringify(profileData.address)) || null,
         profileImage: profileData.profileImage,
       },
     });

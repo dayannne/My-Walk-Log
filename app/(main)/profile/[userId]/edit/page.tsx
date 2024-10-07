@@ -2,7 +2,7 @@
 
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
-import { IAddress, IProfileReq } from '@/app/shared/types/profile';
+import { IProfileReq } from '@/app/shared/types/profile';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import { useEditProfile, useGetMyProfile } from '@/app/store/server/profile';
 import { useEffect, useState } from 'react';
 import Header from '@/app/_component/common/Header';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { IAddress } from '@/app/shared/types/map';
 
 export interface pageProps {
   params: { userId: string };

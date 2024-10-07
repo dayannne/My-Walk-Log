@@ -1,6 +1,6 @@
-// AddressDisplay.tsx
 import React, { useEffect, useState } from 'react';
 import { useMap } from '@/app/shared/contexts/Map';
+import { IRegion } from '@/app/shared/types/map';
 
 const AddressDisplay: React.FC = () => {
   const { mapData } = useMap()!;
@@ -11,7 +11,10 @@ const AddressDisplay: React.FC = () => {
 
     const geocoder = new kakao.maps.services.Geocoder();
 
-    const displayCenterInfo = (result: any[], status: any) => {
+    const displayCenterInfo = (
+      result: IRegion[],
+      status: kakao.maps.services.Status,
+    ) => {
       if (status === kakao.maps.services.Status.OK) {
         for (let i = 0; i < result.length; i++) {
           if (result[i].region_type === 'H') {

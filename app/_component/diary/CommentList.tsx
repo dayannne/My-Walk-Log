@@ -6,10 +6,11 @@ import MenuModal from '../common/Modal/MenuModal';
 import { useUserStore } from '@/app/store/client/user';
 import { useDeleteComment } from '@/app/store/server/comment';
 import { useModalStore } from '@/app/store/client/modal';
+import { IComment } from '@/app/shared/types/comment';
 
 export interface CommentListProps {
   diaryId: number;
-  comments: any;
+  comments: IComment[];
   setContent: (content: string) => void;
   setEditId: (editId: number | null) => void;
 }
@@ -33,7 +34,7 @@ const CommentList = ({
 
   return (
     <ul className='basis-full bg-white'>
-      {comments?.map((comment: any, idx: number) => (
+      {comments?.map((comment: IComment, idx: number) => (
         <li
           key={comment?.id}
           className={`flex gap-3 border-solid border-gray-200 p-4 ${idx < comments?.length - 1 && 'border-b'}`}

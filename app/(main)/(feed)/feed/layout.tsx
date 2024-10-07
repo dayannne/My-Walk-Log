@@ -1,4 +1,5 @@
 import Header from '@/app/_component/common/Header';
+import { IDiary } from '@/app/shared/types/diary';
 import getQueryClient from '@/app/shared/utils/getQueryCLient';
 import { getFeed } from '@/app/store/server/feed';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
@@ -8,8 +9,8 @@ export interface FeedLayoutProps {
 }
 
 interface FeedData {
-  pages: Array<any>; // or more specific types if known
-  pageParams: Array<any>;
+  pages: IDiary[];
+  pageParams: number[];
 }
 
 const FeedLayout = async ({ children }: FeedLayoutProps) => {
@@ -17,7 +18,7 @@ const FeedLayout = async ({ children }: FeedLayoutProps) => {
   await queryClient.prefetchInfiniteQuery({
     queryKey: ['feed'],
     queryFn: () => getFeed(1),
-    getNextPageParam: (lastPage: { page: any; totalPages: any }) => {
+    getNextPageParam: (lastPage: { page: number; totalPages: number }) => {
       const { page, totalPages } = lastPage;
       return page < totalPages ? page + 1 : undefined;
     },

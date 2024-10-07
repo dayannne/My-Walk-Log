@@ -37,7 +37,7 @@ export const useEditProfile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
       alert('프로필이 수정되었습니다.');
-      router.push(`/profile/my`);
+      router.back();
     },
     onError: (error) => {
       console.log(error);

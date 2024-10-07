@@ -1,4 +1,4 @@
-import { IPlaceInfo } from '@/app/shared/types/map';
+import { IAddressInfo } from '@/app/shared/types/map';
 
 import {
   queryOptions,
@@ -19,7 +19,7 @@ export const useGetPlace = (placeId: string) =>
 
 export const useCreatePlace = () => {
   return useMutation({
-    mutationFn: async (data: IPlaceInfo[]) => {
+    mutationFn: async (data: IAddressInfo[]) => {
       const result = await axios.post('/api/place/search/result', data);
       return result;
     },

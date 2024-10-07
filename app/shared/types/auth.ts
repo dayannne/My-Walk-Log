@@ -1,4 +1,5 @@
-import { IAddress } from './profile';
+import { IDiary } from './diary';
+import { IAddress } from './map';
 
 export interface ISignupForm {
   email: string;
@@ -27,4 +28,20 @@ export interface IUser {
   diaries: [];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IAuthor {
+  id: number;
+  username: string;
+  email: string;
+  address: IAddress;
+  introduction: string;
+  profileImage: string;
+  hashedPassword: string;
+  createdAt: string;
+  updatedAt: string;
+  likedReviews: number[];
+  likedDiaries: number[];
+  likedPlaces: string[];
+  diaries: IDiary[];
 }

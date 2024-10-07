@@ -8,7 +8,7 @@ import React, {
   useState,
   useEffect,
 } from 'react';
-import { IMapContextValue, IPlaceInfo } from '@/app/shared/types/map';
+import { IMapContextValue, IAddressInfo } from '@/app/shared/types/map';
 import useGeolocation from '@/app/_hooks/useGeolocation';
 
 interface MapProps {
@@ -26,7 +26,7 @@ const MapProvider: React.FC<MapProps> = ({ children }) => {
     useState<kakao.maps.MarkerClusterer | null>(null);
   const [overlays, setOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
   const [prevKeyword, setPrevKeyword] = useState<string[]>([]);
-  const [places, setPlaces] = useState<IPlaceInfo[]>([]);
+  const [places, setPlaces] = useState<IAddressInfo[]>([]);
   const [prevLocation, setPrevLocation] = useState<kakao.maps.LatLng | null>(
     null,
   );

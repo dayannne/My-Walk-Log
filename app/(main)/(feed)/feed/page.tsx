@@ -10,10 +10,7 @@ import { useUserStore } from '@/app/store/client/user';
 import useInfiniteScroll from '@/app/_hooks/useInfiniteScroll';
 import { useGetFeed } from '@/app/store/server/feed';
 import { useInfiniteQuery } from '@tanstack/react-query';
-
-export interface FeedDiaryProps {
-  diaries: any;
-}
+import { IDiary } from '@/app/shared/types/diary';
 
 const FeedPage = () => {
   const { user } = useUserStore();
@@ -48,7 +45,7 @@ const FeedPage = () => {
   return (
     <>
       <ul className='grid grid-cols-2 gap-2 bg-white p-4'>
-        {diaries?.map((diary: any) => (
+        {diaries?.map((diary: IDiary) => (
           <li
             className='rounded-2xl'
             key={diary.id}
@@ -67,7 +64,7 @@ const FeedPage = () => {
                   <Image
                     className='mt-[2px] h-8 w-8 shrink-0 rounded-full object-cover'
                     key={`user_${diary.authorId}_profile_image`}
-                    src={diary.author.profileImage}
+                    src={diary?.author?.profileImage as string}
                     alt='프로필 이미지'
                     width={500}
                     height={500}
@@ -75,7 +72,7 @@ const FeedPage = () => {
                   <div className='flex basis-full items-center justify-between'>
                     <span className='flex flex-col gap-[2px]'>
                       <span className='text-xs text-gray-200'>
-                        {diary.author.username}
+                        {diary?.author?.username}
                       </span>
                       <span className='text-[10px] leading-none text-gray-400'>
                         {formatTimeAgo(diary.createdAt)}

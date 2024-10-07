@@ -10,13 +10,6 @@ export interface layoutProps {
 }
 
 const ProfileLayout = async ({ children, params }: layoutProps) => {
-  // const queryClient = getQueryClient();
-
-  // await queryClient.prefetchQuery({
-  //   queryKey: ['myProfile', params.userId],
-  //   queryFn: () => getMyProfile(parseInt(params.userId)),
-  // });
-
   return (
     <div className='flex h-full w-full flex-col'>
       <Header title='나의 프로필'>
@@ -24,8 +17,6 @@ const ProfileLayout = async ({ children, params }: layoutProps) => {
       </Header>
       <div className='flex basis-full flex-col overflow-y-scroll bg-white'>
         {children}
-        {/* <HydrationBoundary state={dehydrate(queryClient)}>
-        </HydrationBoundary> */}
       </div>
     </div>
   );

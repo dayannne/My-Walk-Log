@@ -9,10 +9,10 @@ export interface ProfileLayoutProps {
 
 const ProfileLayout = async ({ children, params }: ProfileLayoutProps) => {
   const queryClient = getQueryClient();
-
+  const userId = parseInt(params.userId);
   await queryClient.prefetchQuery({
     queryKey: ['myProfile'],
-    queryFn: () => getMyProfile(parseInt(params.userId)),
+    queryFn: () => getMyProfile(userId),
     staleTime: 60 * 1000,
   });
 

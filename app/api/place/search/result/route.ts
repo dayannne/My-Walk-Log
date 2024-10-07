@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/prisma/context';
-import { IPlaceInfo } from '@/app/shared/types/map';
+import { IAddressInfo } from '@/app/shared/types/map';
 import { kakaoInstance } from '@/app/api/_routes/axiosInstance';
 
 export async function POST(request: Request) {
   try {
-    const places: IPlaceInfo[] = await request.json();
+    const places: IAddressInfo[] = await request.json();
     const upsertedPlaces = []; // 결과를 저장할 배열
 
     for (const place of places) {

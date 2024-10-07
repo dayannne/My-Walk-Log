@@ -8,8 +8,8 @@ export interface IMapContextValue {
   setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];
   setOverlays: (overlays: kakao.maps.CustomOverlay[]) => void;
-  places: IPlaceInfo[];
-  setPlaces: React.Dispatch<React.SetStateAction<IPlaceInfo[]>>;
+  places: IAddressInfo[];
+  setPlaces: React.Dispatch<React.SetStateAction<IAddressInfo[]>>;
   prevKeyword: string[];
   setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
   currLocation: kakao.maps.LatLng | null;
@@ -22,6 +22,12 @@ export interface IMapContextValue {
   >;
 }
 
+export enum KakaoMapStatus {
+  OK = 'OK',
+  ZERO_RESULT = 'ZERO_RESULT',
+  ERROR = 'ERROR',
+}
+
 export interface Latlng {
   latitude: number;
   longitude: number;
@@ -32,7 +38,26 @@ export interface IMarker {
   content: string;
 }
 
-export interface IPlaceInfo {
+export interface IRegion {
+  region_type: string;
+  code: string;
+  address_name: string;
+  region_1depth_name: string;
+  region_2depth_name: string;
+  region_3depth_name: string;
+  region_4depth_name: string;
+  x: number;
+  y: number;
+}
+
+export interface IAddress {
+  code: string;
+  areaName: string;
+  center: number[];
+  polygonPaths: number[][];
+}
+
+export interface IAddressInfo {
   address_name: string;
   category_group_code?: string;
   category_group_name?: string;
