@@ -2,9 +2,11 @@
 
 import Image from 'next/image';
 import { usePlaceMenuStore } from '@/app/store/client/place';
+import { IPlace } from '@/app/shared/types/place';
+import { IDiary } from '@/app/shared/types/diary';
 
 interface PlaceDiaryAlbumProps {
-  place: any;
+  place: IPlace;
 }
 
 const PlaceDiaryAlbum = ({ place }: PlaceDiaryAlbumProps) => {
@@ -26,7 +28,7 @@ const PlaceDiaryAlbum = ({ place }: PlaceDiaryAlbumProps) => {
         </button>
       </div>
       <div className='grid grid-cols-3 gap-3'>
-        {diaries?.map((diary: any) => (
+        {diaries?.map((diary: IDiary) => (
           <button
             className='relative'
             key={diary.id}

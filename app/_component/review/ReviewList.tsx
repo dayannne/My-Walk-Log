@@ -11,9 +11,10 @@ import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
 import { usePathname } from 'next/navigation';
 import { useModalStore } from '@/app/store/client/modal';
+import { IReview } from '@/app/shared/types/review';
 
 export interface ReviewListProps {
-  reviews: any;
+  reviews: IReview[];
   type: 'PLACE' | 'PROFILE';
 }
 
@@ -48,7 +49,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
     <>
       {reviews && (
         <ul className='bg-white'>
-          {reviews.map((review: any) => (
+          {reviews.map((review: IReview) => (
             <li
               key={review.id}
               className='flex flex-col gap-3 border-b border-solid border-gray-200 p-4'

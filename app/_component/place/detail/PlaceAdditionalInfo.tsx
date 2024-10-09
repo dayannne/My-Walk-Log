@@ -3,14 +3,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FACALTY_INFO } from '@/app/shared/constant';
+import { IPlace } from '@/app/shared/types/place';
 
 export interface PlaceAdditionalInfoProps {
-  place: any;
+  place: IPlace;
 }
 
 const PlaceAdditionalInfo = ({ place }: PlaceAdditionalInfoProps) => {
   const { phonenum, homepage, openHour, facilityInfo } = place?.basicInfo || {};
-
+  console.log(place);
   return (
     <div className='flex flex-col gap-4 bg-white px-4 py-5 text-sm'>
       {/* 주소 */}

@@ -13,7 +13,6 @@ import { useCreateDiary } from '@/app/store/server/diary';
 import Header from '@/app/_component/common/Header';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/app/store/client/user';
-import { IAddressInfo } from '@/app/shared/types/map';
 
 const DiaryFormPage = () => {
   const {
@@ -30,7 +29,8 @@ const DiaryFormPage = () => {
   const { user } = useUserStore();
   const { mutate: createDiary } = useCreateDiary();
   const [placeTags, setPlaceTags] = useState<string[]>([]);
-  const [selectedPlace, setSelectedPlace] = useState<IAddressInfo | null>(null);
+  const [selectedPlace, setSelectedPlace] =
+    useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
   const {
     register,
     handleSubmit,

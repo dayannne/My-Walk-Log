@@ -7,9 +7,10 @@ import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
 import { useUserStore } from '@/app/store/client/user';
 import { useModalStore } from '@/app/store/client/modal';
+import { IDiary } from '@/app/shared/types/diary';
 
 export interface DiaryItemProps {
-  diary: any;
+  diary: IDiary;
   onClick: () => void;
   onConfirm: (diaryId: number) => void;
 }

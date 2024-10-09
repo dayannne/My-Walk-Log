@@ -4,9 +4,10 @@ import { useUserStore } from '@/app/store/client/user';
 import Image from 'next/image';
 import { Carousel } from '@material-tailwind/react';
 import { usePlaceDetailStore } from '@/app/store/client/place';
+import { IPhotoDetail, IPlace } from '@/app/shared/types/place';
 
 export interface PlaceBasicInfoProps {
-  place: any;
+  place: IPlace;
   placeId: string;
 }
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
@@ -82,7 +83,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
                 </div>
               )}
             >
-              {photos.map((photo: any, idx: number) => (
+              {photos.map((photo: IPhotoDetail, idx: number) => (
                 <Image
                   className='h-full w-full object-cover object-center'
                   key={idx}
@@ -135,7 +136,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
           {/* 태그 */}
           <span className='flex flex-wrap gap-1'>
             {tags &&
-              tags.map((item: string, idx: any) => (
+              tags.map((item: string, idx: number) => (
                 <span
                   key={idx}
                   className='border-olive-green rounded-lg border border-solid px-2 text-sm text-black'

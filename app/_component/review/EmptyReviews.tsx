@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { usePlaceDetailStore } from '@/app/store/client/place';
 import { useRouter } from 'next/navigation';
+import { IPlace } from '@/app/shared/types/place';
 
 export interface EmptyReviewsProps {
   url?: string;
-  placeDetail?: any;
+  placeDetail?: IPlace;
 }
 
 const EmptyReviews = ({ url, placeDetail }: EmptyReviewsProps) => {
@@ -26,7 +27,7 @@ const EmptyReviews = ({ url, placeDetail }: EmptyReviewsProps) => {
         onClick={() => {
           if (url) router.push(url);
           else {
-            setPlaceDetail(placeDetail);
+            setPlaceDetail(placeDetail as IPlace);
             setPlaceDetailState(1);
           }
         }}

@@ -127,7 +127,9 @@ const ProfilePage = ({ params }: ProfilePageProps) => {
         ) : (
           <EmptyReviews url='/place/search' />
         ))}
-      {!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}
+      {!loading && openInfo && (
+        <PlaceDetailModal placeId={openInfo as string} />
+      )}
     </>
   );
 };

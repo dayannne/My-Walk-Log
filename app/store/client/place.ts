@@ -1,3 +1,4 @@
+import { IPlace } from '@/app/shared/types/place';
 import { create } from 'zustand';
 
 interface PlaceState {
@@ -23,16 +24,17 @@ export const usePlaceMenuStore = create<PlaceMenuState>((set) => ({
 }));
 
 interface PlaceDetailState {
-  placeDetail: any;
-  setPlaceDetail: (placeDetail: any) => void;
+  placeDetail: IPlace | null;
+  setPlaceDetail: (placeDetail: IPlace | null) => void;
   placeDetailState: number;
   setPlaceDetailState: (userData: number) => void;
 }
 
 export const usePlaceDetailStore = create<PlaceDetailState>((set) => ({
-  placeDetail: {},
+  placeDetail: null,
   placeDetailState: 0,
-  setPlaceDetail: (newPlaceDetail: any) => set({ placeDetail: newPlaceDetail }),
+  setPlaceDetail: (newPlaceDetail: IPlace | null) =>
+    set({ placeDetail: newPlaceDetail }),
   setPlaceDetailState: (newState: number) =>
     set({ placeDetailState: newState }),
 }));

@@ -9,6 +9,7 @@ import HighlightText from '../../common/HighlightText';
 import { useModalStore } from '@/app/store/client/modal';
 import TrailModal from '../TrailModal';
 import { useMap } from '@/app/shared/contexts/Map';
+import { ITrail } from '@/app/shared/types/trail';
 
 export interface SearchResultProps {}
 
@@ -32,7 +33,7 @@ const SearchResult = ({}: SearchResultProps) => {
   return (
     <>
       <ul className='flex max-h-60 shrink-0 flex-col overflow-y-scroll border-t border-solid border-gray-200 bg-white lg:max-h-full'>
-        {trails?.map((trail: any) => (
+        {trails?.map((trail: ITrail) => (
           <li
             key={trail.ESNTL_ID}
             className='hover:bg-hover flex items-start border-b border-solid border-gray-200 px-6 py-4 lg:py-6'
@@ -59,9 +60,11 @@ const SearchResult = ({}: SearchResultProps) => {
                 </span>
                 {trail.WLK_COURS_NM}
               </div>
-              <span className='mt-2 text-xs lg:text-sm'>
-                <HighlightText text={trail.LNM_ADDR} highlight={keyword} />
-              </span>
+              {trail.LNM_ADDR && (
+                <span className='mt-2 text-xs lg:text-sm'>
+                  <HighlightText text={trail.LNM_ADDR} highlight={keyword} />
+                </span>
+              )}
               {/* 난이도 / 거리 / 소요시간 */}
               <div className='mt-2 flex items-center gap-1 text-xs font-light text-gray-800'>
                 <span>{trail.COURS_LEVEL_NM}</span>

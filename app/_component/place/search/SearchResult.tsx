@@ -26,7 +26,6 @@ const SearchResult = () => {
     if (hasMapData) {
       searchPlaces(keyword, type as SearchType);
     }
-    // mapContext?.mapData 의존성 배열 추가 - 새로고침 시에도 검색 결과 불러옴
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, mapContext?.mapData, type, refreshKey]);
 
@@ -43,7 +42,7 @@ const SearchResult = () => {
     <>
       <ul className='flex max-h-60 shrink-0 basis-full flex-col overflow-y-scroll border-t border-solid border-gray-200 bg-white lg:max-h-full'>
         {places &&
-          places.map((place: any) => (
+          places.map((place: kakao.maps.services.PlacesSearchResultItem) => (
             <li
               key={place.id}
               className='hover:bg-hover flex items-start border-b border-solid border-gray-200 px-6 py-4 lg:py-6'

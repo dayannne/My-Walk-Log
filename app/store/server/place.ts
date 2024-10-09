@@ -1,5 +1,3 @@
-import { IAddressInfo } from '@/app/shared/types/map';
-
 import {
   queryOptions,
   useMutation,
@@ -19,7 +17,7 @@ export const useGetPlace = (placeId: string) =>
 
 export const useCreatePlace = () => {
   return useMutation({
-    mutationFn: async (data: IAddressInfo[]) => {
+    mutationFn: async (data: kakao.maps.services.PlacesSearchResult) => {
       const result = await axios.post('/api/place/search/result', data);
       return result;
     },

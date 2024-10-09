@@ -14,9 +14,10 @@ import {
   usePlaceMenuStore,
 } from '@/app/store/client/place';
 import { useState } from 'react';
+import { IPlace } from '@/app/shared/types/place';
 
 interface PlaceReviewProps {
-  place: any;
+  place: IPlace;
 }
 
 const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
@@ -42,11 +43,11 @@ const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
         </button>
         {user &&
           reviews?.length > 0 &&
-          !reviews?.some((review: any) => review.authorId === user.id) && (
+          !reviews?.some((review: IReview) => review.authorId === user.id) && (
             <button
               className='text-olive-green border-olive-green flex shrink-0 items-center justify-center gap-1 rounded-lg border border-solid px-2 py-1 text-xs shadow-md'
               onClick={() => {
-                setPlaceDetail(place)
+                setPlaceDetail(place);
                 setPlaceDetailState(1);
               }}
             >
@@ -61,7 +62,7 @@ const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
           )}
       </div>
       <ul className='pb-4'>
-        {reviews.map((review: any, index: number) => (
+        {reviews.map((review: IReview, index: number) => (
           <>
             {index < 3 && (
               <li
@@ -73,14 +74,14 @@ const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
                     <Image
                       className='h-8 w-8 shrink-0 rounded-full'
                       key={`user_${review.authorId}_profile_image`}
-                      src={review.author.profileImage}
+                      src={review?.author?.profileImage as string}
                       alt='프로필 이미지'
                       width={500}
                       height={500}
                     />
                     <div className='flex basis-full flex-col'>
                       <span className='text-sm font-semibold'>
-                        {review.author.username}
+                        {review?.author?.username as string}
                       </span>
                       <span className='text-xs text-gray-600'>
                         {`${formatDate(review.createdAt).year}년 ${

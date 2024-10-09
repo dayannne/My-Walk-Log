@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { ISignupForm } from '@/app/shared/types/auth';
 import { useSignupMutation } from '@/app/store/server/auth';
 import AreaSearch from '../common/AreaSearch/AreaSearch';
-import { IAddress } from '@/app/shared/types/profile';
+import { IAddress } from '@/app/shared/types/map';
 
 const SignupForm = () => {
   const { mutate: signup } = useSignupMutation();

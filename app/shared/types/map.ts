@@ -8,8 +8,10 @@ export interface IMapContextValue {
   setMarkerClusterer: (markers: kakao.maps.MarkerClusterer | null) => void;
   overlays: kakao.maps.CustomOverlay[];
   setOverlays: (overlays: kakao.maps.CustomOverlay[]) => void;
-  places: IAddressInfo[];
-  setPlaces: React.Dispatch<React.SetStateAction<IAddressInfo[]>>;
+  places: kakao.maps.services.PlacesSearchResult;
+  setPlaces: React.Dispatch<
+    React.SetStateAction<kakao.maps.services.PlacesSearchResult>
+  >;
   prevKeyword: string[];
   setPrevKeyword: React.Dispatch<React.SetStateAction<string[]>>;
   currLocation: kakao.maps.LatLng | null;
@@ -55,21 +57,6 @@ export interface IAddress {
   areaName: string;
   center: number[];
   polygonPaths: number[][];
-}
-
-export interface IAddressInfo {
-  address_name: string;
-  category_group_code?: string;
-  category_group_name?: string;
-  category_name: string;
-  distance: string;
-  id: string;
-  phone: string;
-  place_name: string;
-  place_url: string;
-  road_address_name: string;
-  x: string;
-  y: string;
 }
 
 export type SearchType = 'SEARCH_AGAIN' | 'SEARCH' | 'SEARCH_CATEGORY';

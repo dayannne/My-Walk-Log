@@ -52,8 +52,8 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       walkDuration: parseInt(formData.walkDuration as string),
       keywords: placeKeywords,
       reviewImages,
-      placeName: placeDetail?.placeName,
-      placeAddress: placeDetail?.basicInfo?.address?.region?.fullname,
+      placeName: placeDetail?.placeName as string,
+      placeAddress: placeDetail?.basicInfo?.address?.region?.fullname as string,
     };
 
     createReview({ data, userId: user.id, placeId });

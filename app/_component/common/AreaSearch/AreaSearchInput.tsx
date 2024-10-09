@@ -1,15 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
-import { Area } from '@/app/shared/types/place';
+import { IArea } from '@/app/shared/types/place';
 import { filterAreaData } from '@/app/shared/function/filter';
 import AreaCode from '../../../../public/data/area-code.json';
 
 interface AreaSearchInputProps {
   areaName: string | null;
   setAreaName: (name: string | null) => void;
-  setFilteredResults: (results: Area[]) => void;
-  filteredResults: Area[];
-  onSelect: (item: Area) => void; // Add this prop
+  setFilteredResults: (results: IArea[]) => void;
+  filteredResults: IArea[];
+  onSelect: (item: IArea) => void; // Add this prop
 }
 
 const AreaSearchInput = ({
@@ -19,7 +19,7 @@ const AreaSearchInput = ({
   filteredResults,
   onSelect,
 }: AreaSearchInputProps) => {
-  const data = filterAreaData(AreaCode as Area[]);
+  const data = filterAreaData(AreaCode as IArea[]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.currentTarget.value;

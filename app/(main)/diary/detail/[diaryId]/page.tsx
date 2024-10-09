@@ -81,7 +81,9 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
         editId={editId}
         setEditId={setEditId}
       />
-      {!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}
+      {!loading && openInfo && (
+        <PlaceDetailModal placeId={openInfo as string} />
+      )}
     </>
   );
 };

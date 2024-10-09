@@ -1,9 +1,16 @@
 'use client';
 
+import {
+  IBusInfo,
+  IBusStop,
+  IPlace,
+  ISubway,
+  ISubwayList,
+} from '@/app/shared/types/place';
 import Image from 'next/image';
 
 export interface PlaceFindWayInfoProps {
-  place: any;
+  place: IPlace;
 }
 
 const PlaceFindWayInfo = ({ place }: PlaceFindWayInfoProps) => {
@@ -25,13 +32,13 @@ const PlaceFindWayInfo = ({ place }: PlaceFindWayInfoProps) => {
             지하철역
           </span>
           <div className='flex flex-col gap-2'>
-            {subway.map((station: any) => (
+            {subway.map((station: ISubway) => (
               <div className='flex gap-1' key={station.stationId}>
                 <div className=''>•</div>
                 <div className='flex flex-wrap items-center gap-1 text-xs'>
                   <span className='text-sm'>{station.stationSimpleName}</span>
                   {station.subwayList.map(
-                    (info: any) =>
+                    (info: ISubwayList) =>
                       info.subwayName && (
                         <span
                           className='bg-hover shrink-0 rounded-full border border-solid border-gray-500 px-2 py-[1px] text-xs'
@@ -66,7 +73,7 @@ const PlaceFindWayInfo = ({ place }: PlaceFindWayInfoProps) => {
             버스정류장
           </span>
           <div className='flex flex-col gap-3'>
-            {busStops.map((busStop: any) => (
+            {busStops.map((busStop: IBusStop) => (
               <div className='flex items-start gap-1' key={busStop.busStopId}>
                 <div className=''>•</div>
                 <div className='flex flex-col gap-1'>
@@ -86,7 +93,7 @@ const PlaceFindWayInfo = ({ place }: PlaceFindWayInfoProps) => {
                       </span>
                     </div>
                   </div>
-                  {busStop.busInfo.map((info: any) => (
+                  {busStop.busInfo.map((info: IBusInfo) => (
                     <div
                       className='flex items-start gap-2'
                       key={info.busTypeCode}

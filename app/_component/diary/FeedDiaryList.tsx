@@ -10,9 +10,10 @@ import { useUserStore } from '@/app/store/client/user';
 import useInfiniteScroll from '@/app/_hooks/useInfiniteScroll';
 import { useGetFeed } from '@/app/store/server/feed';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { IDiary } from '@/app/shared/types/diary';
 
 export interface FeedDiaryProps {
-  diaries: any;
+  diaries: IDiary[];
 }
 
 const FeedDiaryList = () => {
@@ -52,7 +53,7 @@ const FeedDiaryList = () => {
   return (
     <>
       <ul className='grid grid-cols-2 gap-2 bg-white p-4'>
-        {diaries?.map((diary: any) => (
+        {diaries?.map((diary: IDiary) => (
           <li
             className='rounded-2xl'
             key={diary.id}

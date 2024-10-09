@@ -8,9 +8,10 @@ import MenuModal from '../common/Modal/MenuModal';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import Link from 'next/link';
 import { useModalStore } from '@/app/store/client/modal';
+import { IDiary } from '@/app/shared/types/diary';
 
 export interface ProfileDiaryListProps {
-  diaries: any;
+  diaries: IDiary[];
 }
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
@@ -18,24 +19,24 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const { setOpenInfo, openId, setOpenId } = useModalStore();
-
+  console.log(diaries);
   const handleConfirm = (diaryId: number) => {
     if (!user) {
       return alert('로그인 후 이용가능합니다.');
     }
-    deleteDiary(diaryId);
+    deleteDiary({ diaryId, userId: user.id });
   };
 
   const handleClick = (diaryId: number) => {
     if (!user) {
       return alert('로그인 후 이용가능합니다.');
     }
-    toggleLike(diaryId);
+    toggleLike({ diaryId, userId: user.id });
   };
 
   return (
     <ul className='flex basis-full flex-col gap-2 bg-white py-2'>
-      {diaries.map((diary: any) => (
+      {diaries.map((diary: IDiary) => (
         <li
           key={diary.id}
           className='flex gap-3 border-b border-solid border-gray-200 p-4'

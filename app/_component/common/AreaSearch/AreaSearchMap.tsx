@@ -1,4 +1,4 @@
-import { IAddress } from '@/app/shared/types/profile';
+import { IAddress } from '@/app/shared/types/map';
 import React, { useEffect, useRef } from 'react';
 
 interface AreaSearchMapProps {

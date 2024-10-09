@@ -9,7 +9,9 @@ import { SearchType } from '../shared/types/map';
 import { useModalStore } from '../store/client/modal';
 
 const useSearchPlaces = () => {
-  const [places, setPlaces] = useState<any[]>([]);
+  const [places, setPlaces] = useState<kakao.maps.services.PlacesSearchResult>(
+    [],
+  );
   const mapContext = useMap();
   const { setOpenInfo } = useModalStore();
   const { mutate: createPlace } = useCreatePlace();
@@ -47,9 +49,9 @@ const useSearchPlaces = () => {
   };
 
   const searchPlacesCB = async (
-    data: any,
+    data: kakao.maps.services.PlacesSearchResult,
     status: kakao.maps.services.Status,
-    pagination: any,
+    pagination: kakao.maps.Pagination,
     type: SearchType, // 추가된 type 인수
   ) => {
     if (status === kakao.maps.services.Status.OK) {
@@ -73,12 +75,18 @@ const useSearchPlaces = () => {
     }
   };
 
-  const displayMarkers = (places: any[], type: SearchType) => {
+  const displayMarkers = (
+    places: kakao.maps.services.PlacesSearchResult,
+    type: SearchType,
+  ) => {
     let overlays: kakao.maps.CustomOverlay[] = [];
     let bounds = new kakao.maps.LatLngBounds();
 
     places.forEach((place, index) => {
-      const position = new kakao.maps.LatLng(place.y, place.x);
+      const position = new kakao.maps.LatLng(
+        parseFloat(place.y),
+        parseFloat(place.x),
+      );
 
       // LatLngBounds 객체에 좌표를 추가
       bounds.extend(position);

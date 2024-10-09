@@ -1,4 +1,4 @@
-import { PlaceKeywords } from '../types/place';
+import { IPlaceKeywords } from '../types/place';
 
 export const FILTER_CATEGORIES = [
   '도보여행',
@@ -39,7 +39,7 @@ export const ENTRY_FEE = [
   { id: 'paid', value: 'paid', label: '유료 입장' },
 ];
 
-export const PLACE_KEYWORDS: PlaceKeywords = {
+export const PLACE_KEYWORDS: IPlaceKeywords = {
   시설: {
     1: '🚍 대중교통이 편해요',
     2: '🅿️ 주차하기 편해요',

@@ -2,8 +2,8 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import Image from 'next/image';
-
 import { useModalStore } from '@/app/store/client/modal';
+import { ITrail } from '@/app/shared/types/trail';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -15,6 +15,24 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 
 function TrailModal() {
   const { openInfo, handleCloseInfo } = useModalStore();
+
+  if (!openInfo || typeof openInfo !== 'object') {
+    return null;
+  }
+
+  const {
+    WLK_COURS_FLAG_NM,
+    WLK_COURS_NM,
+    COURS_DC,
+    COURS_LEVEL_NM,
+    COURS_LT_CN,
+    COURS_TIME_CN,
+    LNM_ADDR,
+    CVNTL_NM,
+    TOILET_DC,
+    OPTN_DC,
+    ADIT_DC,
+  } = openInfo as ITrail;
 
   return (
     <StyledDialog
@@ -30,17 +48,13 @@ function TrailModal() {
           height={80}
         />
         <div className='flex flex-col items-center'>
-          <span className='text-lg font-medium'>
-            {openInfo.WLK_COURS_FLAG_NM}
-          </span>
-          {openInfo.WLK_COURS_FLAG_NM !== openInfo.WLK_COURS_NM && (
-            <span className='text-base text-gray-600'>
-              {openInfo.WLK_COURS_NM}
-            </span>
+          <span className='text-lg font-medium'>{WLK_COURS_FLAG_NM}</span>
+          {WLK_COURS_FLAG_NM !== WLK_COURS_NM && (
+            <span className='text-base text-gray-600'>{WLK_COURS_NM}</span>
           )}
         </div>
         <div className='border-olive-green text-olive-green w-full rounded-xl border border-solid p-2 text-center text-sm'>
-          {openInfo.COURS_DC}
+          {COURS_DC}
         </div>
         <div className='flex w-full flex-col gap-2 rounded-xl border border-solid border-gray-300 p-2 text-sm'>
           {/* 난이도 */}
@@ -51,7 +65,7 @@ function TrailModal() {
               width={24}
               height={24}
             />
-            <span>{openInfo.COURS_LEVEL_NM}</span>
+            <span>{COURS_LEVEL_NM}</span>
           </div>
           {/* 산책 거리 */}
           <div className='flex items-center gap-2'>
@@ -61,7 +75,7 @@ function TrailModal() {
               width={24}
               height={24}
             />
-            <span> {openInfo.COURS_LT_CN}</span>
+            <span>{COURS_LT_CN}</span>
           </div>
           {/* 산책 소요시간 */}
           <div className='flex items-center gap-2'>
@@ -71,7 +85,7 @@ function TrailModal() {
               width={24}
               height={24}
             />
-            <span> {openInfo.COURS_TIME_CN}</span>
+            <span>{COURS_TIME_CN}</span>
           </div>
           {/* 주소 */}
           <div className='flex items-center gap-2'>
@@ -82,13 +96,13 @@ function TrailModal() {
               height={24}
             />
             <div className='flex flex-col gap-1'>
-              <span>{openInfo.LNM_ADDR}</span>
+              <span>{LNM_ADDR}</span>
             </div>
           </div>
         </div>
         <div className='flex w-full flex-col gap-2 rounded-xl border border-solid border-gray-300 p-2 text-sm'>
           {/* 편의 시설 정보 */}
-          {openInfo.CVNTL_NM && (
+          {CVNTL_NM && (
             <div className='flex items-center'>
               <div className='flex w-[80px] items-center gap-[2px]'>
                 <Image
@@ -101,7 +115,7 @@ function TrailModal() {
                   편의시설
                 </span>
               </div>
-              <span className='grow-0'>{openInfo.CVNTL_NM}</span>
+              <span className='grow-0'>{CVNTL_NM}</span>
             </div>
           )}
           <div className='flex items-center'>
@@ -116,8 +130,7 @@ function TrailModal() {
                 화장실
               </span>
             </div>
-
-            <span className='grow-0'>{openInfo.TOILET_DC}</span>
+            <span className='grow-0'>{TOILET_DC}</span>
           </div>
           <div className='flex items-center'>
             <div className='flex w-[80px] items-center gap-[2px]'>
@@ -131,18 +144,17 @@ function TrailModal() {
                 물
               </span>
             </div>
-
-            <span className='grow-0'>{openInfo.OPTN_DC}</span>
+            <span className='grow-0'>{OPTN_DC}</span>
           </div>
         </div>
 
         <div className='overflow-hidden rounded-xl border border-solid border-gray-300'>
           <p className='bg-hover flex h-full max-h-56 w-full flex-col gap-1 overflow-y-scroll p-4'>
-            {openInfo?.ADIT_DC.split('. ').map((str: string, idx: number) => (
+            {ADIT_DC.split('. ').map((str: string, idx: number) => (
               <React.Fragment key={idx}>
                 {str.trim()}
-                {idx !== openInfo.ADIT_DC.split('. ').length - 1 && '.'}
-                {idx !== openInfo.ADIT_DC.split('. ').length - 1 && (
+                {idx !== ADIT_DC.split('. ').length - 1 && '.'}
+                {idx !== ADIT_DC.split('. ').length - 1 && (
                   <>
                     <br />
                     <br />

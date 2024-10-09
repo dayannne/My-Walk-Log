@@ -3,9 +3,10 @@ import { useDiaryLike, useDeleteDiary } from '@/app/store/server/diary';
 
 import DiaryItem from './DiaryItem';
 import { useUserStore } from '@/app/store/client/user';
+import { IDiary } from '@/app/shared/types/diary';
 
 export interface DiaryListProps {
-  diaries: any;
+  diaries: IDiary[];
 }
 
 const DiaryList = ({ diaries }: DiaryListProps) => {
@@ -35,7 +36,7 @@ const DiaryList = ({ diaries }: DiaryListProps) => {
 
   return (
     <ul className='flex flex-col gap-2 bg-white'>
-      {diaries.map((diary: any) => (
+      {diaries.map((diary: IDiary) => (
         <DiaryItem
           key={diary.id}
           diary={diary}

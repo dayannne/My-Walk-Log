@@ -13,11 +13,8 @@ import PlaceDetailMenu from './PlaceDetailMenu';
 import PlaceDiaryAlbum from './PlaceDiaryAlbum';
 import PlaceFindWayInfo from './PlaceFindWayInfo';
 import PleceReviewSummary from './PleceReviewSummary';
-import Image from 'next/image';
 import { useGetPlace } from '@/app/store/server/place';
-import { useModalStore } from '@/app/store/client/modal';
 import { usePathname } from 'next/navigation';
-import CloseButton from '../../common/Button/CloseButton';
 
 const PlaceDetail = ({ placeId }: { placeId: string }) => {
   const pathname = usePathname();

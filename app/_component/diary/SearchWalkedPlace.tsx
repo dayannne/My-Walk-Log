@@ -2,18 +2,21 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FILTER_CATEGORIES } from '@/app/shared/constant';
 import { filterPlacesByKeyword } from '@/app/shared/function/filter';
 import Image from 'next/image';
-import { IAddressInfo } from '@/app/shared/types/map';
 
 interface Props {
-  selectedPlace: IAddressInfo | null;
-  setSelectedPlace: (place: IAddressInfo | null) => void;
+  selectedPlace: kakao.maps.services.PlacesSearchResultItem | null;
+  setSelectedPlace: (
+    place: kakao.maps.services.PlacesSearchResultItem | null,
+  ) => void;
 }
 
 const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const kakaoMapRef = useRef<kakao.maps.Map | null>(null);
   const markerRef = useRef<kakao.maps.Marker | null>(null);
-  const [places, setPlaces] = useState<any[]>([]);
+  const [places, setPlaces] = useState<kakao.maps.services.PlacesSearchResult>(
+    [],
+  );
   const [placeName, setPlaceName] = useState('');
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +35,9 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
       setPlaces([]);
     }
   };
-  const handleSelectPlace = (place: any) => {
+  const handleSelectPlace = (
+    place: kakao.maps.services.PlacesSearchResultItem,
+  ) => {
     setPlaceName(place.place_name);
     setSelectedPlace(place);
     setTimeout(() => {

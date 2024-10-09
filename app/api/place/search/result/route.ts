@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/prisma/context';
-import { IAddressInfo } from '@/app/shared/types/map';
 import { kakaoInstance } from '@/app/api/_routes/axiosInstance';
 
 export async function POST(request: Request) {
   try {
-    const places: IAddressInfo[] = await request.json();
+    const places: kakao.maps.services.PlacesSearchResult = await request.json();
     const upsertedPlaces = []; // 결과를 저장할 배열
 
     for (const place of places) {
@@ -34,6 +33,10 @@ export async function POST(request: Request) {
               tags: placeDetailResponse.data.basicInfo.tags || null,
               address: placeDetailResponse.data.basicInfo.address || null,
               phonenum: placeDetailResponse.data.basicInfo.phonenum || null,
+              homepage: placeDetailResponse.data.basicInfo.homepage || null,
+              openHour: placeDetailResponse.data.basicInfo.openHour || null,
+              facilityInfo:
+                placeDetailResponse.data.basicInfo.facilityInfo || null,
             },
             mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl || {},
             photo: placeDetailResponse.data.photo || {},
@@ -51,6 +54,10 @@ export async function POST(request: Request) {
               tags: placeDetailResponse.data.basicInfo.tags || null,
               address: placeDetailResponse.data.basicInfo.address || null,
               phonenum: placeDetailResponse.data.basicInfo.phonenum || null,
+              homepage: placeDetailResponse.data.basicInfo.homepage || null,
+              openHour: placeDetailResponse.data.basicInfo.openHour || null,
+              facilityInfo:
+                placeDetailResponse.data.basicInfo.facilityInfo || null,
             },
             mainphotourl: placeDetailResponse.data.basicInfo.mainphotourl || {},
             photo: placeDetailResponse.data.photo || {},
