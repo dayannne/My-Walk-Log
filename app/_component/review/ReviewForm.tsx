@@ -5,13 +5,17 @@ import { useForm } from 'react-hook-form';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useState } from 'react';
-import { useUserStore } from '@/app/store/client/user';
 import { useCreateReview } from '@/app/store/server/review';
 import { IReviewReq } from '@/app/shared/types/review';
 import Header from '../common/Header';
 import { usePlaceDetailStore } from '@/app/store/client/place';
+import { useUserStore } from '@/app/store/client/user';
 
 const ReviewForm = ({ placeId }: { placeId: string }) => {
+  const walkDurations = Object.entries(WALK_DURATIONS);
+  const { user } = useUserStore();
+  const { setPlaceDetailState, placeDetail } = usePlaceDetailStore();
+  const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
   const {
     previewImgs,
     fileInputRef,
@@ -20,11 +24,6 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
     uploadImage,
     removeImage,
   } = useImageUpload();
-  const { user } = useUserStore();
-  const { setPlaceDetailState, placeDetail } = usePlaceDetailStore();
-  const walkDurations = Object.entries(WALK_DURATIONS);
-  const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
-
   const {
     register,
     handleSubmit,
@@ -43,6 +42,9 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
   });
   const { mutate: createReview } = useCreateReview();
   const onSubmit = async (formData: IReviewReq) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
     // 이미지 업로드 받아오기
     const reviewImages = await uploadImage();
     const data = {
@@ -50,11 +52,11 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       walkDuration: parseInt(formData.walkDuration as string),
       keywords: placeKeywords,
       reviewImages,
-      placeName: placeDetail.placeName,
-      placeAddress: placeDetail.basicInfo.address.region.fullname,
+      placeName: placeDetail?.placeName as string,
+      placeAddress: placeDetail?.basicInfo?.address?.region?.fullname as string,
     };
 
-    createReview({ data, placeId, userId: user?.id as number });
+    createReview({ data, userId: user.id, placeId });
   };
 
   const handledescriptionChange = (

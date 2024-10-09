@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { NextResponse } from 'next/server';
 
 const Bucket = process.env.AMPLIFY_BUCKET;
 const s3 = new S3Client({
@@ -9,14 +10,16 @@ const s3 = new S3Client({
   },
 });
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const files = formData.getAll('img') as File[];
 
+    // 파일 수가 3개를 초과할 경우
     if (files.length > 3) {
       return new Response(
         JSON.stringify({
+          status: 'error',
           message: '업로드할 수 있는 이미지 파일의 수는 최대 3장입니다.',
         }),
         { status: 400 },
@@ -28,6 +31,7 @@ export async function POST(req: Request, res: Response) {
       const Key = file.name;
       const ContentType = file.type || 'image/jpg';
 
+      // S3에 파일 업로드
       await s3.send(
         new PutObjectCommand({
           Bucket,
@@ -37,26 +41,25 @@ export async function POST(req: Request, res: Response) {
         }),
       );
 
-      // 배열이 아닌 문자열로 반환
       return `https://${Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`;
     });
 
     const imgUrls = await Promise.all(uploadPromises);
 
-    // 파일의 개수가 1이면 배열 대신 단일 URL 반환
-    if (imgUrls.length === 1) {
-      return new Response(JSON.stringify({ data: imgUrls[0], message: 'OK' }), {
-        status: 200,
-      });
-    }
-
-    return new Response(JSON.stringify({ data: imgUrls, message: 'OK' }), {
-      status: 200,
-    });
-  } catch (error) {
-    console.error('Error uploading files:', error);
     return new Response(
-      JSON.stringify({ message: '파일 업로드 중 오류가 발생했습니다.' }),
+      JSON.stringify({
+        status: 'success',
+        data: [...imgUrls],
+        message: '파일이 성공적으로 업로드되었습니다.',
+      }),
+      { status: 200 },
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
+      }),
       { status: 500 },
     );
   }

@@ -19,25 +19,26 @@ const Commentform = ({
   setEditId,
 }: CommentformProps) => {
   const { user } = useUserStore();
+
   const { mutate: editComment } = useEditComment();
   const { mutate: createComment } = useCreateComment();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (!user) alert('로그인 후 이용 가능합니다.');
-
     e.preventDefault();
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
 
     if (editId) {
       const data: ICommentReq = {
         content,
       };
-      editComment({ diaryId, commentId: editId, data });
+      editComment({ data, userId: user?.id, diaryId, commentId: editId });
     } else {
       const data: ICommentReq = {
-        authorId: user?.id as number,
         content,
       };
-      createComment({ diaryId, data });
+      createComment({ data, userId: user?.id, diaryId });
     }
     setContent('');
   };

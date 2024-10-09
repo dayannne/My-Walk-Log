@@ -7,11 +7,11 @@ import Image from 'next/image';
 import MenuModal from '../common/Modal/MenuModal';
 import ConfirmModal from '../common/Modal/ConfirmModal';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useModalStore } from '@/app/store/client/modal';
+import { IDiary } from '@/app/shared/types/diary';
 
 export interface ProfileDiaryListProps {
-  diaries: any;
+  diaries: IDiary[];
 }
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
@@ -19,15 +19,24 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const { setOpenInfo, openId, setOpenId } = useModalStore();
-  const pathname = usePathname().split('/');
-
+  console.log(diaries);
   const handleConfirm = (diaryId: number) => {
-    deleteDiary({ diaryId, userId: user?.id as number });
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    deleteDiary({ diaryId, userId: user.id });
+  };
+
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({ diaryId, userId: user.id });
   };
 
   return (
     <ul className='flex basis-full flex-col gap-2 bg-white py-2'>
-      {diaries.map((diary: any) => (
+      {diaries.map((diary: IDiary) => (
         <li
           key={diary.id}
           className='flex gap-3 border-b border-solid border-gray-200 p-4'
@@ -118,7 +127,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                 </Carousel>
               )}
             </Link>
-            {pathname.includes('my') && (
+            {diary.placeId && (
               <button
                 className='border-olive-green bg-hover flex items-center rounded-lg border border-solid p-2'
                 onClick={() => setOpenInfo(diary.placeId)}
@@ -150,18 +159,11 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
               </button>
             )}
             <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-4'>
+              <div className='flex items-center gap-3'>
                 <div className='flex items-center gap-1'>
-                  <button
-                    onClick={() =>
-                      toggleLike({
-                        diaryId: diary.id,
-                        userId: user?.id as number,
-                      })
-                    }
-                  >
+                  <button onClick={() => handleClick(diary?.id)}>
                     <Image
-                      className='mt-[2px] w-6'
+                      className='w-6'
                       src={
                         diary.likedBy.some((id: number) => id === user?.id) ===
                         true
@@ -180,7 +182,7 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                   href={`/diary/detail/${diary.id}`}
                 >
                   <Image
-                    className='mt-[2px] w-6'
+                    className='w-6'
                     src='/icons/icon-comment.svg'
                     alt='댓글'
                     width={32}
@@ -188,6 +190,11 @@ const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
                   />
                   {diary.comments.length}
                 </Link>
+                {user?.id && user?.id === diary.authorId && (
+                  <span className='bg-hover text-olive-green shrink-0 rounded-lg px-2 py-1 text-xs font-medium'>
+                    {diary.isPublic === true ? '공개' : '비공개'}
+                  </span>
+                )}
               </div>
               {user?.id && user?.id === diary.authorId && (
                 <MenuModal

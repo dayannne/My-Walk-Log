@@ -141,7 +141,7 @@ const Navigation = () => {
       <li className={`basis-full lg:flex lg:flex-col lg:justify-end`}>
         {user ? (
           <Link
-            href={`/profile/my`}
+            href={`/profile/${user?.id}/my`}
             className={`flex basis-full flex-col items-center justify-center gap-1 border-solid border-gray-300 p-2 lg:h-20 lg:basis-auto lg:border-t ${
               pathname.includes('profile')
                 ? 'bg-olive-green text-white'

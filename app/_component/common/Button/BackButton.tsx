@@ -18,6 +18,7 @@ const BackButton = () => {
       onClick={handleBack}
     >
       <Image
+        className='mt-[2px]'
         src='/icons/icon-arrow-left(green).svg'
         alt='뒤로 가기'
         width={20}

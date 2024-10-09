@@ -1,17 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { useUserStore } from '@/app/store/client/user';
 import { usePlaceMenuStore } from '@/app/store/client/place';
+import { IPlace } from '@/app/shared/types/place';
+import { IDiary } from '@/app/shared/types/diary';
 
 interface PlaceDiaryAlbumProps {
-  placeId: string;
-  place: any;
+  place: IPlace;
 }
 
-const PlaceDiaryAlbum = ({ placeId, place }: PlaceDiaryAlbumProps) => {
-  const { user } = useUserStore();
+const PlaceDiaryAlbum = ({ place }: PlaceDiaryAlbumProps) => {
   const { setPlaceMenu } = usePlaceMenuStore();
 
   const diaries = place?.diaries || [];
@@ -30,7 +28,7 @@ const PlaceDiaryAlbum = ({ placeId, place }: PlaceDiaryAlbumProps) => {
         </button>
       </div>
       <div className='grid grid-cols-3 gap-3'>
-        {diaries?.map((diary: any) => (
+        {diaries?.map((diary: IDiary) => (
           <button
             className='relative'
             key={diary.id}

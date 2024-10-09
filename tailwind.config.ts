@@ -1,5 +1,10 @@
 import type { Config } from 'tailwindcss';
+
 const withMT = require('@material-tailwind/react/utils/withMT');
+
+type AddUtilities = (utilities: {
+  [key: string]: Record<string, string>;
+}) => void;
 
 const config: Config = withMT({
   content: [
@@ -28,7 +33,7 @@ const config: Config = withMT({
       },
     },
     plugins: [
-      function (addUtilities: any) {
+      function (addUtilities: AddUtilities) {
         const newUtilities = {
           '.a11y-hidden': {
             overflow: 'hidden',

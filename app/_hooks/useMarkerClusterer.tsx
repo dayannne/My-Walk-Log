@@ -36,7 +36,9 @@ const useMarkerClusterer = () => {
           overlay.getContent() as HTMLElement,
         );
         const size = cluster.getSize();
-        const clusterContent = <MarkerInfo placeName={placeName as string} />;
+        const clusterContent = (
+          <MarkerInfo placeName={placeName as string} size={size} />
+        );
         const newCluster = document.createElement('div');
         newCluster.innerHTML = ReactDOMServer.renderToString(clusterContent);
         newCluster.addEventListener(

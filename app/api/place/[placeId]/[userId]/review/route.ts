@@ -9,14 +9,14 @@ export async function POST(
   const userId = parseInt(params.userId);
   const placeId = params.placeId;
 
-  if (!userId || !placeId) {
-    return new Response(
-      JSON.stringify({
-        message: '잘못된 요청 : 로그인 상태 / 장소 정보 확인',
-      }),
+  if (isNaN(userId) || !placeId) {
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: '유효하지 않은 장소 ID 또는 사용자 ID입니다.',
+      },
       {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }
@@ -35,13 +35,13 @@ export async function POST(
     } = body;
 
     if (!description || !walkDuration) {
-      return new Response(
-        JSON.stringify({
+      return NextResponse.json(
+        {
+          status: 'error',
           message: '필수 필드를 모두 입력해 주세요.',
-        }),
+        },
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
         },
       );
     }
@@ -61,33 +61,35 @@ export async function POST(
     });
 
     return NextResponse.json(
-      { data: review, message: '리뷰가 성공적으로 작성되었습니다.' },
+      {
+        status: 'success',
+        data: { ...review },
+        message: '리뷰가 작성되었습니다.',
+      },
       { status: 201 },
     );
   } catch (error) {
-    console.error('리뷰 작성 오류:', error);
-
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        return new Response(
-          JSON.stringify({
+        return NextResponse.json(
+          {
+            status: 'error',
             message: '중복된 값이 존재합니다.',
-          }),
+          },
           {
             status: 409,
-            headers: { 'Content-Type': 'application/json' },
           },
         );
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        message: '서버 내부 오류',
-      }),
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
+      },
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }

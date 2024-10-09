@@ -11,9 +11,10 @@ import ConfirmModal from '../common/Modal/ConfirmModal';
 import MenuModal from '../common/Modal/MenuModal';
 import { usePathname } from 'next/navigation';
 import { useModalStore } from '@/app/store/client/modal';
+import { IReview } from '@/app/shared/types/review';
 
 export interface ReviewListProps {
-  reviews: any;
+  reviews: IReview[];
   type: 'PLACE' | 'PROFILE';
 }
 
@@ -25,14 +26,30 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
   const { openId, setOpenId, setOpenInfo } = useModalStore();
 
   const handleConfirm = (reviewId: number) => {
-    deleteReview({ reviewId, userId: user?.id as number });
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    deleteReview({
+      reviewId,
+      userId: user?.id,
+    });
+  };
+
+  const handleClick = (reviewId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      reviewId,
+      userId: user?.id,
+    });
   };
 
   return (
     <>
       {reviews && (
         <ul className='bg-white'>
-          {reviews.map((review: any) => (
+          {reviews.map((review: IReview) => (
             <li
               key={review.id}
               className='flex flex-col gap-3 border-b border-solid border-gray-200 p-4'
@@ -179,14 +196,7 @@ const ReviewList = ({ reviews, type }: ReviewListProps) => {
 
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-1'>
-                  <button
-                    onClick={() =>
-                      toggleLike({
-                        reviewId: review.id,
-                        userId: user?.id as number,
-                      })
-                    }
-                  >
+                  <button onClick={() => handleClick(review.id)}>
                     <Image
                       src={
                         review.likedBy.some((id: number) => id === user?.id) ===

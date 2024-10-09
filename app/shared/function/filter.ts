@@ -1,7 +1,9 @@
 import { ENTRY_FEE, FILTER_CATEGORIES } from '../constant';
-import { Area } from '../types/place';
+import { IArea } from '../types/place';
 
-export const filterPlacesByKeyword = (places: any[]) => {
+export const filterPlacesByKeyword = (
+  places: kakao.maps.services.PlacesSearchResult,
+) => {
   return places.filter((place) => {
     const categories = place.category_name.split(` > `);
 
@@ -14,7 +16,7 @@ export const filterEntryFee = (id: string): string | undefined => {
   return entry ? entry.label : undefined;
 };
 
-export const filterAreaData = (data: Area[]) => {
+export const filterAreaData = (data: IArea[]) => {
   const filteredData = data.filter((item) => {
     const history = item.폐지여부;
     const areaName = item.법정동명.split(' ');

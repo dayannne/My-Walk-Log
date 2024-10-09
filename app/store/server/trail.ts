@@ -6,7 +6,7 @@ export const useGetTrail = (keyword: string) =>
     queryKey: ['trail', keyword],
     queryFn: async () => {
       const response = await axios.get(`/api/trail/search/${keyword}`);
-      return response.data;
+      return response.data.data;
     },
     enabled: !!keyword,
   });

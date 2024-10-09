@@ -2,18 +2,22 @@
 
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
-import { IAddress, IProfileReq } from '@/app/shared/types/profile';
-import { useProfileStore } from '@/app/store/client/profile';
+import { IProfileReq } from '@/app/shared/types/profile';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import AreaSearch from '@/app/_component/common/AreaSearch/AreaSearch';
-import { useEditProfile } from '@/app/store/server/profile';
+import { useEditProfile, useGetMyProfile } from '@/app/store/server/profile';
 import { useEffect, useState } from 'react';
 import Header from '@/app/_component/common/Header';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { IAddress } from '@/app/shared/types/map';
 
-const EditProfilePage = () => {
+export interface pageProps {
+  params: { userId: string };
+}
+
+const EditProfilePage = ({ params }: pageProps) => {
   const router = useRouter();
   const {
     previewImgs,
@@ -21,10 +25,10 @@ const EditProfilePage = () => {
     handleButtonClick,
     fileHandler,
     uploadImage,
-    removeImage,
   } = useImageUpload();
-  const { profile } = useProfileStore();
-  const queryClient = useQueryClient();
+  const queryOptions = useGetMyProfile(parseInt(params?.userId));
+  const { data: profile } = useSuspenseQuery(queryOptions);
+
   const { mutate: editProfile } = useEditProfile();
   const [address, setAddress] = useState<IAddress | null>(null);
 
@@ -69,13 +73,7 @@ const EditProfilePage = () => {
       ...(address && { address }),
     };
 
-    editProfile(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-        alert('프로필이 수정되었습니다.');
-        router.push(`/profile/my`);
-      },
-    });
+    editProfile(data);
   };
 
   useEffect(() => {
@@ -167,7 +165,7 @@ const EditProfilePage = () => {
               />
             </div>
             <div className='flex flex-col gap-1'>
-              <span className='text-sm font-medium'>주소</span>
+              <span className='text-sm font-medium'>동네</span>
 
               <AreaSearch
                 address={address}

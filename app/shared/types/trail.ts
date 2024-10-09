@@ -1,4 +1,4 @@
-export interface ITrailInfo {
+export interface ITrail {
   ESNTL_ID: string; // 필수 ID
   WLK_COURS_FLAG_NM: string; // 코스 플래그 이름 (예: 고양누리길)
   WLK_COURS_NM: string; // 코스 이름 (예: 고양행주 누리길)

@@ -6,6 +6,8 @@ import useGeolocation from '@/app/_hooks/useGeolocation';
 import SearchCategory from '../place/search/SearchCategory';
 import SearchAgainButton from '../place/search/SearchAgainButton';
 import { usePathname } from 'next/navigation';
+import CurrLocationButton from './Button/CurrLocationButton';
+import AddressDisplay from './AddressDisplay';
 
 const MapContainer: React.FC = () => {
   const { location } = useGeolocation();
@@ -52,10 +54,12 @@ const MapContainer: React.FC = () => {
     <>
       {pathname.includes('place') && (
         <>
-          <SearchCategory />
           <SearchAgainButton />
+          <SearchCategory />
         </>
       )}
+      <AddressDisplay />
+      <CurrLocationButton />
       <div id='map' ref={mapEl} className='relative h-full w-full'></div>
     </>
   );

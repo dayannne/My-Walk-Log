@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Area } from '@/app/shared/types/place';
 import { useGetArea } from '@/app/store/server/area';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import AreaSearchMap from './AreaSearchMap';
 import AreaSearchInput from './AreaSearchInput';
 import LocationSearch from './LocationSearch';
 import { calculateCenter } from '@/app/shared/function/calculator';
-import { IAddress } from '@/app/shared/types/profile';
+import { IAddress } from '@/app/shared/types/map';
 import { Latlng } from '@/app/shared/types/map';
+import { IArea } from '@/app/shared/types/place';
 
 interface AreaSearchProps {
   address: IAddress | null;
@@ -17,7 +16,7 @@ interface AreaSearchProps {
 
 function AreaSearch({ address, setAddress, type }: AreaSearchProps) {
   const [areaName, setAreaName] = useState<string | null>(null);
-  const [filteredResults, setFilteredResults] = useState<Area[]>([]);
+  const [filteredResults, setFilteredResults] = useState<IArea[]>([]);
   const [currLocation, setCurrLocation] = useState<Latlng | null>(null);
   const [selectedCode, setSelectedCode] = useState<number | null>(null);
 
@@ -26,7 +25,7 @@ function AreaSearch({ address, setAddress, type }: AreaSearchProps) {
     location: currLocation,
   });
 
-  const handleSelectArea = (item: Area) => {
+  const handleSelectArea = (item: IArea) => {
     setCurrLocation(null);
     setSelectedCode(Math.floor(item.법정동코드 / 100));
     setAreaName(item.법정동명);

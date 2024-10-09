@@ -21,16 +21,31 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { user } = useUserStore();
   const { openInfo, setOpenInfo } = useModalStore();
   const queryOptions = useGetDiaryDetail(params.diaryId);
-  const { data: diary, isLoading } = useSuspenseQuery(queryOptions);
+  const { data: diary, isLoading, error } = useSuspenseQuery(queryOptions);
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [editId, setEditId] = useState<number | null>(null);
   const handleConfirm = (diaryId: number) => {
-    deleteDiary({ diaryId, userId: user?.id as number });
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    deleteDiary({
+      diaryId,
+      userId: user?.id,
+    });
   };
-  console.log(isLoading);
+
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      diaryId,
+      userId: user?.id,
+    });
+  };
 
   useEffect(() => {
     if (loading) {
@@ -46,20 +61,17 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
         <DiaryItem
           diary={diary}
           onConfirm={handleConfirm}
-          onClick={() =>
-            toggleLike({
-              diaryId: diary.id,
-              userId: user?.id as number,
-            })
-          }
+          onClick={() => handleClick(diary?.id)}
         />
         <div className='flex-grow'>
-          <CommentList
-            diaryId={diaryId}
-            comments={diary.comments}
-            setContent={setContent}
-            setEditId={setEditId}
-          />
+          {diary?.comments?.length > 0 && (
+            <CommentList
+              diaryId={diaryId}
+              comments={diary?.comments}
+              setContent={setContent}
+              setEditId={setEditId}
+            />
+          )}
         </div>
       </div>
       <Commentform
@@ -69,7 +81,9 @@ const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
         editId={editId}
         setEditId={setEditId}
       />
-      {!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}
+      {!loading && openInfo && (
+        <PlaceDetailModal placeId={openInfo as string} />
+      )}
     </>
   );
 };
