@@ -7,8 +7,7 @@ import { useEffect, useState } from 'react';
 export interface pageProps {}
 
 const SearchResultPage = () => {
-  const { openInfo } = useModalStore();
-  const { setOpenInfo } = useModalStore();
+  const { openInfo, setOpenInfo } = useModalStore();
 
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +19,13 @@ const SearchResultPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  return <>{!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}</>;
+  return (
+    <>
+      {!loading && openInfo && (
+        <PlaceDetailModal placeId={openInfo as string} />
+      )}
+    </>
+  );
 };
 
 export default SearchResultPage;

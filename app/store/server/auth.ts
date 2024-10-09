@@ -38,7 +38,7 @@ export const useSignupMutation = () => {
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
-        console.error(error);
+        console.log(error);
       }
     },
   });

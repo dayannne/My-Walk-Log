@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { ISignupForm } from '@/app/shared/types/auth';
 import { useSignupMutation } from '@/app/store/server/auth';
 import AreaSearch from '../common/AreaSearch/AreaSearch';
-import { IAddress } from '@/app/shared/types/profile';
+import { IAddress } from '@/app/shared/types/map';
 
 const SignupForm = () => {
   const { mutate: signup } = useSignupMutation();
@@ -18,6 +18,7 @@ const SignupForm = () => {
     email: '',
   });
   const [address, setAddress] = useState<IAddress | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     watch,
@@ -27,7 +28,7 @@ const SignupForm = () => {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<ISignupForm>({
-    mode: 'onBlur',
+    mode: 'onBlur', // or 'onChange' depending on your needs
     reValidateMode: 'onChange',
     shouldFocusError: true,
     shouldUnregister: true,
@@ -41,34 +42,41 @@ const SignupForm = () => {
 
   const onSubmit = async (data: ISignupForm) => {
     if (emailValid.isValid === false) {
-      return alert('아이디의 중복 여부를 확인해 주세요.');
+      return setErrorMessage('아이디의 중복 여부를 확인해 주세요.');
     }
     const { email, password, username } = data;
 
-    signup({
-      email,
-      password,
-      username,
-      address: address || undefined,
-    });
+    signup(
+      {
+        email,
+        password,
+        username,
+        address: address || null,
+      },
+      {
+        onError: (error: unknown) => {
+          if (axios.isAxiosError(error)) {
+            setErrorMessage(
+              error.response?.data.message ||
+                '회원가입 실패, 다시 시도해 주세요.',
+            );
+          } else {
+            setErrorMessage('회원가입 실패, 다시 시도해 주세요.');
+          }
+        },
+      },
+    );
   };
 
   const handleCheckBtn = async () => {
     const email = getValues('email');
     try {
-      const response = await axios.post('/api/auth/email-check', { email });
-      const { isDuplicate } = response.data;
-      if (isDuplicate) {
-        setError('email', { message: '이미 존재하는 이메일입니다.' });
-        setEmailValid({ isValid: false, email: '' });
-      } else {
-        setEmailValid({ isValid: true, email });
-      }
+      await axios.post('/api/auth/email-check', { email });
+      setEmailValid({ isValid: true, email });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error(error.message);
-      } else {
-        console.error('예상치 못한 에러 발생:', error);
+        setError('email', { message: error.response?.data.message });
+        setEmailValid({ isValid: false, email: '' });
       }
     }
   };
@@ -97,7 +105,6 @@ const SignupForm = () => {
                 message: '올바른 이메일 형식이 아닙니다.',
               },
             })}
-            autoComplete='username'
           />
           <button
             type='button'
@@ -108,13 +115,13 @@ const SignupForm = () => {
             중복 확인
           </button>
         </div>
+        {errors.email && (
+          <p className='text-sm text-red-400'>{errors.email.message}</p>
+        )}
+        {emailValid.isValid === true && (
+          <p className='text-sm text-green-500'>사용 가능한 이메일입니다.</p>
+        )}
       </label>
-      {emailValid.isValid === false && !!getValues('email') && errors.email && (
-        <p className='text-sm text-red-400'>{errors?.email?.message}</p>
-      )}
-      {emailValid.isValid === true && (
-        <p className='text-sm text-green-500'>사용 가능한 이메일입니다.</p>
-      )}
       <label>
         <h2 className='relative mb-2'>
           비밀번호
@@ -133,12 +140,11 @@ const SignupForm = () => {
               message: '비밀번호는 최소 8자 이상이어야 합니다.',
             },
           })}
-          autoComplete='new-password' // autocomplete 속성 추가
         />
+        {errors.password && (
+          <p className='text-sm text-red-400'>{errors.password.message}</p>
+        )}
       </label>
-      {!!getValues('password') && errors?.password && (
-        <p className='text-sm text-red-400'>{errors?.password?.message}</p>
-      )}
       <label>
         <h2 className='relative mb-2'>
           비밀번호 확인
@@ -154,9 +160,9 @@ const SignupForm = () => {
             {...register('passwordConfirm', {
               required: true,
               validate: (value) =>
-                !!watch('password') && watch('password') === value,
+                (!!watch('password') && watch('password') === value) ||
+                '비밀번호가 일치하지 않습니다.',
             })}
-            autoComplete='new-password'
           />
           <Image
             src='/icons/icon-check.svg'
@@ -165,6 +171,11 @@ const SignupForm = () => {
             height={24}
             className={`absolute right-2 top-1/2 h-auto w-6 -translate-y-1/2 rounded-full ${!!watch('password') && watch('password') === watch('passwordConfirm') ? 'bg-olive-green' : 'bg-gray-300'}`}
           />
+          {errors.passwordConfirm && (
+            <p className='text-sm text-red-400'>
+              {errors.passwordConfirm.message}
+            </p>
+          )}
         </div>
       </label>
       <span className='my-2 h-[1px] w-full bg-gray-100'></span>
@@ -182,10 +193,13 @@ const SignupForm = () => {
           placeholder='이름 입력 (8자리 이하)'
           {...register('username', {
             required: '이름을 입력해 주세요.',
-            maxLength: 8,
+            maxLength: {
+              value: 8,
+              message: '이름은 최대 8자까지 입력 가능합니다.',
+            },
           })}
         />
-        {!!getValues('username') && errors.username && (
+        {errors.username && (
           <p className='text-sm text-red-400'>{errors.username.message}</p>
         )}
       </label>
@@ -194,10 +208,13 @@ const SignupForm = () => {
         <AreaSearch address={address} setAddress={setAddress} type='SIGNUP' />
       </label>
       <div className='flex flex-col'>
+        {errorMessage && ( // Display the error message if it exists
+          <p className='mt-4 text-sm text-red-400'>{errorMessage}</p>
+        )}
         <button
           type='submit'
           className='bg-olive-green mt-6 w-full rounded-md p-4 text-sm text-white disabled:bg-gray-300'
-          disabled={isValid === false}
+          disabled={!isValid}
         >
           회원가입
         </button>

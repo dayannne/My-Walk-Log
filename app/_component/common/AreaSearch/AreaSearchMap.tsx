@@ -1,4 +1,4 @@
-import { IAddress } from '@/app/shared/types/profile';
+import { IAddress } from '@/app/shared/types/map';
 import React, { useEffect, useRef } from 'react';
 
 interface AreaSearchMapProps {
@@ -8,7 +8,7 @@ interface AreaSearchMapProps {
 function AreaSearchMap({ address }: AreaSearchMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (mapRef.current && address) {
+    if (mapRef.current && address?.center) {
       kakao?.maps.load(() => {
         const position = new kakao.maps.LatLng(
           address.center[1],

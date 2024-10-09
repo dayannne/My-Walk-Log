@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { useGetAllDiary } from '@/app/store/server/diary';
 import { useDiaryLike } from '@/app/store/server/diary';
 import { WEATHERS } from '@/app/shared/constant';
 import { formatTimeAgo } from '@/app/shared/function/format';
@@ -9,16 +8,24 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useUserStore } from '@/app/store/client/user';
 import useInfiniteScroll from '@/app/_hooks/useInfiniteScroll';
+import { useGetFeed } from '@/app/store/server/feed';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { IDiary } from '@/app/shared/types/diary';
 
 export interface FeedDiaryProps {
-  diaries: any;
+  diaries: IDiary[];
 }
 
 const FeedDiaryList = () => {
   const { user } = useUserStore();
+  const queryOptions = useGetFeed();
   const { mutate: toggleLike } = useDiaryLike();
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useGetAllDiary();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useInfiniteQuery(queryOptions);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const fetchMorePortfolio = () => {
     if (!isFetchingNextPage && hasNextPage) {
@@ -33,10 +40,20 @@ const FeedDiaryList = () => {
   const flattenedDiaries = data?.pages.flatMap((page) => page)[0] || [];
   const { data: diaries } = flattenedDiaries;
 
+  const handleClick = (diaryId: number) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      diaryId,
+      userId: user?.id,
+    });
+  };
+
   return (
     <>
       <ul className='grid grid-cols-2 gap-2 bg-white p-4'>
-        {diaries?.map((diary: any) => (
+        {diaries?.map((diary: IDiary) => (
           <li
             className='rounded-2xl'
             key={diary.id}
@@ -89,14 +106,7 @@ const FeedDiaryList = () => {
               </div>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-1'>
-                  <button
-                    onClick={() =>
-                      toggleLike({
-                        diaryId: diary.id,
-                        userId: user?.id as number,
-                      })
-                    }
-                  >
+                  <button onClick={() => handleClick(diary?.id)}>
                     <Image
                       className='w-6'
                       src={

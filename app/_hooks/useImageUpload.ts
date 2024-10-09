@@ -38,7 +38,7 @@ export const useImageUpload = () => {
         body: formData,
       }).then((res) => res.json());
 
-      if (result.message === 'OK') {
+      if (result.status === 'success') {
         return result.data;
       } else {
         alert('이미지 저장에 실패했습니다.');

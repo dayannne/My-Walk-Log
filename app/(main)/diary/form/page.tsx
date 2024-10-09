@@ -7,12 +7,12 @@ import { useRouter } from 'next/navigation';
 import { useImageUpload } from '@/app/_hooks/useImageUpload';
 import FileInput from '@/app/_component/common/Input/FileInput';
 import { useState } from 'react';
-import { useUserStore } from '@/app/store/client/user';
 import { IDiaryReq } from '@/app/shared/types/diary';
 import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
 import { useCreateDiary } from '@/app/store/server/diary';
 import Header from '@/app/_component/common/Header';
 import { useQueryClient } from '@tanstack/react-query';
+import { useUserStore } from '@/app/store/client/user';
 
 const DiaryFormPage = () => {
   const {
@@ -24,14 +24,13 @@ const DiaryFormPage = () => {
     removeImage,
   } = useImageUpload();
   const router = useRouter();
-  const { user } = useUserStore();
-
   const queryClient = useQueryClient();
-  const { mutate: createDiary } = useCreateDiary();
-
   const weathers = Object.entries(WEATHERS);
+  const { user } = useUserStore();
+  const { mutate: createDiary } = useCreateDiary();
   const [placeTags, setPlaceTags] = useState<string[]>([]);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [selectedPlace, setSelectedPlace] =
+    useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
   const {
     register,
     handleSubmit,
@@ -45,30 +44,36 @@ const DiaryFormPage = () => {
     defaultValues: {
       content: '',
       weather: null,
-      tags: [],
+      isPublic: 'false',
     },
   });
 
   const onSubmit = async (formData: IDiaryReq) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
     // 이미지 업로드 받아오기
     const diaryImages = await uploadImage();
     const data: IDiaryReq = {
       // TODO 여기 장소검색 input에서 placeId 받아와야 함
       ...formData,
-      authorId: user?.id as number,
-      placeId: selectedPlace.id,
       diaryImages,
+      isPublic: formData.isPublic === 'true' ? true : false,
       tags: placeTags,
-      placeName: selectedPlace.place_name,
-      placeAddress: selectedPlace.address_name,
+      placeId: selectedPlace?.id || null,
+      placeName: selectedPlace?.place_name || null,
+      placeAddress: selectedPlace?.address_name || null,
     };
-    createDiary(data, {
-      onSuccess: () => {
-        alert('일기가 기록되었습니다.');
-        queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-        router.back();
+    createDiary(
+      { data, userId: user?.id },
+      {
+        onSuccess: () => {
+          alert('일기가 기록되었습니다.');
+          queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+          router.back();
+        },
       },
-    });
+    );
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -77,6 +82,10 @@ const DiaryFormPage = () => {
 
   const handleWeatherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue('weather', e.target.value, { shouldValidate: true });
+  };
+
+  const handleIsPublicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue('isPublic', e.target.value, { shouldValidate: true });
   };
 
   const handleRemoveImage =
@@ -114,6 +123,7 @@ const DiaryFormPage = () => {
             취소
           </button>
           <button
+            type='submit'
             className={`box-border h-full grow-0 rounded-lg border border-solid px-2 py-1 text-xs shadow-md ${isValid ? 'bg-olive-green border-olive-green text-white' : 'border-gray-400 bg-gray-100 text-gray-400'}`}
             onClick={handleSubmit(onSubmit)}
             disabled={!isValid}
@@ -124,7 +134,12 @@ const DiaryFormPage = () => {
       </Header>
       <form className='bg-hover flex h-full basis-full flex-col gap-5 overflow-y-scroll px-3 py-5'>
         <div className='flex flex-col gap-2 rounded-md bg-white p-3'>
-          <span className='font-medium'>날씨</span>
+          <span className='flex items-center gap-1 font-medium'>
+            <span>날씨</span>
+            <span className='bg-hover text-olive-green shrink-0 rounded-lg px-1 text-xs'>
+              필수
+            </span>
+          </span>
           <span className='text-xs text-gray-500'>
             오늘, 산책하면서의 날씨는 어땠나요?
           </span>
@@ -146,11 +161,11 @@ const DiaryFormPage = () => {
                 />
                 <label
                   htmlFor={key}
-                  className='hover:bg-hover peer-checked:bg-olive-green box-border flex aspect-square w-auto grow-0 basis-full cursor-pointer items-center justify-center rounded-full border border-solid border-transparent bg-gray-300 p-2 shadow-sm hover:border-gray-300 peer-checked:border-gray-300 peer-checked:text-white'
+                  className='hover:bg-hover peer-checked:bg-olive-green box-border flex aspect-square w-auto grow-0 basis-full cursor-pointer items-center justify-center rounded-full border border-solid border-gray-300 bg-white p-2 shadow-sm peer-checked:border-gray-300 peer-checked:text-white'
                 >
                   {emoji}
                 </label>
-                <span className='peer-checked:text-olive-green text-wrap text-xs text-gray-300'>
+                <span className='peer-checked:text-olive-green text-wrap text-xs text-gray-400'>
                   {name}
                 </span>
               </li>
@@ -214,13 +229,18 @@ const DiaryFormPage = () => {
           </div>
         </div>
         <div className='flex flex-col gap-2 rounded-md bg-white p-3'>
-          <span className='font-medium'>메모</span>
+          <span className='flex items-center gap-1 font-medium'>
+            <span>메모</span>
+            <span className='bg-hover text-olive-green shrink-0 rounded-lg px-1 text-xs'>
+              필수
+            </span>
+          </span>
           <textarea
             rows={7}
             className='resize-none rounded-lg border border-solid border-gray-500 p-2 text-xs shadow-sm focus:outline-none'
             placeholder='오늘, 산책하면서 어땠나요? 감정, 좋았던 점, 기억나는 순간 등 자유롭게 담아 봐요.'
             {...register('content', {
-              required: '이용 후기를 입력해 주세요.',
+              required: '일기 내용을 입력해 주세요.',
             })}
             onChange={handleContentChange}
           />
@@ -242,7 +262,7 @@ const DiaryFormPage = () => {
           <input
             type='text'
             placeholder='입력 후 엔터를 눌러 여러 태그를 등록해 보세요.'
-            className='rounded-lg border border-solid border-gray-500 p-2 text-xs shadow-sm focus:outline-none'
+            className='rounded-lg border border-solid border-gray-500 px-2 py-3 text-xs shadow-sm focus:outline-none'
             onKeyDown={handleTagInputKeyDown}
           />
           <div className='flex flex-wrap gap-2'>
@@ -264,6 +284,53 @@ const DiaryFormPage = () => {
               </button>
             ))}
           </div>
+        </div>
+        <div className='flex flex-col gap-2 rounded-md bg-white p-3'>
+          <span className='flex items-center gap-1 font-medium'>
+            <span>공개 여부</span>
+            <span className='bg-hover text-olive-green shrink-0 rounded-lg px-1 text-xs'>
+              필수
+            </span>
+          </span>
+          <span className='text-xs text-gray-500'>
+            일기를 공개하면 피드에 일기가 노출되고, 댓글을 통해 다른 사람들과
+            소통할 수 있어요.
+          </span>
+          <ul className='border-olive-green flex h-11 rounded-lg border border-solid'>
+            <li className='basis-full'>
+              <input
+                type='radio'
+                id='private'
+                value='false'
+                className='peer hidden'
+                {...register('isPublic')}
+                onChange={handleIsPublicChange}
+              />
+              <label
+                htmlFor='private'
+                className='hover:bg-hover peer-checked:bg-olive-green box-border flex aspect-square h-full w-full grow-0 cursor-pointer items-center justify-center rounded-l-lg border-r border-solid border-gray-300 bg-white peer-checked:border-gray-300 peer-checked:text-white'
+              >
+                비공개
+              </label>
+            </li>
+
+            <li className='basis-full'>
+              <input
+                type='radio'
+                id='public'
+                value='true'
+                className='peer hidden'
+                {...register('isPublic')}
+                onChange={handleIsPublicChange}
+              />
+              <label
+                htmlFor='public'
+                className='hover:bg-hover peer-checked:bg-olive-green box-border flex aspect-square h-full w-full grow-0 cursor-pointer items-center justify-center rounded-r-lg bg-white peer-checked:border-gray-300 peer-checked:text-white'
+              >
+                공개
+              </label>
+            </li>
+          </ul>
         </div>
       </form>
     </div>

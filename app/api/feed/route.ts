@@ -13,8 +13,14 @@ export async function GET(req: Request) {
     const take = pageSize;
 
     const diaries = await prisma.diary.findMany({
-      skip,
-      take,
+      where: {
+        isPublic: true,
+      },
+      skip, // 건너뛸 항목 수
+      take, // 가져올 항목 수
+      orderBy: {
+        createdAt: 'desc', // 최신 순으로 정렬
+      },
       include: {
         author: {
           include: {
@@ -22,26 +28,25 @@ export async function GET(req: Request) {
           },
         },
         comments: true,
-        placeDetail: true,
       },
     });
 
-    if (!diaries) {
-      return NextResponse.json({ message: '잘못된 request' }, { status: 400 });
-    }
-
     const totalDiaries = await prisma.diary.count();
 
-    return NextResponse.json({
-      data: diaries,
-      page,
-      pageSize,
-      totalPages: Math.ceil(totalDiaries / pageSize),
-      totalDiaries,
-    });
+    return NextResponse.json(
+      {
+        status: 'success',
+        data: diaries.length ? diaries : [],
+        page,
+        pageSize,
+        totalPages: Math.ceil(totalDiaries / pageSize),
+        totalDiaries,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
-      { message: '일기 피드를 불러오는 중 에러가 발생했습니다.' },
+      { status: 'error', message: '서버 에러가 발생했습니다.' },
       { status: 500 },
     );
   }

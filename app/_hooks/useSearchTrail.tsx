@@ -1,13 +1,13 @@
 import { useMap } from '../shared/contexts/Map';
 import { useState } from 'react';
-import { ITrailInfo } from '../shared/types/trail';
+import { ITrail } from '../shared/types/trail';
 import { useModalStore } from '../store/client/modal';
 
 const useSearchTrail = () => {
   const mapContext = useMap();
   const { handleOpenInfo } = useModalStore();
 
-  const displayTrailMarkers = (trails: ITrailInfo[]) => {
+  const displayTrailMarkers = (trails: ITrail[]) => {
     const { mapData } = mapContext!;
     const newBounds = new kakao.maps.LatLngBounds();
 

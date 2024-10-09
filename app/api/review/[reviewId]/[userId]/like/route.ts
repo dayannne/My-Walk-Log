@@ -9,13 +9,13 @@ export async function POST(
   const userId = parseInt(params.userId);
 
   if (isNaN(userId) || isNaN(reviewId)) {
-    return new Response(
-      JSON.stringify({
-        message: '잘못된 요청 : 로그인 상태 / 리뷰 정보 확인',
-      }),
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: '유효하지 않은 장소 ID 또는 사용자 ID입니다.',
+      },
       {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }
@@ -34,11 +34,13 @@ export async function POST(
     ]);
 
     if (!user || !review) {
-      return new Response(
-        JSON.stringify({ message: '리뷰 또는 사용자를 찾을 수 없습니다.' }),
+      return NextResponse.json(
+        {
+          status: 'error',
+          message: '리뷰 또는 사용자를 찾을 수 없습니다.',
+        },
         {
           status: 404,
-          headers: { 'Content-Type': 'application/json' },
         },
       );
     }
@@ -67,16 +69,21 @@ export async function POST(
 
     const message = userHasLiked ? '좋아요가 취소되었습니다.' : '좋아요 성공';
 
-    return NextResponse.json({ message }, { status: 200 });
+    return NextResponse.json(
+      {
+        status: 'success',
+        message,
+      },
+      { status: 200 },
+    );
   } catch (error) {
-    console.error('사용자 또는 리뷰 세부정보 업데이트 오류:', error);
-    return new Response(
-      JSON.stringify({
-        message: '서버 내부 오류',
-      }),
+    return NextResponse.json(
+      {
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
+      },
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
       },
     );
   }

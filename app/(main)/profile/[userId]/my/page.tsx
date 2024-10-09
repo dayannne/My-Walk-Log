@@ -2,10 +2,7 @@
 
 import ProfileDiaryList from '@/app/_component/diary/ProfileDiaryList';
 import { useUserStore } from '@/app/store/client/user';
-import {
-  useProfileMenuStore,
-  useProfileStore,
-} from '@/app/store/client/profile';
+import { useProfileMenuStore } from '@/app/store/client/profile';
 import { useGetMyProfile } from '@/app/store/server/profile';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -21,25 +18,18 @@ import ProfileMenu from '@/app/_component/profile/ProfileMenu';
 import { useModalStore } from '@/app/store/client/modal';
 import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
 
-export interface ProfilePageProps {}
+export interface ProfilePageProps {
+  params: { userId: string };
+}
 
-const ProfilePage = ({}: ProfilePageProps) => {
-  const { user } = useUserStore();
-  const { setProfile } = useProfileStore();
+const ProfilePage = ({ params }: ProfilePageProps) => {
   const { profileMenu } = useProfileMenuStore();
   const { openInfo, setOpenInfo } = useModalStore();
-
-  const queryOptions = useGetMyProfile(user?.id as number);
+  const userId = parseInt(params?.userId);
+  const queryOptions = useGetMyProfile(userId);
   const { data: profile } = useSuspenseQuery(queryOptions);
 
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (profile) {
-      setProfile(profile);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile]);
 
   useEffect(() => {
     if (loading) {
@@ -57,15 +47,18 @@ const ProfilePage = ({}: ProfilePageProps) => {
           <div className='flex items-center gap-3'>
             <Image
               className='h-20 w-20 rounded-full object-cover object-center'
-              src={profile.profileImage}
+              src={profile?.profileImage}
               alt='프로필 이미지'
               width={300}
               height={300}
             />
             <div className='flex basis-full flex-col gap-2'>
               <span className='flex items-center gap-1 font-semibold'>
-                <span> {profile.username}</span>
-                <Link className='mt-[2px]' href={`/profile/edit`}>
+                <span> {profile?.username}</span>
+                <Link
+                  className='mt-[2px]'
+                  href={`/profile/${parseInt(params?.userId)}/edit`}
+                >
                   <Image
                     src='/icons/icon-pencil.svg'
                     width={16}
@@ -81,16 +74,16 @@ const ProfilePage = ({}: ProfilePageProps) => {
                   </span>
                 )}
                 <span className='text-xs text-gray-600'>
-                  리뷰 {profile.reviews.length}
+                  리뷰 {profile?.reviews?.length}
                 </span>
                 <span className='h-3 w-[1px] bg-gray-300'></span>
                 <span className='text-xs text-gray-600'>
-                  일기 {profile.diaries.length}
+                  일기 {profile?.diaries?.length}
                 </span>
               </div>
               <p className='text-xs'>
-                {profile.introduction
-                  .split('\n')
+                {profile?.introduction
+                  ?.split('\n')
                   .map((str: string, idx: number) => (
                     <Fragment key={idx}>
                       {str}
@@ -117,24 +110,26 @@ const ProfilePage = ({}: ProfilePageProps) => {
       )}
       <ProfileMenu />
       {profileMenu === 0 &&
-        (diaries.length > 0 ? (
+        (diaries?.length > 0 ? (
           <ProfileDiaryList diaries={diaries} />
         ) : (
           <EmptyDiaries />
         ))}
       {profileMenu === 1 &&
-        (likedPlaces.length > 0 ? (
+        (likedPlaces?.length > 0 ? (
           <LikedPlaceList likedPlaces={likedPlaces} />
         ) : (
           <EmptyLikedPlaces />
         ))}
       {profileMenu === 2 &&
-        (reviews.length > 0 ? (
+        (reviews?.length > 0 ? (
           <ReviewList reviews={reviews} type='PROFILE' />
         ) : (
           <EmptyReviews url='/place/search' />
         ))}
-      {!loading && openInfo && <PlaceDetailModal placeId={openInfo} />}
+      {!loading && openInfo && (
+        <PlaceDetailModal placeId={openInfo as string} />
+      )}
     </>
   );
 };

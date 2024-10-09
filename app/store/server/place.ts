@@ -1,5 +1,3 @@
-import { IPlaceInfo } from '@/app/shared/types/map';
-
 import {
   queryOptions,
   useMutation,
@@ -12,14 +10,14 @@ export const useGetPlace = (placeId: string) =>
     queryKey: ['place', placeId],
     queryFn: async () => {
       const response = await axios.get(`/api/place/${placeId}`);
-      return response.data;
+      return response.data.data;
     },
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });
 
 export const useCreatePlace = () => {
   return useMutation({
-    mutationFn: async (data: IPlaceInfo[]) => {
+    mutationFn: async (data: kakao.maps.services.PlacesSearchResult) => {
       const result = await axios.post('/api/place/search/result', data);
       return result;
     },
@@ -60,7 +58,7 @@ export const useGetLikedPlaces = (likedPlaces: string[]) =>
       const response = await axios.get(`/api/likedPlaces`, {
         params: { likedPlaces },
       });
-      return response.data;
+      return response.data.data;
     },
-    staleTime: 0,
+    staleTime: 60 * 1000,
   });

@@ -12,6 +12,9 @@ export async function GET(
   try {
     const diaries = await prisma.diary.findMany({
       where: { placeId },
+      orderBy: {
+        createdAt: 'desc', // 최신 순으로 정렬
+      },
       include: {
         author: {
           include: {
@@ -23,10 +26,19 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(diaries);
+    return NextResponse.json(
+      {
+        status: 'success',
+        data: diaries,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
-      { message: '일기를 불러오는 중 에러가 발생했습니다.' },
+      {
+        status: 'error',
+        message: '서버 에러가 발생했습니다.',
+      },
       { status: 500 },
     );
   }

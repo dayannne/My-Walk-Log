@@ -1,14 +1,16 @@
 import Image from 'next/image';
 import { usePlaceDetailStore } from '@/app/store/client/place';
 import { useRouter } from 'next/navigation';
+import { IPlace } from '@/app/shared/types/place';
 
 export interface EmptyReviewsProps {
   url?: string;
+  placeDetail?: IPlace;
 }
 
-const EmptyReviews = ({ url }: EmptyReviewsProps) => {
+const EmptyReviews = ({ url, placeDetail }: EmptyReviewsProps) => {
   const router = useRouter();
-  const { setPlaceDetailState } = usePlaceDetailStore();
+  const { setPlaceDetailState, setPlaceDetail } = usePlaceDetailStore();
 
   return (
     <div className='box-border flex basis-full flex-col items-center justify-center gap-2 bg-white p-5'>
@@ -22,7 +24,13 @@ const EmptyReviews = ({ url }: EmptyReviewsProps) => {
       아직 작성된 리뷰가 없어요.
       <button
         className='text-olive-green border-olive-green flex w-full max-w-44 items-center gap-1 rounded-lg border border-solid px-2 py-1 text-sm shadow-md'
-        onClick={() => (url ? router.push(url) : setPlaceDetailState(1))}
+        onClick={() => {
+          if (url) router.push(url);
+          else {
+            setPlaceDetail(placeDetail as IPlace);
+            setPlaceDetailState(1);
+          }
+        }}
       >
         <Image
           className=''

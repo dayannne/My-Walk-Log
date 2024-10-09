@@ -4,10 +4,10 @@ import { useUserStore } from '@/app/store/client/user';
 import Image from 'next/image';
 import { Carousel } from '@material-tailwind/react';
 import { usePlaceDetailStore } from '@/app/store/client/place';
-import PlaceDetail from './PlaceDetail';
+import { IPhotoDetail, IPlace } from '@/app/shared/types/place';
 
 export interface PlaceBasicInfoProps {
-  place: any;
+  place: IPlace;
   placeId: string;
 }
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
@@ -37,8 +37,17 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
       alert('URL이 클립보드에 복사되었습니다 :)');
     } catch (err) {
       alert('URL 복사에 실패했습니다.');
-      console.error('복사 오류:', err);
     }
+  };
+
+  const handleClick = (placeId: string) => {
+    if (!user) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+    toggleLike({
+      placeId,
+      userId: user?.id,
+    });
   };
 
   return (
@@ -74,7 +83,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
                 </div>
               )}
             >
-              {photos.map((photo: any, idx: number) => (
+              {photos.map((photo: IPhotoDetail, idx: number) => (
                 <Image
                   className='h-full w-full object-cover object-center'
                   key={idx}
@@ -127,7 +136,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
           {/* 태그 */}
           <span className='flex flex-wrap gap-1'>
             {tags &&
-              tags.map((item: string, idx: any) => (
+              tags.map((item: string, idx: number) => (
                 <span
                   key={idx}
                   className='border-olive-green rounded-lg border border-solid px-2 text-sm text-black'
@@ -141,7 +150,7 @@ const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
         <div className='border-gray-240 flex border-t border-solid border-gray-200 py-2'>
           <button
             className='flex basis-full flex-col items-center justify-center gap-1 border-r border-solid text-sm'
-            onClick={() => toggleLike({ placeId, userId: user?.id as number })}
+            onClick={() => handleClick(placeId)}
           >
             <Image
               className='w-5'

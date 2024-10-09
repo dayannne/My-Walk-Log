@@ -6,58 +6,42 @@ import {
   useQueryClient,
   useMutation,
   queryOptions,
-  useInfiniteQuery,
 } from '@tanstack/react-query';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { useModalStore } from '../client/modal';
 
 export const getDiaryDetail = async (diaryId: number) => {
-  return await fetch(
+  const response = await axios.get(
     `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary/${diaryId}`,
-  ).then((res) => res.json());
-};
+  );
 
-export const getAllDiary = async (pageParam = 1) => {
-  return await fetch(
-    `${process.env.NEXT_PUBLIC_DOMAIN}/api/diary?page=${pageParam}&size=10`,
-  ).then((res) => res.json());
+  return response.data.data;
 };
 
 export const useGetDiaryDetail = (diaryId: number) =>
   queryOptions({
     queryKey: ['diaryDetail', diaryId],
-    queryFn: async () => {
-      const response = await axios.get(`/api/diary/${diaryId}`);
-      return response.data;
-    },
+    queryFn: () => getDiaryDetail(diaryId),
     enabled: !!diaryId,
-  });
-
-export const useGetAllDiary = () =>
-  useInfiniteQuery({
-    queryKey: ['allDiary'],
-    queryFn: async ({ pageParam = 1 }) => {
-      const response = await axios.get(`/api/diary?page=${pageParam}&size=10`);
-      return response.data;
-    },
-    getNextPageParam: (lastPage) => {
-      const { page, totalPages } = lastPage;
-      return page < totalPages ? page + 1 : undefined;
-    },
-    initialPageParam: 1,
-    staleTime: 60 * 1000,
   });
 
 export const useCreateDiary = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: IDiaryReq) => {
-      return await axios.post(`/api/diary/write`, data);
+    mutationFn: async ({
+      data,
+      userId,
+    }: {
+      data: IDiaryReq;
+      userId: number;
+    }) => {
+      return await axios.post(`/api/diary/write/${userId}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
+      queryClient.invalidateQueries({ queryKey: ['feed'] });
     },
     onError: (error) => {
       console.log(error);
