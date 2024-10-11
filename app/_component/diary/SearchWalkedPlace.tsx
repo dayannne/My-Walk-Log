@@ -39,47 +39,10 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
   const handleSelectPlace = (
     place: kakao.maps.services.PlacesSearchResultItem,
   ) => {
-    if (selectedPlace?.id !== place.id) {
+    // 기존 selectedPlace가 null이 아니고, ID가 다를 경우에만 실행
+    if (!selectedPlace || selectedPlace.id !== place.id) {
       setPlaceName(place.place_name);
       setSelectedPlace(place);
-
-      // 마커 설정을 바로 호출
-      const position = new kakao.maps.LatLng(
-        parseFloat(place.y),
-        parseFloat(place.x),
-      );
-
-      // 기존 마커 제거
-      if (markerRef.current) {
-        markerRef.current.setMap(null);
-      }
-
-      const imageSrc = '/icons/icon-marker.svg';
-      const imageSize = new kakao.maps.Size(56, 56);
-      const imageOption = { offset: new kakao.maps.Point(27, 54) };
-      const markerImage = new kakao.maps.MarkerImage(
-        imageSrc,
-        imageSize,
-        imageOption,
-      );
-
-      // 새 마커 생성
-      const marker = new kakao.maps.Marker({
-        position: position,
-        image: markerImage,
-      });
-
-      // kakaoMapRef.current가 null이 아닐 때만 실행
-      if (kakaoMapRef.current) {
-        marker.setMap(kakaoMapRef.current);
-        kakaoMapRef.current.setCenter(position);
-      }
-
-      markerRef.current = marker;
-
-      setTimeout(() => {
-        setPlaces([]);
-      }, 200);
     }
   };
 
@@ -90,14 +53,48 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
   };
 
   useEffect(() => {
-    if (mapRef.current) {
-      const options = {
-        center: new kakao.maps.LatLng(37.5665, 126.978), // 초기 서울 위치
-        level: 5,
-      };
-      kakaoMapRef.current = new kakao.maps.Map(mapRef.current, options);
-    }
-  }, []);
+    const { kakao } = window;
+
+    // Load Kakao Maps
+    kakao.maps.load(() => {
+      if (!kakaoMapRef.current && mapRef.current) {
+        const options = {
+          center: new kakao.maps.LatLng(37.5665, 126.978),
+          level: 5,
+        };
+        kakaoMapRef.current = new kakao.maps.Map(mapRef.current, options);
+      }
+
+      if (selectedPlace && kakaoMapRef.current) {
+        const position = new kakao.maps.LatLng(
+          parseFloat(selectedPlace.y as string),
+          parseFloat(selectedPlace.x as string),
+        );
+        kakaoMapRef.current.setCenter(position);
+
+        if (markerRef.current) {
+          markerRef.current.setMap(null);
+        }
+
+        const imageSrc = '/icons/icon-marker.svg';
+        const imageSize = new kakao.maps.Size(56, 56);
+        const imageOption = { offset: new kakao.maps.Point(27, 54) };
+        const markerImage = new kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imageOption,
+        );
+
+        const marker = new kakao.maps.Marker({
+          position: position,
+          image: markerImage,
+          map: kakaoMapRef.current,
+        });
+
+        markerRef.current = marker;
+      }
+    });
+  }, [selectedPlace]);
 
   return (
     <div className='flex flex-col gap-3'>
@@ -124,7 +121,11 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
                 <button
                   type='button'
                   className='hover:bg-hover group flex w-full cursor-pointer flex-col px-2 py-2'
-                  onClick={() => handleSelectPlace(place)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSelectPlace(place);
+                    setPlaces([]);
+                  }}
                 >
                   <span className='place-name text-xs'>{place.place_name}</span>
                   <span className='text-xs text-gray-500'>
