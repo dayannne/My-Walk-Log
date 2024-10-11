@@ -35,41 +35,21 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
       setPlaces([]);
     }
   };
+
   const handleSelectPlace = (
     place: kakao.maps.services.PlacesSearchResultItem,
   ) => {
-    setPlaceName(place.place_name);
-    setSelectedPlace(place);
-    setTimeout(() => {
-      setPlaces([]);
-    }, 100);
-  };
+    if (selectedPlace?.id !== place.id) {
+      setPlaceName(place.place_name);
+      setSelectedPlace(place);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  };
-
-  useEffect(() => {
-    if (!kakaoMapRef.current && mapRef.current) {
-      const options = {
-        center: new kakao.maps.LatLng(37.5665, 126.978),
-        level: 5,
-      };
-      kakaoMapRef.current = new kakao.maps.Map(mapRef.current, options);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (places.length === 0 && kakaoMapRef.current) {
+      // 마커 설정을 바로 호출
       const position = new kakao.maps.LatLng(
-        parseFloat(selectedPlace?.y as string),
-        parseFloat(selectedPlace?.x as string),
+        parseFloat(place.y),
+        parseFloat(place.x),
       );
-      kakaoMapRef.current.setCenter(position);
 
-      // 기존 마커를 제거
+      // 기존 마커 제거
       if (markerRef.current) {
         markerRef.current.setMap(null);
       }
@@ -89,10 +69,35 @@ const SearchWalkedPlace = ({ selectedPlace, setSelectedPlace }: Props) => {
         image: markerImage,
       });
 
-      marker.setMap(kakaoMapRef.current);
-      markerRef.current = marker; // 새 마커를 ref에 저장
+      // kakaoMapRef.current가 null이 아닐 때만 실행
+      if (kakaoMapRef.current) {
+        marker.setMap(kakaoMapRef.current);
+        kakaoMapRef.current.setCenter(position);
+      }
+
+      markerRef.current = marker;
+
+      setTimeout(() => {
+        setPlaces([]);
+      }, 200);
     }
-  }, [selectedPlace, places]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
+  useEffect(() => {
+    if (mapRef.current) {
+      const options = {
+        center: new kakao.maps.LatLng(37.5665, 126.978), // 초기 서울 위치
+        level: 5,
+      };
+      kakaoMapRef.current = new kakao.maps.Map(mapRef.current, options);
+    }
+  }, []);
 
   return (
     <div className='flex flex-col gap-3'>
