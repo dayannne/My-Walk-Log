@@ -1,3 +1,4 @@
+import { IDiary } from '@/app/shared/types/diary';
 import { infiniteQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -15,7 +16,7 @@ export const useGetFeed = () =>
   infiniteQueryOptions({
     queryKey: ['feed'],
     queryFn: () => getFeed(1),
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: (lastPage: any) => {
       const { page, totalPages } = lastPage;
       return page < totalPages ? page + 1 : undefined;
     },

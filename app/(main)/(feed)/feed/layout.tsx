@@ -18,7 +18,7 @@ const FeedLayout = async ({ children }: FeedLayoutProps) => {
   await queryClient.prefetchInfiniteQuery({
     queryKey: ['feed'],
     queryFn: () => getFeed(1),
-    getNextPageParam: (lastPage: { page: number; totalPages: number }) => {
+    getNextPageParam: (lastPage: any) => {
       const { page, totalPages } = lastPage;
       return page < totalPages ? page + 1 : undefined;
     },
