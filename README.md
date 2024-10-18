@@ -1,4 +1,4 @@
-# 나의 산책일기
+# 🚶‍♀️‍➡️나의 산책일기🌿
 ![image](https://github.com/user-attachments/assets/34c01929-52ce-4bc3-9602-7a9c06be21ba)
 
 [**->서비스 바로가기🚶‍♀️‍➡️**](https://my-walk-log.vercel.app)
