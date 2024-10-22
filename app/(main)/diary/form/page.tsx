@@ -26,7 +26,7 @@ const DiaryFormPage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const weathers = Object.entries(WEATHERS);
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const { mutate: createDiary } = useCreateDiary();
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] =

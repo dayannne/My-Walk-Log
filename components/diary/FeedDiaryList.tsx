@@ -17,7 +17,7 @@ export interface FeedDiaryProps {
 }
 
 const FeedDiaryList = () => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const queryOptions = useGetFeed();
   const { mutate: toggleLike } = useDiaryLike();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =

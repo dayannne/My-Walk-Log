@@ -1,7 +1,8 @@
 import { useProfileMenuStore } from '@/store/client/profile';
 
 const ProfileMenu = () => {
-  const { profileMenu, setProfileMenu } = useProfileMenuStore();
+  const profileMenu = useProfileMenuStore((state) => state.profileMenu);
+  const setProfileMenu = useProfileMenuStore((state) => state.setProfileMenu);
 
   return (
     <nav className='mb-2 flex list-none border-y border-solid border-gray-200 bg-white shadow-sm'>

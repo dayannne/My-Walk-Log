@@ -18,9 +18,9 @@ import { usePathname } from 'next/navigation';
 
 const PlaceDetail = ({ placeId }: { placeId: string }) => {
   const pathname = usePathname();
-  const { placeMenu } = usePlaceMenuStore();
   const queryOptions = useGetPlace(placeId);
   const { data: placeDetail } = useSuspenseQuery(queryOptions);
+  const placeMenu = usePlaceMenuStore((state) => state.placeMenu);
 
   // URL이 변경되거나 새로고침 시 openInfo를 null로 설정
 

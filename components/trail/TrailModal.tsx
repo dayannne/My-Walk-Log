@@ -14,7 +14,8 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function TrailModal() {
-  const { openInfo, handleCloseInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
+  const handleCloseInfo = useModalStore((state) => state.handleCloseInfo);
 
   if (!openInfo || typeof openInfo !== 'object') {
     return null;

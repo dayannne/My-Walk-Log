@@ -5,7 +5,7 @@ import { useModalStore } from '../store/client/modal';
 
 const useSearchTrail = () => {
   const mapContext = useMap();
-  const { handleOpenInfo } = useModalStore();
+  const handleOpenInfo = useModalStore((state) => state.handleOpenInfo);
 
   const displayTrailMarkers = (trails: ITrail[]) => {
     const { mapData } = mapContext!;

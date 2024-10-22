@@ -15,11 +15,13 @@ export interface ProfileDiaryListProps {
 }
 
 const ProfileDiaryList = ({ diaries }: ProfileDiaryListProps) => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
-  const { setOpenInfo, openId, setOpenId } = useModalStore();
-  console.log(diaries);
+  const openId = useModalStore((state) => state.openId);
+  const setOpenId = useModalStore((state) => state.setOpenId);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
+
   const handleConfirm = (diaryId: number) => {
     if (!user) {
       return alert('로그인 후 이용가능합니다.');

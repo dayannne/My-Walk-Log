@@ -11,9 +11,12 @@ export interface PlaceBasicInfoProps {
   placeId: string;
 }
 const PlaceBasicInfo = ({ place, placeId }: PlaceBasicInfoProps) => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const { mainphotourl, tags } = place?.basicInfo || {};
-  const { setPlaceDetailState, setPlaceDetail } = usePlaceDetailStore();
+  const setPlaceDetail = usePlaceDetailStore((state) => state.setPlaceDetail);
+  const setPlaceDetailState = usePlaceDetailStore(
+    (state) => state.setPlaceDetailState,
+  );
 
   // API 요청
   const { mutate: toggleLike } = usePlaceLike();

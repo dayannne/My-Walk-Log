@@ -18,9 +18,12 @@ interface PlaceReviewProps {
 }
 
 const PleceReviewSummary = ({ place }: PlaceReviewProps) => {
-  const { user } = useUserStore();
-  const { setPlaceMenu } = usePlaceMenuStore();
-  const { setPlaceDetail, setPlaceDetailState } = usePlaceDetailStore();
+  const user = useUserStore((state) => state.user);
+  const setPlaceMenu = usePlaceMenuStore((state) => state.setPlaceMenu);
+  const setPlaceDetail = usePlaceDetailStore((state) => state.setPlaceDetail);
+  const setPlaceDetailState = usePlaceDetailStore(
+    (state) => state.setPlaceDetailState,
+  );
 
   const [flipped, setFlipped] = useState(true);
 

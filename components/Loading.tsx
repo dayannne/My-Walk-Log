@@ -5,7 +5,7 @@ import { Backdrop } from '@mui/material';
 import { useEffect } from 'react';
 
 const Loading = () => {
-  const { setOpenInfo } = useModalStore();
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
 
   useEffect(() => {
     setOpenInfo(null);

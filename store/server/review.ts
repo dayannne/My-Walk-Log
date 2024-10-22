@@ -9,8 +9,9 @@ import { useModalStore } from '../client/modal';
 
 export const useCreateReview = () => {
   const queryClient = useQueryClient();
-  const { setPlaceDetailState } = usePlaceDetailStore();
-
+  const setPlaceDetailState = usePlaceDetailStore(
+    (state) => state.setPlaceDetailState,
+  );
   return useMutation({
     mutationFn: async ({
       placeId,
@@ -61,7 +62,7 @@ export const useReviewLike = () => {
 export const useDeleteReview = () => {
   const queryClient = useQueryClient();
   const pathname = usePathname();
-  const { openInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
 
   return useMutation({
     mutationFn: async ({

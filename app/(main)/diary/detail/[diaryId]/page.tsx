@@ -18,8 +18,9 @@ export interface DiaryPageProps {}
 
 const DiaryPage = ({ params }: { params: { diaryId: number } }) => {
   const { diaryId } = params;
-  const { user } = useUserStore();
-  const { openInfo, setOpenInfo } = useModalStore();
+  const user = useUserStore((state) => state.user);
+  const openInfo = useModalStore((state) => state.openInfo);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
   const queryOptions = useGetDiaryDetail(params.diaryId);
   const { data: diary, isLoading, error } = useSuspenseQuery(queryOptions);
   const { mutate: toggleLike } = useDiaryLike();

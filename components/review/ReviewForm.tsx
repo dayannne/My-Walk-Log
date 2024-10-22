@@ -13,8 +13,12 @@ import { useUserStore } from '@/store/client/user';
 
 const ReviewForm = ({ placeId }: { placeId: string }) => {
   const walkDurations = Object.entries(WALK_DURATIONS);
-  const { user } = useUserStore();
-  const { setPlaceDetailState, placeDetail } = usePlaceDetailStore();
+  const user = useUserStore((state) => state.user);
+  const placeDetail = usePlaceDetailStore((state) => state.placeDetail);
+  const setPlaceDetailState = usePlaceDetailStore(
+    (state) => state.setPlaceDetailState,
+  );
+
   const [placeKeywords, setPlaceKeywords] = useState<number[]>([]);
   const {
     previewImgs,

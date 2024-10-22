@@ -19,11 +19,13 @@ export interface ReviewListProps {
 }
 
 const ReviewList = ({ reviews, type }: ReviewListProps) => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const pathname = usePathname().split('/');
   const { mutate: toggleLike } = useReviewLike();
   const { mutate: deleteReview } = useDeleteReview();
-  const { openId, setOpenId, setOpenInfo } = useModalStore();
+  const openId = useModalStore((state) => state.openId);
+  const setOpenId = useModalStore((state) => state.setOpenId);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
 
   const handleConfirm = (reviewId: number) => {
     if (!user) {

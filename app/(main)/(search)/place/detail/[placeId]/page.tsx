@@ -6,7 +6,9 @@ import { usePlaceDetailStore } from '@/store/client/place';
 
 const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   const { placeId } = params;
-  const { placeDetailState } = usePlaceDetailStore();
+  const placeDetailState = usePlaceDetailStore(
+    (state) => state.placeDetailState,
+  );
 
   return (
     <>

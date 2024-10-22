@@ -16,9 +16,9 @@ const SearchResult = () => {
   const type = searchParams.get('type') || 'SEARCH';
   const mapContext = useMap();
   const keyword = decodeURIComponent(useParams().keyword as string);
-  const { refreshKey } = useRefreshStore();
+  const refreshKey = useRefreshStore((state) => state.refreshKey);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
   const { searchPlaces, places } = useSearchPlaces();
-  const { setOpenInfo } = useModalStore();
 
   useEffect(() => {
     const hasMapData = mapContext?.mapData;

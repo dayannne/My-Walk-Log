@@ -23,11 +23,12 @@ export interface ProfilePageProps {
 }
 
 const ProfilePage = ({ params }: ProfilePageProps) => {
-  const { profileMenu } = useProfileMenuStore();
-  const { openInfo, setOpenInfo } = useModalStore();
   const userId = parseInt(params?.userId);
   const queryOptions = useGetMyProfile(userId);
   const { data: profile } = useSuspenseQuery(queryOptions);
+  const openInfo = useModalStore((state) => state.openInfo);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
+  const profileMenu = useProfileMenuStore((state) => state.profileMenu);
 
   const [loading, setLoading] = useState(true);
 

@@ -10,7 +10,7 @@ export interface DiaryListProps {
 }
 
 const DiaryList = ({ diaries }: DiaryListProps) => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const { mutate: toggleLike } = useDiaryLike();
   const { mutate: deleteDiary } = useDeleteDiary();
 

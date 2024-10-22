@@ -16,8 +16,10 @@ export interface DiaryItemProps {
 }
 
 const DiaryItem = ({ diary, onConfirm, onClick }: DiaryItemProps) => {
-  const { user } = useUserStore();
-  const { setOpenInfo, openId, setOpenId } = useModalStore();
+  const user = useUserStore((state) => state.user);
+  const openId = useModalStore((state) => state.openId);
+  const setOpenId = useModalStore((state) => state.setOpenId);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
 
   return (
     <li

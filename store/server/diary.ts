@@ -77,7 +77,7 @@ export const useDeleteDiary = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();
-  const { openInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
 
   return useMutation({
     mutationFn: async ({

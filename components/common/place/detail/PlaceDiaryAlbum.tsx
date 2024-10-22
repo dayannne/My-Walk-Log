@@ -10,7 +10,7 @@ interface PlaceDiaryAlbumProps {
 }
 
 const PlaceDiaryAlbum = ({ place }: PlaceDiaryAlbumProps) => {
-  const { setPlaceMenu } = usePlaceMenuStore();
+  const setPlaceMenu = usePlaceMenuStore((state) => state.setPlaceMenu);
 
   const diaries = place?.diaries || [];
 

@@ -10,8 +10,8 @@ interface LikedPlaceListProps {
 }
 
 const LikedPlaceList = ({ likedPlaces }: LikedPlaceListProps) => {
-  const { user } = useUserStore();
-  const { setOpenInfo } = useModalStore();
+  const user = useUserStore((state) => state.user);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
   // API 요청
   const { mutate: toggleLike } = usePlaceLike();
   const queryOptions = useGetLikedPlaces(likedPlaces);

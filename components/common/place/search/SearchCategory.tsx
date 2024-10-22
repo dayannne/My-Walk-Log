@@ -11,8 +11,8 @@ const SearchCategory = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { setRefreshKey } = useRefreshStore();
   const keyword = decodeURIComponent(pathname.split('/').pop() as string);
+  const setRefreshKey = useRefreshStore((state) => state.setRefreshKey);
 
   // 이미지 상태를 관리하기 위한 state
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);

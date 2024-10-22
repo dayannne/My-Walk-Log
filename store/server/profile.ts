@@ -27,7 +27,7 @@ export const useGetMyProfile = (userId: number) =>
   });
 
 export const useEditProfile = () => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({

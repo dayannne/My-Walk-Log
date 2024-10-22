@@ -21,8 +21,10 @@ const CommentList = ({
   setContent,
   setEditId,
 }: CommentListProps) => {
-  const { user } = useUserStore();
-  const { openId, setOpenId } = useModalStore();
+  const user = useUserStore((state) => state.user);
+  const openId = useModalStore((state) => state.openId);
+  const setOpenId = useModalStore((state) => state.setOpenId);
+
   const { mutate: deleteComment } = useDeleteComment();
 
   const handleConfirm = (commentId: number) => {

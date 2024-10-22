@@ -19,7 +19,8 @@ const SearchResult = ({}: SearchResultProps) => {
   const queryOptions = useGetTrail(keyword);
   const { data: trails } = useSuspenseQuery(queryOptions);
   const { displayTrailMarkers } = useSearchTrail();
-  const { openInfo, handleOpenInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
+  const handleOpenInfo = useModalStore((state) => state.handleOpenInfo);
 
   // 산책로 마커
   useEffect(() => {

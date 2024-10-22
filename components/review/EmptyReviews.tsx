@@ -10,7 +10,10 @@ export interface EmptyReviewsProps {
 
 const EmptyReviews = ({ url, placeDetail }: EmptyReviewsProps) => {
   const router = useRouter();
-  const { setPlaceDetailState, setPlaceDetail } = usePlaceDetailStore();
+  const setPlaceDetail = usePlaceDetailStore((state) => state.setPlaceDetail);
+  const setPlaceDetailState = usePlaceDetailStore(
+    (state) => state.setPlaceDetailState,
+  );
 
   return (
     <div className='box-border flex basis-full flex-col items-center justify-center gap-2 bg-white p-5'>

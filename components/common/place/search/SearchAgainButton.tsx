@@ -23,8 +23,8 @@ const SearchAgainButton = () => {
     ? decodeURIComponent(params?.keyword as string)
     : null;
   const mapContext = useMap();
-  const { setRefreshKey } = useRefreshStore();
   const { currLocation, prevLocation, setPrevLocation, mapData } = mapContext!;
+  const setRefreshKey = useRefreshStore((state) => state.setRefreshKey);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

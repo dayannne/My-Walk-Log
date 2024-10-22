@@ -1,7 +1,8 @@
 import { usePlaceMenuStore } from '@/store/client/place';
 
 const PlaceDetailMenu = () => {
-  const { placeMenu, setPlaceMenu } = usePlaceMenuStore();
+  const placeMenu = usePlaceMenuStore((state) => state.placeMenu);
+  const setPlaceMenu = usePlaceMenuStore((state) => state.setPlaceMenu);
 
   return (
     <nav className='flex list-none bg-white shadow-sm'>

@@ -9,7 +9,8 @@ export interface layoutProps {
 
 const SearchResultLayout = ({ children }: layoutProps) => {
   const pathname = usePathname();
-  const { openInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
+
   return (
     <>
       <div

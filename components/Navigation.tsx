@@ -10,7 +10,7 @@ import useSearchTrail from '@/hooks/useSearchTrail';
 
 const Navigation = () => {
   const pathname = usePathname();
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const [isHovered, setIsHovered] = useState('');
   const { clearMarkersAndInfo } = useSearchPlaces();
   const { clearMarkers } = useSearchTrail();

@@ -18,7 +18,7 @@ const Commentform = ({
   editId,
   setEditId,
 }: CommentformProps) => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
 
   const { mutate: editComment } = useEditComment();
   const { mutate: createComment } = useCreateComment();

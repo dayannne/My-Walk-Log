@@ -13,7 +13,7 @@ const useSearchPlaces = () => {
     [],
   );
   const mapContext = useMap();
-  const { setOpenInfo } = useModalStore();
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
   const { mutate: createPlace } = useCreatePlace();
   const { createClusterer } = useMarkerClusterer();
   const location = mapContext?.mapData?.getCenter();

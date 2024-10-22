@@ -10,8 +10,10 @@ export interface LogoutButtonProps {}
 
 const LogoutButton = ({}: LogoutButtonProps) => {
   const router = useRouter();
-  const { setUser } = useUserStore();
-  const { open, setOpen } = useModalStore();
+  const setUser = useUserStore((state) => state.setUser);
+  const open = useModalStore((state) => state.open);
+  const setOpen = useModalStore((state) => state.setOpen);
+
   const handleLogout = () => {
     // TODO: 로그아웃 확인 팝업 추가
     alert('로그아웃 되었습니다.');

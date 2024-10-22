@@ -11,9 +11,12 @@ import PlaceDetail from '../place/detail/PlaceDetail';
 import CloseButton from '../Button/CloseButton';
 
 const PlaceDetailModal = ({ placeId }: { placeId: string }) => {
-  const { placeDetailState } = usePlaceDetailStore();
   const { screenSize } = useSmallScreenCheck();
-  const { setOpenInfo } = useModalStore();
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
+  const placeDetailState = usePlaceDetailStore(
+    (state) => state.placeDetailState,
+  );
+
   const handleCloseButton = () => {
     setOpenInfo(null);
   };

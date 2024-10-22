@@ -1,18 +1,6 @@
 import { IPlace } from '@/shared/types/place';
 import { create } from 'zustand';
 
-interface PlaceState {
-  placeId: string | null;
-  setPlaceId: (newPlace: string | null) => void;
-  clearPlace: () => void;
-}
-
-export const usePlaceIdStore = create<PlaceState>((set) => ({
-  placeId: null,
-  setPlaceId: (newPlaceId: string | null) => set({ placeId: newPlaceId }),
-  clearPlace: () => set({ placeId: null }),
-}));
-
 interface PlaceMenuState {
   placeMenu: number;
   setPlaceMenu: (userData: number) => void;

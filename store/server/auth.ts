@@ -6,7 +6,7 @@ import { useUserStore } from '../client/user';
 
 export const useLoginMutation = () => {
   const router = useRouter();
-  const { setUser } = useUserStore();
+  const setUser = useUserStore((state) => state.setUser);
 
   return useMutation({
     mutationFn: async (data: ILoginForm) => {

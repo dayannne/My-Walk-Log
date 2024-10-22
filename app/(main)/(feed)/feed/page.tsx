@@ -13,7 +13,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { IDiary } from '@/shared/types/diary';
 
 const FeedPage = () => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user);
   const queryOptions = useGetFeed();
   const { mutate: toggleLike } = useDiaryLike();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
