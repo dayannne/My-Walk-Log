@@ -59,16 +59,12 @@ const useSearchPlaces = () => {
 
       const filteredPlaces = filterPlacesByKeyword(data);
 
-      if (filteredPlaces.length === 0) {
-        return alert('검색 결과가 존재하지 않습니다.');
-      }
-
       setPlaces(filteredPlaces);
       displayMarkers(filteredPlaces, type);
       createPlace(filteredPlaces);
     } else {
       if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        return alert('검색 결과가 존재하지 않습니다.');
+        return setPlaces([]);
       } else if (status === kakao.maps.services.Status.ERROR) {
         return alert('검색 결과 중 오류가 발생했습니다.');
       }
