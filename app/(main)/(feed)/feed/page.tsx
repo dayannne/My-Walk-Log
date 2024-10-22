@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { useDiaryLike } from '@/app/store/server/diary';
-import { WEATHERS } from '@/app/shared/constant';
-import { formatTimeAgo } from '@/app/shared/function/format';
+import { useDiaryLike } from '@/store/server/diary';
+import { WEATHERS } from '@/shared/constant';
+import { formatTimeAgo } from '@/shared/function/format';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUserStore } from '@/app/store/client/user';
-import useInfiniteScroll from '@/app/_hooks/useInfiniteScroll';
-import { useGetFeed } from '@/app/store/server/feed';
+import { useUserStore } from '@/store/client/user';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useGetFeed } from '@/store/server/feed';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { IDiary } from '@/app/shared/types/diary';
+import { IDiary } from '@/shared/types/diary';
 
 const FeedPage = () => {
   const { user } = useUserStore();

@@ -1,7 +1,7 @@
 'use client';
 
-import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
-import { useModalStore } from '@/app/store/client/modal';
+import PlaceDetailModal from '@/components/common/Modal/PlaceDetailModal';
+import { useModalStore } from '@/store/client/modal';
 import { useEffect, useState } from 'react';
 
 export interface pageProps {}

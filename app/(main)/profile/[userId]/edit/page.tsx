@@ -1,17 +1,17 @@
 'use client';
 
-import FileInput from '@/app/_component/common/Input/FileInput';
-import { useImageUpload } from '@/app/_hooks/useImageUpload';
-import { IProfileReq } from '@/app/shared/types/profile';
+import FileInput from '@/components/common/Input/FileInput';
+import { useImageUpload } from '@/hooks/useImageUpload';
+import { IProfileReq } from '@/shared/types/profile';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import AreaSearch from '@/app/_component/common/AreaSearch/AreaSearch';
-import { useEditProfile, useGetMyProfile } from '@/app/store/server/profile';
+import AreaSearch from '@/components/common/AreaSearch/AreaSearch';
+import { useEditProfile, useGetMyProfile } from '@/store/server/profile';
 import { useEffect, useState } from 'react';
-import Header from '@/app/_component/common/Header';
+import Header from '@/components/Header';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { IAddress } from '@/app/shared/types/map';
+import { IAddress } from '@/shared/types/map';
 
 export interface pageProps {
   params: { userId: string };

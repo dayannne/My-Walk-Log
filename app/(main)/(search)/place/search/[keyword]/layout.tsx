@@ -1,4 +1,4 @@
-import SearchResult from '@/app/_component/place/search/SearchResult';
+import SearchResult from '@/components/common/place/search/SearchResult';
 
 export interface SearchResultLayoutProps {
   children: React.ReactNode;

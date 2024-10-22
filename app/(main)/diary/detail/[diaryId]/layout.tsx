@@ -1,6 +1,6 @@
-import Header from '@/app/_component/common/Header';
-import getQueryClient from '@/app/shared/utils/getQueryCLient';
-import { getDiaryDetail } from '@/app/store/server/diary';
+import Header from '@/components/Header';
+import getQueryClient from '@/shared/utils/getQueryCLient';
+import { getDiaryDetail } from '@/store/server/diary';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 export interface DiaryLayoutProps {

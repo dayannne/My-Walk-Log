@@ -1,18 +1,18 @@
 'use client';
 
-import { WEATHERS } from '@/app/shared/constant';
+import { WEATHERS } from '@/shared/constant';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { useImageUpload } from '@/app/_hooks/useImageUpload';
-import FileInput from '@/app/_component/common/Input/FileInput';
+import { useImageUpload } from '@/hooks/useImageUpload';
+import FileInput from '@/components/common/Input/FileInput';
 import { useState } from 'react';
-import { IDiaryReq } from '@/app/shared/types/diary';
-import SearchWalkedPlace from '@/app/_component/diary/SearchWalkedPlace';
-import { useCreateDiary } from '@/app/store/server/diary';
-import Header from '@/app/_component/common/Header';
+import { IDiaryReq } from '@/shared/types/diary';
+import SearchWalkedPlace from '@/components/diary/SearchWalkedPlace';
+import { useCreateDiary } from '@/store/server/diary';
+import Header from '@/components/Header';
 import { useQueryClient } from '@tanstack/react-query';
-import { useUserStore } from '@/app/store/client/user';
+import { useUserStore } from '@/store/client/user';
 
 const DiaryFormPage = () => {
   const {

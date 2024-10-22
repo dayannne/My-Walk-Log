@@ -3,10 +3,10 @@ import Script from 'next/script';
 
 import { Noto_Sans_KR } from 'next/font/google';
 
-import '../styles/globals.css';
+import '../shared/styles/globals.css';
 
-import ReactQueryProviders from './_hooks/useReactQuery';
-import MaterialProvider from '@/styles/MaterialProvider';
+import ReactQueryProviders from '../hooks/useReactQuery';
+import MaterialProvider from '@/shared/styles/MaterialProvider';
 
 export const metadata: Metadata = {
   title: '나의 산책 일기',

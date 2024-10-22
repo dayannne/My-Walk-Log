@@ -1,16 +1,16 @@
 'use client';
 
-import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
-import Commentform from '@/app/_component/diary/Commentform';
-import CommentList from '@/app/_component/diary/CommentList';
-import DiaryItem from '@/app/_component/diary/DiaryItem';
-import { useModalStore } from '@/app/store/client/modal';
-import { useUserStore } from '@/app/store/client/user';
+import PlaceDetailModal from '@/components/common/Modal/PlaceDetailModal';
+import Commentform from '@/components/diary/Commentform';
+import CommentList from '@/components/diary/CommentList';
+import DiaryItem from '@/components/diary/DiaryItem';
+import { useModalStore } from '@/store/client/modal';
+import { useUserStore } from '@/store/client/user';
 import {
   useDiaryLike,
   useDeleteDiary,
   useGetDiaryDetail,
-} from '@/app/store/server/diary';
+} from '@/store/server/diary';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useModalStore } from '@/app/store/client/modal';
+import { useModalStore } from '@/store/client/modal';
 import { usePathname } from 'next/navigation';
 
 export interface layoutProps {
