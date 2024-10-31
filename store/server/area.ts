@@ -21,7 +21,6 @@ export const useGetArea = ({ areaCode, location }: AreaReq) =>
           data: 'LT_C_ADEMD_INFO',
           key: `${process.env.NEXT_PUBLIC_MAP_API_KEY}`,
           size: 1000,
-          domain: `${process.env.NEXT_PUBLIC_DOMAIN}`,
           format: 'json',
           errorformat: 'json',
           attrfilter: areaCode ? `emd_cd:like:${areaCode}` : '',
