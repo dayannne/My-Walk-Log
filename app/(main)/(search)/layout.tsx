@@ -1,6 +1,6 @@
 'use client';
 
-import { useModalStore } from '@/app/store/client/modal';
+import { useModalStore } from '@/store/client/modal';
 import { usePathname } from 'next/navigation';
 
 export interface layoutProps {
@@ -9,7 +9,8 @@ export interface layoutProps {
 
 const SearchResultLayout = ({ children }: layoutProps) => {
   const pathname = usePathname();
-  const { openInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
+
   return (
     <>
       <div

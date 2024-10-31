@@ -1,5 +1,5 @@
-import Header from '@/app/_component/common/Header';
-import SearchForm from '@/app/_component/trail/search/SearchForm';
+import Header from '@/components/Header';
+import SearchForm from '@/components/trail/search/SearchForm';
 
 export interface TrailLayoutProps {
   children: React.ReactNode;

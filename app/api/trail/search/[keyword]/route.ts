@@ -20,10 +20,10 @@ export async function GET(
     if (!trails.length) {
       return NextResponse.json(
         {
-          status: 'error',
-          message: '검색 결과가 존재하지 않습니다.',
+          status: 'success',
+          data: [],
         },
-        { status: 404 },
+        { status: 200 },
       );
     }
 

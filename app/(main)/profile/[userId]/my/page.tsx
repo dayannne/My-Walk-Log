@@ -1,33 +1,34 @@
 'use client';
 
-import ProfileDiaryList from '@/app/_component/diary/ProfileDiaryList';
-import { useUserStore } from '@/app/store/client/user';
-import { useProfileMenuStore } from '@/app/store/client/profile';
-import { useGetMyProfile } from '@/app/store/server/profile';
+import ProfileDiaryList from '@/components/diary/ProfileDiaryList';
+import { useUserStore } from '@/store/client/user';
+import { useProfileMenuStore } from '@/store/client/profile';
+import { useGetMyProfile } from '@/store/server/profile';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Fragment, useEffect, useState } from 'react';
-import ReviewList from '@/app/_component/review/ReviewList';
-import EmptyReviews from '@/app/_component/review/EmptyReviews';
-import EmptyDiaries from '@/app/_component/diary/EmpryDiaries';
-import EmptyLikedPlaces from '@/app/_component/profile/EmptyLikedPlaces';
-import LikedPlaceList from '@/app/_component/profile/LikedPlaceList';
-import ProfileMenu from '@/app/_component/profile/ProfileMenu';
-import { useModalStore } from '@/app/store/client/modal';
-import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
+import ReviewList from '@/components/review/ReviewList';
+import EmptyReviews from '@/components/review/EmptyReviews';
+import EmptyDiaries from '@/components/diary/EmpryDiaries';
+import EmptyLikedPlaces from '@/components/profile/EmptyLikedPlaces';
+import LikedPlaceList from '@/components/profile/LikedPlaceList';
+import ProfileMenu from '@/components/profile/ProfileMenu';
+import { useModalStore } from '@/store/client/modal';
+import PlaceDetailModal from '@/components/common/Modal/PlaceDetailModal';
 
 export interface ProfilePageProps {
   params: { userId: string };
 }
 
 const ProfilePage = ({ params }: ProfilePageProps) => {
-  const { profileMenu } = useProfileMenuStore();
-  const { openInfo, setOpenInfo } = useModalStore();
   const userId = parseInt(params?.userId);
   const queryOptions = useGetMyProfile(userId);
   const { data: profile } = useSuspenseQuery(queryOptions);
+  const openInfo = useModalStore((state) => state.openInfo);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
+  const profileMenu = useProfileMenuStore((state) => state.profileMenu);
 
   const [loading, setLoading] = useState(true);
 

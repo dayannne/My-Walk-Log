@@ -1,13 +1,14 @@
 'use client';
 
-import PlaceDetailModal from '@/app/_component/common/Modal/PlaceDetailModal';
-import { useModalStore } from '@/app/store/client/modal';
+import PlaceDetailModal from '@/components/common/Modal/PlaceDetailModal';
+import { useModalStore } from '@/store/client/modal';
 import { useEffect, useState } from 'react';
 
 export interface pageProps {}
 
 const SearchResultPage = () => {
-  const { openInfo, setOpenInfo } = useModalStore();
+  const openInfo = useModalStore((state) => state.openInfo);
+  const setOpenInfo = useModalStore((state) => state.setOpenInfo);
 
   const [loading, setLoading] = useState(true);
 

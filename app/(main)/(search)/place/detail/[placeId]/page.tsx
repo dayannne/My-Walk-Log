@@ -1,12 +1,14 @@
 'use client';
 
-import PlaceDetail from '@/app/_component/place/detail/PlaceDetail';
-import ReviewForm from '@/app/_component/review/ReviewForm';
-import { usePlaceDetailStore } from '@/app/store/client/place';
+import PlaceDetail from '@/components/common/place/detail/PlaceDetail';
+import ReviewForm from '@/components/review/ReviewForm';
+import { usePlaceDetailStore } from '@/store/client/place';
 
 const PlaceDetailPage = ({ params }: { params: { placeId: string } }) => {
   const { placeId } = params;
-  const { placeDetailState } = usePlaceDetailStore();
+  const placeDetailState = usePlaceDetailStore(
+    (state) => state.placeDetailState,
+  );
 
   return (
     <>

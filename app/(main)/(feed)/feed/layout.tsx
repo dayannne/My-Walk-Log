@@ -1,7 +1,7 @@
-import Header from '@/app/_component/common/Header';
-import { IDiary } from '@/app/shared/types/diary';
-import getQueryClient from '@/app/shared/utils/getQueryCLient';
-import { getFeed } from '@/app/store/server/feed';
+import Header from '@/components/Header';
+import { IDiary } from '@/shared/types/diary';
+import getQueryClient from '@/shared/utils/getQueryCLient';
+import { getFeed } from '@/store/server/feed';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 
 export interface FeedLayoutProps {

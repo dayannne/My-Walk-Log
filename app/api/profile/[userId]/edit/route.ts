@@ -1,6 +1,6 @@
 import prisma from '@/prisma/context';
 import { NextResponse } from 'next/server';
-import { IProfileReq } from '@/app/shared/types/profile';
+import { IProfileReq } from '@/shared/types/profile';
 
 export async function PUT(
   request: Request,

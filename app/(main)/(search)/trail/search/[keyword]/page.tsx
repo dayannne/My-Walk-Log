@@ -1,4 +1,4 @@
-import SearchResult from '@/app/_component/trail/search/SearchResult';
+import SearchResult from '@/components/trail/search/SearchResult';
 
 export interface pageProps {}
 

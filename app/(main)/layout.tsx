@@ -1,6 +1,6 @@
-import MapContainer from '../_component/common/MapContainer';
-import Navigation from '../_component/common/Navigation';
-import MapProvider from '../shared/contexts/Map';
+import MapContainer from '../../components/MapContainer';
+import Navigation from '../../components/Navigation';
+import MapProvider from '../../shared/contexts/Map';
 
 export interface MainLayoutProps {
   children: React.ReactNode;

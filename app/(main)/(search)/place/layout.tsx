@@ -1,5 +1,5 @@
-import Header from '@/app/_component/common/Header';
-import SearchForm from '@/app/_component/place/search/SearchForm';
+import Header from '@/components/Header';
+import SearchForm from '@/components/common/place/search/SearchForm';
 
 export interface PlaceLayoutProps {
   children: React.ReactNode;
