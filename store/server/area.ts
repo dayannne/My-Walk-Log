@@ -13,7 +13,7 @@ export const useGetArea = ({ areaCode, location }: AreaReq) =>
       if (!areaCode && !location) {
         return null;
       }
-
+      const qs = require('qs');
       const result = await mapInstance.get('', {
         params: {
           service: 'data',
@@ -23,10 +23,14 @@ export const useGetArea = ({ areaCode, location }: AreaReq) =>
           size: 1000,
           format: 'json',
           errorformat: 'json',
+          domain: 'https://my-walk-log.vercel.app',
           attrfilter: areaCode ? `emd_cd:like:${areaCode}` : '',
           geomfilter: location
             ? `POINT(${location?.longitude} ${location?.latitude})`
             : '',
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { encode: false }); // encode: false로 인코딩을 방지
         },
       });
 
