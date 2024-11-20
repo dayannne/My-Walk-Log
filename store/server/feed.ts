@@ -1,4 +1,3 @@
-import { IDiary } from '@/app/shared/types/diary';
 import { infiniteQueryOptions } from '@tanstack/react-query';
 import axios from 'axios';
 
