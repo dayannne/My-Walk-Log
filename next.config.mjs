@@ -22,8 +22,8 @@ const nextConfig = {
         destination: 'https://place.map.kakao.com/:path*',
       },
       {
-        source: '/api/vworld/:path*',
-        destination: 'https://api.vworld.kr/req/data/:path*',
+        source: '/api/vworld/:path*', // 요청 경로
+        destination: 'https://api.vworld.kr/req/data/:path*', // 실제 API 경로로 프록시
       },
     ];
   },
