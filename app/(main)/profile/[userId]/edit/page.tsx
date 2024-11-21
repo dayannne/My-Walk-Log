@@ -83,6 +83,12 @@ const EditProfilePage = ({ params }: pageProps) => {
     }
   }, [profile]);
 
+  const preventFileInputOpen = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className='flex h-full flex-col'>
       {isPending && <Loading isLoading={isPending} />}
@@ -149,6 +155,7 @@ const EditProfilePage = ({ params }: pageProps) => {
                   },
                 })}
                 onChange={handleUsernameChange}
+                onKeyDown={preventFileInputOpen}
               />
               {errors.username && (
                 <span className='text-xs text-red-500'>
