@@ -13,6 +13,7 @@ import { useCreateDiary } from '@/store/server/diary';
 import Header from '@/components/Header';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserStore } from '@/store/client/user';
+import Loading from '@/components/common/Loading';
 
 const DiaryFormPage = () => {
   const {
@@ -27,7 +28,7 @@ const DiaryFormPage = () => {
   const queryClient = useQueryClient();
   const weathers = Object.entries(WEATHERS);
   const user = useUserStore((state) => state.user);
-  const { mutate: createDiary } = useCreateDiary();
+  const { mutate: createDiary, isPending } = useCreateDiary();
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] =
     useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
@@ -114,6 +115,8 @@ const DiaryFormPage = () => {
 
   return (
     <div className='flex h-full flex-col'>
+      {isPending && <Loading isLoading={isPending} />}
+
       <Header title='산책일기 쓰기'>
         <div className='flex gap-[6px]'>
           <button

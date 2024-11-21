@@ -20,13 +20,7 @@ const SearchResultPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  return (
-    <>
-      {!loading && openInfo && (
-        <PlaceDetailModal placeId={openInfo as string} />
-      )}
-    </>
-  );
+  return <>{openInfo && <PlaceDetailModal placeId={openInfo as string} />}</>;
 };
 
 export default SearchResultPage;

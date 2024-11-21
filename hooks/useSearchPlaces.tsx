@@ -9,8 +9,9 @@ import { SearchType } from '../shared/types/map';
 import { useModalStore } from '../store/client/modal';
 
 const useSearchPlaces = () => {
-  const [places, setPlaces] = useState<kakao.maps.services.PlacesSearchResult>(
-    [],
+  const [isLoading, setIsLoading] = useState(false);
+  const [places, setPlaces] = useState<kakao.maps.services.PlacesSearchResult | null>(
+   null,
   );
   const mapContext = useMap();
   const setOpenInfo = useModalStore((state) => state.setOpenInfo);
@@ -20,6 +21,7 @@ const useSearchPlaces = () => {
 
   const searchPlaces = (keyword: string, type: SearchType) => {
     if (keyword !== '') {
+      setIsLoading(true);
       const { mapData, setPrevKeyword, setPrevLocation } = mapContext!;
 
       const placesService = new kakao.maps.services.Places();
@@ -69,6 +71,7 @@ const useSearchPlaces = () => {
         return alert('검색 결과 중 오류가 발생했습니다.');
       }
     }
+    setIsLoading(false);
   };
 
   const displayMarkers = (
@@ -128,7 +131,13 @@ const useSearchPlaces = () => {
     }
   };
 
-  return { searchPlaces, displayMarkers, clearMarkersAndInfo, places }; // places 반환
+  return {
+    searchPlaces,
+    displayMarkers,
+    clearMarkersAndInfo,
+    places,
+    isLoading,
+  }; // places 반환
 };
 
 export default useSearchPlaces;

@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { IAddress } from '@/shared/types/map';
+import Loading from '@/components/common/Loading';
 
 export interface pageProps {
   params: { userId: string };
@@ -29,7 +30,7 @@ const EditProfilePage = ({ params }: pageProps) => {
   const queryOptions = useGetMyProfile(parseInt(params?.userId));
   const { data: profile } = useSuspenseQuery(queryOptions);
 
-  const { mutate: editProfile } = useEditProfile();
+  const { mutate: editProfile, isPending } = useEditProfile();
   const [address, setAddress] = useState<IAddress | null>(null);
 
   const methods = useForm<IProfileReq>({
@@ -84,6 +85,8 @@ const EditProfilePage = ({ params }: pageProps) => {
 
   return (
     <div className='flex h-full flex-col'>
+      {isPending && <Loading isLoading={isPending} />}
+
       <Header title='프로필 수정하기'>
         <div className='flex gap-[6px]'>
           <button

@@ -10,6 +10,7 @@ import { IReviewReq } from '@/shared/types/review';
 import Header from '../Header';
 import { usePlaceDetailStore } from '@/store/client/place';
 import { useUserStore } from '@/store/client/user';
+import Loading from '../common/Loading';
 
 const ReviewForm = ({ placeId }: { placeId: string }) => {
   const walkDurations = Object.entries(WALK_DURATIONS);
@@ -44,7 +45,7 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
       entryFee: null,
     },
   });
-  const { mutate: createReview } = useCreateReview();
+  const { mutate: createReview, isPending } = useCreateReview();
   const onSubmit = async (formData: IReviewReq) => {
     if (!user) {
       return alert('로그인 후 이용가능합니다.');
@@ -84,6 +85,7 @@ const ReviewForm = ({ placeId }: { placeId: string }) => {
     };
   return (
     <div className='sm-md:h-full flex w-full basis-full flex-col overflow-y-scroll'>
+      {isPending && <Loading isLoading={isPending} />}
       <Header title='리뷰 쓰기'>
         <div className='flex gap-[6px]'>
           <button
