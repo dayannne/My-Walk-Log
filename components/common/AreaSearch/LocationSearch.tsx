@@ -19,7 +19,7 @@ const LocationSearch = ({
 
   return (
     <button
-      className={`border-olive-green flex w-full items-center rounded-lg border border-solid px-2 py-3 text-sm ${currLocation && 'bg-olive-green text-white outline-none'}`}
+      className={`border-olive-green flex w-full items-center rounded-lg border border-solid px-2 py-3 text-sm ${currLocation && 'bg-olive-green outline-none'}`}
       type='button'
       onClick={handleSearchCurrLocation}
     >
@@ -33,7 +33,9 @@ const LocationSearch = ({
         width={24}
         height={24}
       />
-      <span className='basis-full'>현재 위치로 검색하기</span>
+      <span className={`basis-full ${currLocation && 'text-white'}`}>
+        현재 위치로 검색하기
+      </span>
     </button>
   );
 };

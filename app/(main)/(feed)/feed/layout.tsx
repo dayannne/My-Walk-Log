@@ -15,6 +15,7 @@ interface FeedData {
 
 const FeedLayout = async ({ children }: FeedLayoutProps) => {
   const queryClient = getQueryClient();
+  await queryClient.invalidateQueries({ queryKey: ['feed'] });
   await queryClient.prefetchInfiniteQuery({
     queryKey: ['feed'],
     queryFn: () => getFeed(1),

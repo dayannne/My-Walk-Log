@@ -33,6 +33,12 @@ const AreaSearchInput = ({
     }
   };
 
+  const preventFileInputOpen = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className='flex max-h-56 w-full flex-col rounded-md border border-solid border-gray-300 text-sm shadow-sm'>
       <div className='relative'>
@@ -49,6 +55,7 @@ const AreaSearchInput = ({
           value={areaName ?? ''}
           onChange={handleSearchChange}
           placeholder='동명(읍,면)으로 검색 (ex.고색동)'
+          onKeyDown={preventFileInputOpen}
         />
       </div>
       {filteredResults.length > 0 && (

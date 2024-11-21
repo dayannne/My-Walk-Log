@@ -23,12 +23,13 @@ const DiaryFormPage = () => {
     fileHandler,
     uploadImage,
     removeImage,
+    isPending: isImagePending,
   } = useImageUpload();
   const router = useRouter();
   const queryClient = useQueryClient();
   const weathers = Object.entries(WEATHERS);
   const user = useUserStore((state) => state.user);
-  const { mutate: createDiary, isPending } = useCreateDiary();
+  const { mutate: createDiary, isPending: isDiaryPending } = useCreateDiary();
   const [placeTags, setPlaceTags] = useState<string[]>([]);
   const [selectedPlace, setSelectedPlace] =
     useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
@@ -115,7 +116,9 @@ const DiaryFormPage = () => {
 
   return (
     <div className='flex h-full flex-col'>
-      {isPending && <Loading isLoading={isPending} />}
+      {(isImagePending || isDiaryPending) && (
+        <Loading isLoading={isImagePending || isDiaryPending} />
+      )}
 
       <Header title='산책일기 쓰기'>
         <div className='flex gap-[6px]'>

@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 
 export const useImageUpload = () => {
   const [previewImgs, setPreviewImgs] = useState<File[]>([]);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,6 +29,7 @@ export const useImageUpload = () => {
 
   const uploadImage = async () => {
     if (previewImgs.length > 0) {
+      setIsPending(true);
       const formData = new FormData();
       previewImgs.forEach((file) => {
         formData.append('img', file);
@@ -44,6 +46,7 @@ export const useImageUpload = () => {
         alert('이미지 저장에 실패했습니다.');
       }
     }
+    setIsPending(false);
   };
 
   return {
@@ -53,5 +56,6 @@ export const useImageUpload = () => {
     fileHandler,
     removeImage,
     uploadImage,
+    isPending,
   };
 };
