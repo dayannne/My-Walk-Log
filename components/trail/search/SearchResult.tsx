@@ -28,7 +28,7 @@ const SearchResult = ({}: SearchResultProps) => {
   useEffect(() => {
     const hasMapData = mapContext?.mapData;
     if (hasMapData && trails && keyword) {
-      displayTrailMarkers(trails);
+      if (trails.length > 0) displayTrailMarkers(trails);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapContext?.mapData, trails, keyword]);

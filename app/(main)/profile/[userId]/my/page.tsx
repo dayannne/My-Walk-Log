@@ -47,7 +47,7 @@ const ProfilePage = ({ params }: ProfilePageProps) => {
         <div className='flex flex-col gap-2 bg-white p-6'>
           <div className='flex items-center gap-3'>
             <Image
-              className='h-20 w-20 rounded-full object-cover object-center'
+              className='h-20 w-20 shrink-0 rounded-full object-cover object-center'
               src={profile?.profileImage}
               alt='프로필 이미지'
               width={300}
