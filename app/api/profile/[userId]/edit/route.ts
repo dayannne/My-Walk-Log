@@ -39,11 +39,12 @@ export async function PUT(
         profileImage: profileData.profileImage,
       },
     });
+    const { hashedPassword, ...updatedUserWithoutPassword } = updatedUser;
 
     return NextResponse.json(
       {
         status: 'success',
-        data: { ...updatedUser },
+        data: { ...updatedUserWithoutPassword },
         message: '프로필이 수정되었습니다.',
       },
       { status: 200 },

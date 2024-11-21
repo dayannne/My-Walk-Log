@@ -28,13 +28,15 @@ export const useGetMyProfile = (userId: number) =>
 
 export const useEditProfile = () => {
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
     mutationFn: async (data: IProfileReq) => {
       return await axios.put(`/api/profile/${user?.id}/edit`, data);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      setUser(response.data.data);
       queryClient.invalidateQueries({ queryKey: ['myProfile'] });
       alert('프로필이 수정되었습니다.');
       router.back();
