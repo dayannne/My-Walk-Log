@@ -207,17 +207,15 @@ const DiaryFormPage = () => {
           </button>
           <div className='flex gap-2'>
             {previewImgs &&
-              Array.from(previewImgs)?.map((file, index) => (
+              Array.from(previewImgs)?.map(({ file, previewUrl }, index) => (
                 <div key={index} className='relative'>
                   <Image
                     className='h-24 w-24 rounded-lg object-cover object-center'
-                    src={URL.createObjectURL(file)}
+                    src={previewUrl}
                     alt={`이미지 미리보기 ${index + 1}`}
                     width={100}
                     height={100}
-                    onLoad={() =>
-                      URL.revokeObjectURL(URL.createObjectURL(file))
-                    }
+                    // onLoad={() => URL.revokeObjectURL(previewUrl)}
                   />
                   <button
                     className='absolute right-1 top-1 text-white'

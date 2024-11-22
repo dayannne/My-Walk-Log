@@ -20,12 +20,12 @@ export interface IUser {
   username: string;
   profileImage: string;
   introduction: string;
-  address: string;
+  address: IAddress | null;
   likedDiaries: [];
   likedPlaces: [];
   likedReviews: [];
-  reviews: [];
-  diaries: [];
+  // reviews: [];
+  // diaries: [];
   createdAt: string;
   updatedAt: string;
 }

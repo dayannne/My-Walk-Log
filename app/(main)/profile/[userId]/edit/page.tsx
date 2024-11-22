@@ -122,7 +122,7 @@ const EditProfilePage = ({ params }: pageProps) => {
               <Image
                 className='h-24 w-24 rounded-full object-cover shadow-md'
                 src={
-                  (previewImgs[0] && URL.createObjectURL(previewImgs[0])) ||
+                  (previewImgs[0] && previewImgs[0].previewUrl) ||
                   profile.profileImage
                 }
                 width={300}
