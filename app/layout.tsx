@@ -32,6 +32,9 @@ export const metadata: Metadata = {
   verification: {
     google: 'dL9BfGCE-Cdx2iSc_ptmjcrO9A7YbwlaqABBt8MigF8',
   },
+  other: {
+    'naver-site-verification': 'bff67bb1d0bca2cf89fcc249dc440cb3d7328b1e',
+  },
 };
 
 const font = Noto_Sans_KR({
