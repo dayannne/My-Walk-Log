@@ -85,6 +85,7 @@ export const useImageUpload = () => {
         setIsPending(false);
       }
     }
+    setIsPending(false);
   };
 
   return {
