@@ -17,16 +17,19 @@ export const metadata: Metadata = {
   },
   description:
     '내 집 앞 소소한 산책부터 본격적인 트래킹까지 ~ 산책 장소 & 산책로를 쉽게 찾고 나만의 산책 기록을 일기로 남겨요.',
+  icons: {
+    icon: '/logo-mini(default).png',
+  },
   openGraph: {
     siteName: '나의 산책 일기(My WorkLog)',
     images: {
-      url: 'public/icons/icon-logo(default).svg',
+      url: '/logo(default).png',
     },
   },
   twitter: {
     title: '나의 산책 일기(My WorkLog)',
     images: {
-      url: 'public/icons/icon-logo(default).svg',
+      url: '/logo(default).png',
     },
   },
   verification: {
