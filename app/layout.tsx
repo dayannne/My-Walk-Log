@@ -9,8 +9,32 @@ import ReactQueryProviders from '../hooks/useReactQuery';
 import MaterialProvider from '@/shared/styles/MaterialProvider';
 
 export const metadata: Metadata = {
-  title: '나의 산책 일기',
-  description: '나의 산책 일기 - my walk log',
+  metadataBase: new URL('https://my-walk-log.vercel.app'),
+  title: {
+    template: '%s | 나의 산책 일기(My WorkLog)',
+    default:
+      '나의 산책일기(My WorkLog) | 산책장소 & 산책로 탐색 및 일기 기록 서비스',
+  },
+  description:
+    '내 집 앞 소소한 산책부터 본격적인 트래킹까지 ~ 산책 장소 & 산책로를 쉽게 찾고 나만의 산책 기록을 일기로 남겨요.',
+  openGraph: {
+    siteName: '나의 산책 일기(My WorkLog)',
+    images: {
+      url: 'public/icons/icon-logo(default).svg',
+    },
+  },
+  twitter: {
+    title: '나의 산책 일기(My WorkLog)',
+    images: {
+      url: 'public/icons/icon-logo(default).svg',
+    },
+  },
+  verification: {
+    google: 'dL9BfGCE-Cdx2iSc_ptmjcrO9A7YbwlaqABBt8MigF8',
+  },
+  other: {
+    'naver-site-verification': 'bff67bb1d0bca2cf89fcc249dc440cb3d7328b1e',
+  },
 };
 
 const font = Noto_Sans_KR({
