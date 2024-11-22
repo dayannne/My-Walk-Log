@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
 interface Props {
@@ -7,21 +7,27 @@ interface Props {
 
 export default function Loading({ isLoading }: Props) {
   const [active, setActive] = useState('LoadingBox1');
-  let timeout: NodeJS.Timeout;
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null); // useRef로 timeout을 추적
 
   useEffect(() => {
     if (isLoading) {
       if (active === '' || active === 'LoadingBox3')
-        timeout = setTimeout(() => setActive('LoadingBox1'), 500);
+        timeoutRef.current = setTimeout(() => setActive('LoadingBox1'), 500);
       else if (active === 'LoadingBox1')
-        timeout = setTimeout(() => setActive('LoadingBox2'), 500);
+        timeoutRef.current = setTimeout(() => setActive('LoadingBox2'), 500);
       else if (active === 'LoadingBox2')
-        timeout = setTimeout(() => setActive('LoadingBox3'), 500);
+        timeoutRef.current = setTimeout(() => setActive('LoadingBox3'), 500);
     } else {
-      clearTimeout(timeout);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current); // isLoading이 false일 때, timeout을 정리
+      }
     }
 
-    return () => clearTimeout(timeout); // 컴포넌트가 unmount될 때 타이머를 깨끗이 정리
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current); // 컴포넌트가 unmount될 때 timeout을 정리
+      }
+    };
   }, [isLoading, active]);
 
   return (
