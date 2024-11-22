@@ -29,6 +29,9 @@ export const metadata: Metadata = {
       url: 'public/icons/icon-logo(default).svg',
     },
   },
+  verification: {
+    google: 'dL9BfGCE-Cdx2iSc_ptmjcrO9A7YbwlaqABBt8MigF8',
+  },
 };
 
 const font = Noto_Sans_KR({
