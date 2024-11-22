@@ -52,14 +52,28 @@ const nextConfig = {
   },
   // 이미지 호스트 추가
   images: {
-    domains: [
-      'my-walklog.s3.ap-southeast-2.amazonaws.com',
-      'my-walk-log.s3.ap-northeast-2.amazonaws.com',
-      'storep-phinf.pstatic.net',
-      'postfiles.pstatic.net',
-      't1.daumcdn.net',
-      'blog.kakaocdn.net',
-      't1.kakaocdn.net',
+    remotePatterns: [
+      {
+        hostname: 'my-walklog.s3.ap-southeast-2.amazonaws.com',
+      },
+      {
+        hostname: 'my-walk-log.s3.ap-northeast-2.amazonaws.com',
+      },
+      {
+        hostname: 'storep-phinf.pstatic.net',
+      },
+      {
+        hostname: 'postfiles.pstatic.net',
+      },
+      {
+        hostname: 't1.daumcdn.net',
+      },
+      {
+        hostname: 'blog.kakaocdn.net',
+      },
+      {
+        hostname: 't1.kakaocdn.net',
+      },
     ],
   },
 };
