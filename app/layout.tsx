@@ -11,24 +11,24 @@ import MaterialProvider from '@/shared/styles/MaterialProvider';
 export const metadata: Metadata = {
   metadataBase: new URL('https://my-walk-log.vercel.app'),
   title: {
-    template: '%s | 나의 산책 일기(My WorkLog)',
-    default:
-      '나의 산책일기(My WorkLog) | 산책장소 & 산책로 탐색 및 일기 기록 서비스',
+    template: '%s | 나의 산책 일기(My WalkLog)',
+    default: '나의 산책 일기(My WalkLog) | 나만의 산책 이야기가 시작되는 곳',
   },
   description:
-    '내 집 앞 소소한 산책부터 본격적인 트래킹까지 ~ 산책 장소 & 산책로를 쉽게 찾고 나만의 산책 기록을 일기로 남겨요.',
+    '나의 산책 일기(My WalkLog) | 내 집 앞 소소한 산책부터 본격적인 트래킹까지, 산책 장소를 쉽게 찾고 나만의 산책 이야기를 일기로 남겨요.',
   icons: {
     icon: '/images/logo-mini(default).png',
     shortcut: '/images/favicon.ico',
   },
   openGraph: {
-    siteName: '나의 산책 일기(My WorkLog)',
+    siteName: '나의 산책 일기(My WalkLog)',
+    title: '나의 산책 일기(My WalkLog) | 나만의 산책 이야기가 시작되는 곳',
     images: {
       url: '/images/logo(default).png',
     },
   },
   twitter: {
-    title: '나의 산책 일기(My WorkLog)',
+    title: '나의 산책 일기(My WalkLog)',
     images: {
       url: '/images/logo(default).png',
     },
